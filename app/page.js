@@ -228,11 +228,8 @@ export default function Home() {
                 </svg>
                 <div className="flex-1">
                   <div className="font-bold text-gray-900 mb-2">University Relations, Major Financial Services Firm</div>
-                  <p className="text-gray-600 italic mb-4">
+                  <p className="text-gray-600 italic">
                     "Peer referrals are our most successful hiring method. This platform captures that validation at scale, which is exactly what we need."
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Recruiter feedback emphasized the importance of skills tagging and career interest filters for cross-functional hiring
                   </p>
                 </div>
               </div>
@@ -245,11 +242,8 @@ export default function Home() {
                 </svg>
                 <div className="flex-1">
                   <div className="font-bold text-gray-900 mb-2">Tech Recruiting Professional</div>
-                  <p className="text-gray-600 italic mb-4">
+                  <p className="text-gray-600 italic">
                     "Experience matters more than GPA in tech. Being able to see actual project work and peer validation from group projects is a game-changer."
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Feedback helped us add portfolio links and focus survey questions on group project collaboration
                   </p>
                 </div>
               </div>
