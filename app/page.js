@@ -22,15 +22,7 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            {/* Logo placeholder - add your logo file here */}
-            <img src="/logo.png" alt="Signl Logo" className="w-10 h-10 rounded-lg" onError={(e) => {
-              // Fallback to letter logo if image not found
-              e.target.style.display = 'none'
-              e.target.nextSibling.style.display = 'flex'
-            }} />
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-teal-500 rounded-lg flex items-center justify-center" style={{display: 'none'}}>
-              <span className="text-white font-bold text-xl">S</span>
-            </div>
+            <img src="/logo.png.png" alt="Signl Logo" className="w-10 h-10 rounded-lg object-contain" />
             <span className="text-2xl font-bold text-gray-900">Signl</span>
           </div>
           <div className="hidden md:flex items-center space-x-8">
@@ -255,9 +247,7 @@ export default function Home() {
       <footer className="bg-gray-900 text-gray-400 py-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-teal-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">S</span>
-            </div>
+            <img src="/logo.png.png" alt="Signl Logo" className="w-8 h-8 rounded-lg object-contain" />
             <span className="text-xl font-bold text-white">Signl</span>
           </div>
           <p className="mb-4">Peer-validated college recruiting platform</p>
