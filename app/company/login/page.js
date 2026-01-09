@@ -11,9 +11,14 @@ export default function CompanyLogin() {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    // Simple demo login - just redirect to students page
-    // In production, this would validate credentials
-    router.push('/students')
+
+    // Validate credentials
+    if (email === 'demo@signl.com' && password === 'signl2024') {
+      router.push('/students')
+    } else {
+      alert('Invalid credentials. Please contact us for a demo to get access.')
+      setPassword('')
+    }
   }
 
   return (
