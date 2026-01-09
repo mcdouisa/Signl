@@ -37,7 +37,6 @@ export default function Home() {
             <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">How It Works</a>
             <a href="#for-companies" className="text-gray-600 hover:text-gray-900 transition-colors">For Companies</a>
             <a href="#for-students" className="text-gray-600 hover:text-gray-900 transition-colors">For Students</a>
-            <Link href="/students" className="text-gray-600 hover:text-gray-900 transition-colors">Student Profiles</Link>
             <Link href="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">Admin</Link>
           </div>
           <Link href="/signin" className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
