@@ -255,23 +255,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-teal-50 border-2 border-blue-200 rounded-2xl p-8 text-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <div className="text-4xl font-bold text-blue-600 mb-2">500+</div>
-                <div className="text-gray-700 font-semibold">Survey Responses Collected</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold text-teal-600 mb-2">15+</div>
-                <div className="text-gray-700 font-semibold">Recruiter Conversations</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold text-blue-600 mb-2">3</div>
-                <div className="text-gray-700 font-semibold">Universities Launching Soon</div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
