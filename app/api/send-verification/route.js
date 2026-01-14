@@ -51,9 +51,19 @@ export async function POST(request) {
     // Send verification email using Resend
     try {
       const data = await resend.emails.send({
-        from: 'Signl <onboarding@resend.dev>', // Replace with your verified domain
+        from: 'Signl Team <onboarding@resend.dev>', // Replace with your verified domain
         to: [email],
-        subject: 'Verify your email for Signl',
+        subject: 'Complete Your Signl Account Setup',
+        replyTo: 'noreply@resend.dev',
+        text: `Welcome to Signl!
+
+You recently requested to create an account with Signl. To complete your registration and verify your email address, please click the link below:
+
+${verificationUrl}
+
+This link will expire in 24 hours. If you didn't request this email, you can safely ignore it.
+
+© ${new Date().getFullYear()} Signl. All rights reserved.`,
         html: `
           <!DOCTYPE html>
           <html>
@@ -67,10 +77,10 @@ export async function POST(request) {
               </div>
 
               <div style="background: #ffffff; padding: 40px 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px;">
-                <p style="font-size: 16px; margin-bottom: 20px;">Hi there,</p>
+                <p style="font-size: 16px; margin-bottom: 20px;">Hello,</p>
 
                 <p style="font-size: 16px; margin-bottom: 20px;">
-                  Thank you for joining Signl! Click the button below to verify your email address and create your account.
+                  You recently requested to create an account with Signl. To complete your registration and verify your email address, please click the button below.
                 </p>
 
                 <div style="text-align: center; margin: 35px 0;">
