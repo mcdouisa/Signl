@@ -12,30 +12,35 @@ export default function VerifyEmail() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    
-    // Validate BYU email
-    if (!email.endsWith('@byu.edu')) {
-      setError('Please use your BYU email address (@byu.edu)')
+
+    // Basic email validation
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address')
       return
     }
-    
+
     setIsSubmitting(true)
-    
+
     try {
-      // TODO: Send verification email via Firebase/API
-      // For now, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      // In production, this would:
-      // 1. Generate unique token
-      // 2. Store token + email in database with 24hr expiration
-      // 3. Send email with link: /survey?token=abc123
-      
-      console.log('Sending verification email to:', email)
-      
+      // Send verification email via API
+      const response = await fetch('/api/send-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send verification email')
+      }
+
+      console.log('Verification email sent to:', email)
       setSubmitted(true)
     } catch (err) {
-      setError('Something went wrong. Please try again.')
+      setError(err.message || 'Something went wrong. Please try again.')
       console.error('Error sending verification:', err)
     } finally {
       setIsSubmitting(false)
@@ -61,9 +66,9 @@ export default function VerifyEmail() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 text-left">
             <p className="text-blue-900 font-semibold mb-2">📧 Next Steps:</p>
             <ol className="text-blue-800 text-sm space-y-2 ml-4 list-decimal">
-              <li>Check your BYU email inbox</li>
+              <li>Check your email inbox</li>
               <li>Click the verification link (expires in 24 hours)</li>
-              <li>Complete the survey to nominate your peers</li>
+              <li>Complete your profile and nominate your peers</li>
             </ol>
           </div>
           <p className="text-sm text-gray-500">
@@ -99,7 +104,7 @@ export default function VerifyEmail() {
               Join Signl
             </h1>
             <p className="text-xl text-gray-600">
-              Help us identify top talent at BYU through peer validation
+              Help us identify top talent through peer validation
             </p>
           </div>
 
@@ -111,17 +116,17 @@ export default function VerifyEmail() {
                 </svg>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
-                Verify Your BYU Email
+                Verify Your Email
               </h2>
               <p className="text-gray-600 text-center">
-                Enter your BYU email to get started. We'll send you a secure link to complete the survey.
+                Enter your email to get started. We'll send you a secure link to create your account.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  BYU Email Address *
+                  Email Address *
                 </label>
                 <input
                   type="email"
@@ -129,7 +134,7 @@ export default function VerifyEmail() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-                  placeholder="john.doe@byu.edu"
+                  placeholder="your.email@example.com"
                   disabled={isSubmitting}
                 />
                 {error && (
@@ -141,7 +146,7 @@ export default function VerifyEmail() {
                   </p>
                 )}
                 <p className="text-sm text-gray-500 mt-2">
-                  📧 Must be a valid @byu.edu email address
+                  📧 We'll send you a verification link to create your account
                 </p>
               </div>
 
@@ -172,7 +177,7 @@ export default function VerifyEmail() {
                 <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span><strong>Ensures authenticity</strong> - Only real BYU students can participate</span>
+                <span><strong>Ensures authenticity</strong> - Only verified email addresses can participate</span>
               </li>
               <li className="flex items-start">
                 <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

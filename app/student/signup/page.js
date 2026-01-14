@@ -1,9 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 export default function StudentSignup() {
+  const searchParams = useSearchParams()
+  const [isVerifying, setIsVerifying] = useState(true)
+  const [verificationError, setVerificationError] = useState('')
+  const [verifiedEmail, setVerifiedEmail] = useState('')
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     // Step 1: Account Info
@@ -35,6 +40,50 @@ export default function StudentSignup() {
   const [submitted, setSubmitted] = useState(false)
 
   const allSkills = ['Problem Solving', 'Communication', 'Technical Skills', 'Leadership', 'Teamwork', 'Creativity', 'Reliability', 'Work Ethic', 'Attention to Detail']
+
+  // Verify email token on component mount
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = searchParams.get('token')
+      const email = searchParams.get('email')
+
+      // If no token/email, redirect to verify page
+      if (!token || !email) {
+        window.location.href = '/verify'
+        return
+      }
+
+      try {
+        const response = await fetch('/api/verify-token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token, email }),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          setVerificationError(data.error || 'Invalid verification link')
+          setIsVerifying(false)
+          return
+        }
+
+        // Token is valid, pre-fill email and allow signup
+        setVerifiedEmail(data.email)
+        setFormData(prev => ({ ...prev, schoolEmail: data.email }))
+        setIsVerifying(false)
+
+      } catch (error) {
+        console.error('Verification error:', error)
+        setVerificationError('Failed to verify email. Please try again.')
+        setIsVerifying(false)
+      }
+    }
+
+    verifyToken()
+  }, [searchParams])
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target
@@ -87,12 +136,12 @@ export default function StudentSignup() {
   const nextStep = () => {
     // Validation for each step
     if (step === 1) {
-      if (!formData.schoolEmail.endsWith('@byu.edu')) {
-        alert('Please use a valid BYU email address')
-        return
-      }
       if (formData.password !== formData.confirmPassword) {
         alert('Passwords do not match')
+        return
+      }
+      if (formData.schoolEmail && !formData.schoolEmail.includes('@')) {
+        alert('Please enter a valid email address')
         return
       }
     }
@@ -124,6 +173,44 @@ export default function StudentSignup() {
       console.error('Error creating account:', error)
       alert('There was an error creating your account. Please try again.')
     }
+  }
+
+  // Loading state while verifying token
+  if (isVerifying) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center px-6">
+        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="animate-spin w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Verifying your email...</h2>
+          <p className="text-gray-600">Please wait while we verify your verification link.</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state if verification failed
+  if (verificationError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center px-6">
+        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Verification Failed</h2>
+          <p className="text-lg text-gray-600 mb-8">{verificationError}</p>
+          <Link href="/verify" className="inline-block bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+            Request New Link
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (submitted) {
@@ -198,9 +285,28 @@ export default function StudentSignup() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">School Email *</label>
-                <input type="email" name="schoolEmail" value={formData.schoolEmail} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="john.doe@byu.edu" />
-                <p className="text-sm text-gray-500 mt-1">Must be a valid @byu.edu email</p>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                <input
+                  type="email"
+                  name="schoolEmail"
+                  value={formData.schoolEmail}
+                  onChange={handleChange}
+                  required
+                  readOnly={!!verifiedEmail}
+                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 ${verifiedEmail ? 'bg-gray-50 cursor-not-allowed' : ''}`}
+                  placeholder="your.email@example.com"
+                />
+                {verifiedEmail && (
+                  <p className="text-sm text-green-600 mt-1 flex items-center">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Email verified
+                  </p>
+                )}
+                {!verifiedEmail && (
+                  <p className="text-sm text-gray-500 mt-1">This will be your primary email for Signl</p>
+                )}
               </div>
 
               <div>
