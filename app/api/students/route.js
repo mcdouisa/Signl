@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server'
 import { db } from '../../../lib/firebase'
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 
-export async function GET(request) {
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
   try {
     // Check if Firebase is configured
     if (!db) {
@@ -14,14 +17,9 @@ export async function GET(request) {
       })
     }
 
-    // Get query parameters for filtering
-    const { searchParams } = new URL(request.url)
-    const majorFilter = searchParams.get('major')
-    const gradYearFilter = searchParams.get('gradYear')
-
     // Fetch all active students
     const studentsRef = collection(db, 'students')
-    let studentsQuery = query(studentsRef, where('status', '==', 'active'))
+    const studentsQuery = query(studentsRef, where('status', '==', 'active'))
 
     const querySnapshot = await getDocs(studentsQuery)
 
@@ -29,10 +27,6 @@ export async function GET(request) {
     const students = []
     querySnapshot.forEach((doc) => {
       const data = doc.data()
-
-      // Apply filters if provided
-      if (majorFilter && data.major !== majorFilter) return
-      if (gradYearFilter && data.gradYear !== gradYearFilter) return
 
       // Calculate display name
       const name = `${data.firstName} ${data.lastName}`
