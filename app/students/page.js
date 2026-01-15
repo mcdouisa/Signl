@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-// Mock student data - shows what companies would see
+// Mock student data - shows what companies would see (demo data)
 const mockStudents = [
   {
     id: 1,
@@ -1033,13 +1033,36 @@ export default function StudentsPreview() {
   const [selectedSkill, setSelectedSkill] = useState('All')
   const [selectedCareer, setSelectedCareer] = useState('All')
   const [selectedStudent, setSelectedStudent] = useState(null)
+  const [realStudents, setRealStudents] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const majors = ['All', ...new Set(mockStudents.map(s => s.major))]
-  const gradYears = ['All', ...new Set(mockStudents.map(s => s.gradYear))]
+  // Fetch real students from database
+  useEffect(() => {
+    const fetchRealStudents = async () => {
+      try {
+        const response = await fetch('/api/students')
+        const data = await response.json()
+        if (data.success && data.students) {
+          setRealStudents(data.students)
+        }
+      } catch (error) {
+        console.error('Error fetching students:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchRealStudents()
+  }, [])
+
+  // Combine real students with mock students (real students first)
+  const allStudents = [...realStudents, ...mockStudents]
+
+  const majors = ['All', ...new Set(allStudents.map(s => s.major))]
+  const gradYears = ['All', ...new Set(allStudents.map(s => s.gradYear))]
   const skills = ['All', 'Technical Skills', 'Problem Solving', 'Communication', 'Leadership', 'Teamwork', 'Creativity']
   const careers = ['All', 'Software Engineering', 'Product Management', 'Data Analysis', 'Consulting']
 
-  const filteredStudents = mockStudents.filter(student => {
+  const filteredStudents = allStudents.filter(student => {
     if (selectedMajor !== 'All' && student.major !== selectedMajor) return false
     if (selectedGradYear !== 'All' && student.gradYear !== selectedGradYear) return false
     if (selectedSkill !== 'All' && !student.topSkills.includes(selectedSkill)) return false
@@ -1130,7 +1153,11 @@ export default function StudentsPreview() {
             </div>
           </div>
           <div className="mt-4 text-sm text-gray-600">
-            Showing {filteredStudents.length} of {mockStudents.length} students
+            Showing {filteredStudents.length} of {allStudents.length} students
+            {realStudents.length > 0 && (
+              <span className="ml-2 text-green-600">({realStudents.length} verified)</span>
+            )}
+            {loading && <span className="ml-2 text-blue-600">Loading...</span>}
           </div>
         </div>
 
@@ -1148,7 +1175,14 @@ export default function StudentsPreview() {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">{student.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-bold text-gray-900">{student.name}</h3>
+                        {student.isRealStudent && (
+                          <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-semibold">
+                            Verified
+                          </span>
+                        )}
+                      </div>
                       <p className="text-sm text-gray-600">{student.major}</p>
                       <p className="text-sm text-gray-600">{student.gradYear}</p>
                     </div>

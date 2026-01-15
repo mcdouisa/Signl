@@ -156,22 +156,42 @@ export default function StudentSignup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     try {
-      // TODO: Save to Firebase
-      const { db } = await import('../../../lib/firebase')
-      const { collection, addDoc } = await import('firebase/firestore')
-      
-      await addDoc(collection(db, 'students'), {
-        ...formData,
-        createdAt: new Date().toISOString()
+      // Register student via API
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          schoolEmail: formData.schoolEmail,
+          personalEmail: formData.personalEmail,
+          password: formData.password,
+          gpa: formData.gpa,
+          major: formData.major,
+          gradYear: formData.gradYear,
+          careerInterests: formData.careerInterests,
+          skills: formData.skills,
+          githubUrl: formData.githubUrl,
+          bio: formData.bio,
+          nominations: formData.nominations.filter(n => n.name) // Only include nominations with names
+        }),
       })
-      
-      console.log('Student account created:', formData)
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create account')
+      }
+
+      console.log('Student account created:', data)
       setSubmitted(true)
     } catch (error) {
       console.error('Error creating account:', error)
-      alert('There was an error creating your account. Please try again.')
+      alert(error.message || 'There was an error creating your account. Please try again.')
     }
   }
 
