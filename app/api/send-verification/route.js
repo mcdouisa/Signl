@@ -27,22 +27,29 @@ export async function POST(request) {
     const expiresAt = new Date()
     expiresAt.setHours(expiresAt.getHours() + 24)
 
-    // Store token in Firebase (if configured)
+    // Store token in Firebase (if configured) with timeout
     if (db) {
       try {
-        await addDoc(collection(db, 'verification_tokens'), {
+        const firebasePromise = addDoc(collection(db, 'verification_tokens'), {
           email,
           token,
           expiresAt: expiresAt.toISOString(),
           createdAt: new Date().toISOString(),
           used: false
         })
+
+        // Add 5 second timeout for Firebase to prevent hanging
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firebase timeout')), 5000)
+        )
+
+        await Promise.race([firebasePromise, timeoutPromise])
       } catch (firebaseError) {
-        console.error('Firebase error:', firebaseError)
-        // Continue even if Firebase fails
+        console.error('Firebase error (continuing anyway):', firebaseError.message)
+        // Continue even if Firebase fails - don't block email sending
       }
     } else {
-      console.log('Firebase not configured - skipping token storage (development mode)')
+      console.log('Firebase not configured - skipping token storage')
     }
 
     // Create verification link
