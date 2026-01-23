@@ -62,6 +62,12 @@ export default function StudentDashboard() {
               <span className="text-sm text-gray-600">
                 Welcome, {student.firstName}!
               </span>
+              <Link
+                href="/student/settings"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              >
+                Settings
+              </Link>
               <button
                 onClick={handleLogout}
                 className="text-gray-600 hover:text-gray-900 text-sm font-medium"
