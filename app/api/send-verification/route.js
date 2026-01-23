@@ -27,15 +27,32 @@ export async function POST(request) {
     const expiresAt = new Date()
     expiresAt.setHours(expiresAt.getHours() + 24)
 
-    // Store token in Firebase (if configured) - fire and forget, don't wait
+    // Store token in Firebase (if configured) - wait for completion with timeout
     if (db) {
-      addDoc(collection(db, 'verification_tokens'), {
-        email,
-        token,
-        expiresAt: expiresAt.toISOString(),
-        createdAt: new Date().toISOString(),
-        used: false
-      }).catch(err => console.error('Firebase error (non-blocking):', err.message))
+      try {
+        const firebasePromise = addDoc(collection(db, 'verification_tokens'), {
+          email,
+          token,
+          expiresAt: expiresAt.toISOString(),
+          createdAt: new Date().toISOString(),
+          used: false
+        })
+
+        // Wait up to 8 seconds for Firebase write to complete
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firebase timeout')), 8000)
+        )
+
+        await Promise.race([firebasePromise, timeoutPromise])
+        console.log('Token stored in Firebase successfully')
+      } catch (err) {
+        console.error('Firebase error:', err.message)
+        // If Firebase fails, we can't verify the token later, so return an error
+        return NextResponse.json(
+          { error: 'Failed to initialize verification. Please try again.' },
+          { status: 500 }
+        )
+      }
     }
 
     // Create verification link
