@@ -13,7 +13,7 @@ export default function CompanyLogin() {
     e.preventDefault()
 
     // Validate credentials
-    if (email === 'demo@signl.com' && password === 'signl2024') {
+    if (email === 'demo@signl.com' && password === 'signl2025') {
       router.push('/students')
     } else {
       alert('Invalid credentials. Please contact us for a demo to get access.')

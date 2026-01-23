@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { colleges, majorsByCollege, allSkills } from '../../../lib/collegeData'
 
-export default function StudentSignup() {
+function StudentSignupContent() {
   const searchParams = useSearchParams()
   const [isVerifying, setIsVerifying] = useState(true)
   const [verificationError, setVerificationError] = useState('')
@@ -20,15 +21,16 @@ export default function StudentSignup() {
     confirmPassword: '',
     gpa: '',
     resume: null,
-    
+
     // Step 2: Profile Info
+    college: '',
     major: '',
     gradYear: '',
     careerInterests: '',
     skills: [],
     githubUrl: '',
     bio: '',
-    
+
     // Step 3: Nominations
     nominations: [
       { name: '', email: '', major: '', projectContext: '', skills: [], reason: '' },
@@ -36,10 +38,22 @@ export default function StudentSignup() {
       { name: '', email: '', major: '', projectContext: '', skills: [], reason: '' }
     ]
   })
-  
-  const [submitted, setSubmitted] = useState(false)
 
-  const allSkills = ['Problem Solving', 'Communication', 'Technical Skills', 'Leadership', 'Teamwork', 'Creativity', 'Reliability', 'Work Ethic', 'Attention to Detail']
+  const [submitted, setSubmitted] = useState(false)
+  const [availableMajors, setAvailableMajors] = useState([])
+
+  // Update available majors when college changes
+  useEffect(() => {
+    if (formData.college) {
+      setAvailableMajors(majorsByCollege[formData.college] || [])
+      // Reset major if switching colleges
+      if (formData.major && !majorsByCollege[formData.college]?.includes(formData.major)) {
+        setFormData(prev => ({ ...prev, major: '' }))
+      }
+    } else {
+      setAvailableMajors([])
+    }
+  }, [formData.college])
 
   // Verify email token on component mount
   useEffect(() => {
@@ -171,6 +185,7 @@ export default function StudentSignup() {
           personalEmail: formData.personalEmail,
           password: formData.password,
           gpa: formData.gpa,
+          college: formData.college,
           major: formData.major,
           gradYear: formData.gradYear,
           careerInterests: formData.careerInterests,
@@ -367,18 +382,39 @@ export default function StudentSignup() {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Major *</label>
-                <input type="text" name="major" value={formData.major} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Computer Science" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">College/University *</label>
+                  <select name="college" value={formData.college} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select your college</option>
+                    {colleges.map(college => (
+                      <option key={college} value={college}>{college}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Major *</label>
+                  <select
+                    name="major"
+                    value={formData.major}
+                    onChange={handleChange}
+                    required
+                    disabled={!formData.college}
+                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 ${!formData.college ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                  >
+                    <option value="">{formData.college ? 'Select your major' : 'Select college first'}</option>
+                    {availableMajors.map(major => (
+                      <option key={major} value={major}>{major}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Expected Graduation *</label>
                 <select name="gradYear" value={formData.gradYear} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option value="">Select graduation date</option>
-                  <option value="May 2025">May 2025</option>
-                  <option value="August 2025">August 2025</option>
-                  <option value="December 2025">December 2025</option>
                   <option value="May 2026">May 2026</option>
                   <option value="August 2026">August 2026</option>
                   <option value="December 2026">December 2026</option>
@@ -497,6 +533,7 @@ export default function StudentSignup() {
                   <h3 className="font-semibold text-gray-900 mb-2">Your Information</h3>
                   <p className="text-gray-700"><strong>Name:</strong> {formData.firstName} {formData.lastName}</p>
                   <p className="text-gray-700"><strong>Email:</strong> {formData.schoolEmail}</p>
+                  <p className="text-gray-700"><strong>College:</strong> {formData.college}</p>
                   <p className="text-gray-700"><strong>Major:</strong> {formData.major}</p>
                   <p className="text-gray-700"><strong>Graduation:</strong> {formData.gradYear}</p>
                 </div>
@@ -528,5 +565,20 @@ export default function StudentSignup() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function StudentSignup() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <StudentSignupContent />
+    </Suspense>
   )
 }

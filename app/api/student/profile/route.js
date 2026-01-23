@@ -10,6 +10,7 @@ const ALLOWED_FIELDS = [
   'bio',
   'careerInterests',
   'skills',
+  'college',
   'major',
   'gpa',
   'gradYear'

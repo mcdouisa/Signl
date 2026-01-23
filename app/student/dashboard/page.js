@@ -63,6 +63,12 @@ export default function StudentDashboard() {
                 Welcome, {student.firstName}!
               </span>
               <Link
+                href="/student/peers"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              >
+                Peers
+              </Link>
+              <Link
                 href="/student/settings"
                 className="text-gray-600 hover:text-gray-900 text-sm font-medium"
               >
@@ -82,22 +88,20 @@ export default function StudentDashboard() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Welcome Section */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {student.firstName}!
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Manage your profile and see your peer validation status
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-4xl font-bold text-blue-600">{student.peerScore || 70}</div>
-              <div className="text-sm text-gray-500">Peer Score</div>
-            </div>
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">
+              Welcome back, {student.firstName}!
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Manage your profile and endorse your peers
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-gray-50 rounded-xl p-4">
+              <div className="text-sm font-semibold text-gray-600 mb-1">College</div>
+              <div className="text-gray-900">{student.college || 'Not specified'}</div>
+            </div>
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="text-sm font-semibold text-gray-600 mb-1">Major</div>
               <div className="text-gray-900">{student.major || 'Not specified'}</div>
@@ -107,9 +111,27 @@ export default function StudentDashboard() {
               <div className="text-gray-900">{student.gradYear || 'Not specified'}</div>
             </div>
             <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-sm font-semibold text-gray-600 mb-1">Nominations</div>
-              <div className="text-gray-900">{student.nominationCount || 0} received</div>
+              <div className="text-sm font-semibold text-gray-600 mb-1">Endorsements Given</div>
+              <div className="text-gray-900">{student.endorsementsGiven || 0} / 5</div>
             </div>
+          </div>
+        </div>
+
+        {/* Endorse Peers CTA */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Endorse Your Peers</h2>
+              <p className="text-gray-600">
+                Help your classmates stand out by endorsing their skills. You can endorse up to 5 peers from your college and major.
+              </p>
+            </div>
+            <Link
+              href="/student/peers"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all whitespace-nowrap"
+            >
+              View Peers
+            </Link>
           </div>
         </div>
 

@@ -257,7 +257,7 @@ export default function Home() {
             <Link href="/admin" className="hover:text-white transition-colors">Admin</Link>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800">
-            <p className="text-sm">© 2024 Signl. All rights reserved.</p>
+            <p className="text-sm">© 2025 Signl. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -22,6 +22,7 @@ export async function POST(request) {
       personalEmail,
       password,
       gpa,
+      college,
       major,
       gradYear,
       careerInterests,
@@ -93,6 +94,7 @@ export async function POST(request) {
       passwordHash: hash,
       passwordSalt: salt,
       gpa: gpa ? parseFloat(gpa) : null,
+      college: college || null,
       major: major || null,
       gradYear: gradYear || null,
       careerInterests: careerInterests || null,
@@ -102,6 +104,7 @@ export async function POST(request) {
       nominations: nominations || [],
       peerScore: initialPeerScore,
       nominationCount: 0,
+      endorsementsGiven: 0,
       status: 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

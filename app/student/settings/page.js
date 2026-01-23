@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-
-const allSkills = ['Problem Solving', 'Communication', 'Technical Skills', 'Leadership', 'Teamwork', 'Creativity', 'Reliability', 'Work Ethic', 'Attention to Detail']
+import { colleges, majorsByCollege, allSkills } from '../../../lib/collegeData'
 
 export default function StudentSettings() {
   const router = useRouter()
@@ -19,11 +18,22 @@ export default function StudentSettings() {
     bio: '',
     careerInterests: '',
     skills: [],
+    college: '',
     major: '',
     gpa: ''
   })
   const [profileSaving, setProfileSaving] = useState(false)
   const [profileMessage, setProfileMessage] = useState({ type: '', text: '' })
+  const [availableMajors, setAvailableMajors] = useState([])
+
+  // Update available majors when college changes
+  useEffect(() => {
+    if (profileForm.college && majorsByCollege[profileForm.college]) {
+      setAvailableMajors(majorsByCollege[profileForm.college])
+    } else {
+      setAvailableMajors([])
+    }
+  }, [profileForm.college])
 
   // Password form state
   const [passwordForm, setPasswordForm] = useState({
@@ -52,6 +62,7 @@ export default function StudentSettings() {
     try {
       const { student: studentData } = JSON.parse(session)
       setStudent(studentData)
+      const studentCollege = studentData.college || ''
       setProfileForm({
         linkedinUrl: studentData.linkedinUrl || '',
         githubUrl: studentData.githubUrl || '',
@@ -59,9 +70,11 @@ export default function StudentSettings() {
         bio: studentData.bio || '',
         careerInterests: studentData.careerInterests || '',
         skills: studentData.skills || [],
+        college: studentCollege,
         major: studentData.major || '',
         gpa: studentData.gpa || ''
       })
+      // availableMajors will be set by the useEffect watching profileForm.college
     } catch (error) {
       console.error('Session error:', error)
       router.push('/student/login')
@@ -73,6 +86,14 @@ export default function StudentSettings() {
   const handleLogout = () => {
     localStorage.removeItem('signl_session')
     router.push('/student/login')
+  }
+
+  const handleCollegeChange = (newCollege) => {
+    setProfileForm(prev => ({
+      ...prev,
+      college: newCollege,
+      major: '' // Reset major when college changes
+    }))
   }
 
   const toggleSkill = (skill) => {
@@ -288,28 +309,51 @@ export default function StudentSettings() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Major</label>
-                <input
-                  type="text"
-                  value={profileForm.major}
-                  onChange={(e) => setProfileForm({ ...profileForm, major: e.target.value })}
+                <label className="block text-sm font-semibold text-gray-700 mb-2">College/University</label>
+                <select
+                  value={profileForm.college}
+                  onChange={(e) => handleCollegeChange(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Computer Science"
-                />
+                >
+                  <option value="">Select your college</option>
+                  {colleges.map(college => (
+                    <option key={college} value={college}>{college}</option>
+                  ))}
+                </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">GPA</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="4.0"
-                  value={profileForm.gpa}
-                  onChange={(e) => setProfileForm({ ...profileForm, gpa: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="3.75"
-                />
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Major</label>
+                {profileForm.major && profileForm.college && !availableMajors.includes(profileForm.major) && (
+                  <p className="text-amber-600 text-sm mb-2">
+                    Current: "{profileForm.major}" - Please select from standardized list below
+                  </p>
+                )}
+                <select
+                  value={availableMajors.includes(profileForm.major) ? profileForm.major : ''}
+                  onChange={(e) => setProfileForm({ ...profileForm, major: e.target.value })}
+                  disabled={!profileForm.college}
+                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!profileForm.college ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                >
+                  <option value="">{profileForm.college ? 'Select your major' : 'Select college first'}</option>
+                  {availableMajors.map(major => (
+                    <option key={major} value={major}>{major}</option>
+                  ))}
+                </select>
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">GPA</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="4.0"
+                value={profileForm.gpa}
+                onChange={(e) => setProfileForm({ ...profileForm, gpa: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="3.75"
+              />
             </div>
 
             <div>

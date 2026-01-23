@@ -10,8 +10,8 @@ const mockResponses = [
     name: 'John Doe',
     email: 'john.doe@byu.edu',
     major: 'Computer Science',
-    gradYear: 'May 2025',
-    submittedAt: '2024-12-08T10:30:00',
+    gradYear: 'May 2026',
+    submittedAt: '2025-01-08T10:30:00',
     nominations: [
       { name: 'Jane Smith', email: 'jane@byu.edu', major: 'CS', reason: 'Excellent team player, always delivers quality work' },
       { name: 'Bob Johnson', email: 'bob@byu.edu', major: 'CS', reason: 'Strong technical skills and great communicator' },
@@ -23,8 +23,8 @@ const mockResponses = [
     name: 'Sarah Miller',
     email: 'sarah.m@byu.edu',
     major: 'Business Analytics',
-    gradYear: 'December 2025',
-    submittedAt: '2024-12-08T11:45:00',
+    gradYear: 'December 2026',
+    submittedAt: '2025-01-08T11:45:00',
     nominations: [
       { name: 'Mike Davis', email: 'mike@byu.edu', major: 'BA', reason: 'Great at problem solving and data analysis' },
       { name: 'Lisa Chen', email: 'lisa@byu.edu', major: 'BA', reason: 'Incredibly detail-oriented and reliable' },
@@ -37,7 +37,7 @@ const mockResponses = [
     email: 'mbrown@byu.edu',
     major: 'Mechanical Engineering',
     gradYear: 'May 2026',
-    submittedAt: '2024-12-08T14:20:00',
+    submittedAt: '2025-01-08T14:20:00',
     nominations: [
       { name: 'Emma Wilson', email: 'emma@byu.edu', major: 'ME', reason: 'Innovative thinker with excellent technical skills' },
       { name: 'David Lee', email: 'david@byu.edu', major: 'ME', reason: 'Very thorough and great at explaining concepts' },
@@ -56,7 +56,7 @@ export default function AdminDashboard() {
   const handleLogin = (e) => {
     e.preventDefault()
     // Simple password protection - replace with real auth
-    if (password === 'signl2024') {
+    if (password === 'signl2025') {
       setIsAuthenticated(true)
     } else {
       alert('Incorrect password')
