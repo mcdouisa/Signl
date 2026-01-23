@@ -382,6 +382,18 @@ export default function StudentSignup() {
                   <option value="May 2026">May 2026</option>
                   <option value="August 2026">August 2026</option>
                   <option value="December 2026">December 2026</option>
+                  <option value="May 2027">May 2027</option>
+                  <option value="August 2027">August 2027</option>
+                  <option value="December 2027">December 2027</option>
+                  <option value="May 2028">May 2028</option>
+                  <option value="August 2028">August 2028</option>
+                  <option value="December 2028">December 2028</option>
+                  <option value="May 2029">May 2029</option>
+                  <option value="August 2029">August 2029</option>
+                  <option value="December 2029">December 2029</option>
+                  <option value="May 2030">May 2030</option>
+                  <option value="August 2030">August 2030</option>
+                  <option value="December 2030">December 2030</option>
                 </select>
               </div>
 
