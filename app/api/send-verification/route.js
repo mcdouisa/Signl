@@ -51,10 +51,10 @@ export async function POST(request) {
     // Send verification email using Resend
     try {
       const data = await resend.emails.send({
-        from: 'Signl Team <onboarding@resend.dev>', // Replace with your verified domain
+        from: 'Signl Team <team@signl.cc>',
         to: [email],
         subject: 'Complete Your Signl Account Setup',
-        replyTo: 'noreply@resend.dev',
+        replyTo: 'support@signl.cc',
         text: `Welcome to Signl!
 
 You recently requested to create an account with Signl. To complete your registration and verify your email address, please click the link below:
