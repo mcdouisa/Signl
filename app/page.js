@@ -22,7 +22,7 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
-            <img src="/logo.png.png" alt="Signl Logo" className="h-12 object-contain cursor-pointer hover:opacity-90 transition-opacity" />
+            <img src="/logo.png.png" alt="Signl Logo" className="h-16 object-contain cursor-pointer hover:opacity-90 transition-opacity" />
           </Link>
           <div className="hidden md:flex items-center space-x-8">
             <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">How It Works</a>
@@ -245,7 +245,7 @@ export default function Home() {
       <footer className="bg-gray-900 text-gray-400 py-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <Link href="/" className="flex justify-center mb-4">
-            <img src="/logo.png.png" alt="Signl Logo" className="h-10 object-contain hover:opacity-90 transition-opacity" />
+            <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
           </Link>
           <p className="mb-4">Peer-validated college recruiting platform</p>
           <div className="flex items-center justify-center space-x-6">

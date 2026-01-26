@@ -120,7 +120,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <img src="/logo.png.png" alt="Signl Logo" className="h-10 object-contain hover:opacity-90 transition-opacity" />
+              <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
             </Link>
             <div className="flex items-center space-x-4">
               <button
