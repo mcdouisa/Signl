@@ -21,15 +21,13 @@ export default function Home() {
         scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <img src="/logo.png.png" alt="Signl Logo" className="w-10 h-10 rounded-lg object-contain" />
-            <span className="text-2xl font-bold text-gray-900">Signl</span>
-          </div>
+          <Link href="/">
+            <img src="/logo.png.png" alt="Signl Logo" className="h-12 object-contain cursor-pointer hover:opacity-90 transition-opacity" />
+          </Link>
           <div className="hidden md:flex items-center space-x-8">
             <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">How It Works</a>
             <a href="#for-companies" className="text-gray-600 hover:text-gray-900 transition-colors">For Companies</a>
             <a href="#for-students" className="text-gray-600 hover:text-gray-900 transition-colors">For Students</a>
-            <Link href="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">Admin</Link>
           </div>
           <Link href="/signin" className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
             Sign In
@@ -246,15 +244,13 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <img src="/logo.png.png" alt="Signl Logo" className="w-8 h-8 rounded-lg object-contain" />
-            <span className="text-xl font-bold text-white">Signl</span>
-          </div>
+          <Link href="/" className="flex justify-center mb-4">
+            <img src="/logo.png.png" alt="Signl Logo" className="h-10 object-contain hover:opacity-90 transition-opacity" />
+          </Link>
           <p className="mb-4">Peer-validated college recruiting platform</p>
           <div className="flex items-center justify-center space-x-6">
             <Link href="/survey" className="hover:text-white transition-colors">For Students</Link>
             <a href="#for-companies" className="hover:text-white transition-colors">For Companies</a>
-            <Link href="/admin" className="hover:text-white transition-colors">Admin</Link>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800">
             <p className="text-sm">© 2025 Signl. All rights reserved.</p>

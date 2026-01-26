@@ -97,10 +97,9 @@ export default function OptIn() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       <nav className="bg-white/90 backdrop-blur-md shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center space-x-2">
-            <img src="/logo.png.png" alt="Signl Logo" className="w-10 h-10 rounded-lg object-contain" />
-            <span className="text-2xl font-bold text-gray-900">Signl</span>
-          </div>
+          <Link href="/">
+            <img src="/logo.png.png" alt="Signl Logo" className="h-10 object-contain hover:opacity-90 transition-opacity" />
+          </Link>
         </div>
       </nav>
 

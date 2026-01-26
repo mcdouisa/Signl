@@ -22,10 +22,9 @@ export default function CompanyDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <img src="/logo.png.png" alt="Signl Logo" className="w-10 h-10 rounded-lg object-contain" />
-            <span className="text-2xl font-bold text-gray-900">Signl</span>
-          </div>
+          <Link href="/">
+            <img src="/logo.png.png" alt="Signl Logo" className="h-10 object-contain hover:opacity-90 transition-opacity" />
+          </Link>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">Acme Corp</span>
             <button className="text-gray-600 hover:text-gray-900">
