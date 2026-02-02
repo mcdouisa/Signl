@@ -28,6 +28,7 @@ function StudentSignupContent() {
     gradYear: '',
     careerInterests: '',
     skills: [],
+    linkedinUrl: '',
     githubUrl: '',
     bio: '',
 
@@ -159,6 +160,18 @@ function StudentSignupContent() {
         return
       }
     }
+    if (step === 2) {
+      // Validate LinkedIn URL is provided and looks like a LinkedIn URL
+      if (!formData.linkedinUrl) {
+        alert('LinkedIn Profile URL is required')
+        return
+      }
+      const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i
+      if (!linkedinPattern.test(formData.linkedinUrl)) {
+        alert('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)')
+        return
+      }
+    }
     setStep(step + 1)
     window.scrollTo(0, 0)
   }
@@ -190,6 +203,7 @@ function StudentSignupContent() {
           gradYear: formData.gradYear,
           careerInterests: formData.careerInterests,
           skills: formData.skills,
+          linkedinUrl: formData.linkedinUrl,
           githubUrl: formData.githubUrl,
           bio: formData.bio,
           nominations: formData.nominations.filter(n => n.name) // Only include nominations with names
@@ -450,6 +464,12 @@ function StudentSignupContent() {
               </div>
 
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">LinkedIn Profile URL *</label>
+                <input type="url" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/yourprofile" />
+                <p className="text-sm text-gray-500 mt-1">Companies use this to learn more about you</p>
+              </div>
+
+              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">GitHub / Portfolio URL (Optional)</label>
                 <input type="url" name="githubUrl" value={formData.githubUrl} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://github.com/yourusername" />
               </div>
@@ -535,6 +555,7 @@ function StudentSignupContent() {
                   <p className="text-gray-700"><strong>College:</strong> {formData.college}</p>
                   <p className="text-gray-700"><strong>Major:</strong> {formData.major}</p>
                   <p className="text-gray-700"><strong>Graduation:</strong> {formData.gradYear}</p>
+                  <p className="text-gray-700"><strong>LinkedIn:</strong> <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{formData.linkedinUrl}</a></p>
                 </div>
 
                 <div className="p-4 bg-gray-50 rounded-lg">

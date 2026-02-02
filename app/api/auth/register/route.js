@@ -27,6 +27,7 @@ export async function POST(request) {
       gradYear,
       careerInterests,
       skills,
+      linkedinUrl,
       githubUrl,
       bio,
       nominations
@@ -36,6 +37,23 @@ export async function POST(request) {
     if (!firstName || !lastName || !schoolEmail || !password) {
       return NextResponse.json(
         { error: 'Missing required fields: firstName, lastName, schoolEmail, password' },
+        { status: 400 }
+      )
+    }
+
+    // Validate LinkedIn URL is provided
+    if (!linkedinUrl) {
+      return NextResponse.json(
+        { error: 'LinkedIn Profile URL is required' },
+        { status: 400 }
+      )
+    }
+
+    // Validate LinkedIn URL format
+    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i
+    if (!linkedinPattern.test(linkedinUrl)) {
+      return NextResponse.json(
+        { error: 'Please provide a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)' },
         { status: 400 }
       )
     }
@@ -99,6 +117,7 @@ export async function POST(request) {
       gradYear: gradYear || null,
       careerInterests: careerInterests || null,
       skills: skills || [],
+      linkedinUrl: linkedinUrl,
       githubUrl: githubUrl || null,
       bio: bio || null,
       nominations: nominations || [],
