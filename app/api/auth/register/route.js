@@ -49,13 +49,42 @@ export async function POST(request) {
       )
     }
 
-    // Validate LinkedIn URL format
-    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i
+    // Validate LinkedIn URL format (more permissive - allows query params, locales, etc.)
+    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i
     if (!linkedinPattern.test(linkedinUrl)) {
       return NextResponse.json(
         { error: 'Please provide a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)' },
         { status: 400 }
       )
+    }
+
+    // Validate nominations - at least 1 required with email or LinkedIn
+    if (!nominations || nominations.length === 0) {
+      return NextResponse.json(
+        { error: 'At least one peer nomination is required' },
+        { status: 400 }
+      )
+    }
+
+    // Validate each nomination has either email or LinkedIn URL
+    for (let i = 0; i < nominations.length; i++) {
+      const nom = nominations[i]
+      if (!nom.name || !nom.name.trim()) {
+        return NextResponse.json(
+          { error: `Nomination #${i + 1}: Name is required` },
+          { status: 400 }
+        )
+      }
+      
+      const hasEmail = nom.email && nom.email.trim() && nom.email.includes('@')
+      const hasLinkedIn = nom.linkedinUrl && nom.linkedinUrl.trim() && linkedinPattern.test(nom.linkedinUrl)
+      
+      if (!hasEmail && !hasLinkedIn) {
+        return NextResponse.json(
+          { error: `Nomination #${i + 1}: Either email or LinkedIn URL is required` },
+          { status: 400 }
+        )
+      }
     }
 
     // Validate email format
@@ -138,9 +167,9 @@ export async function POST(request) {
     })
 
   } catch (error) {
-    console.error('Registration error:', error)
+    console.error('Registration error:', error.message, error.stack)
     return NextResponse.json(
-      { error: 'Failed to create account. Please try again.' },
+      { error: `Failed to create account: ${error.message || 'Unknown error'}` },
       { status: 500 }
     )
   }

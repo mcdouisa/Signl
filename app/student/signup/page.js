@@ -34,9 +34,7 @@ function StudentSignupContent() {
 
     // Step 3: Nominations
     nominations: [
-      { name: '', email: '', major: '', projectContext: '', skills: [], reason: '' },
-      { name: '', email: '', major: '', projectContext: '', skills: [], reason: '' },
-      { name: '', email: '', major: '', projectContext: '', skills: [], reason: '' }
+      { name: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }
     ]
   })
 
@@ -139,11 +137,16 @@ function StudentSignupContent() {
   const addNomination = () => {
     setFormData({
       ...formData,
-      nominations: [...formData.nominations, { name: '', email: '', major: '', projectContext: '', skills: [], reason: '' }]
+      nominations: [...formData.nominations, { name: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }]
     })
   }
 
   const removeNomination = (index) => {
+    // Prevent removing if only 1 nomination left (minimum 1 required)
+    if (formData.nominations.length <= 1) {
+      alert('At least one nomination is required')
+      return
+    }
     const newNominations = formData.nominations.filter((_, i) => i !== index)
     setFormData({ ...formData, nominations: newNominations })
   }
@@ -166,10 +169,50 @@ function StudentSignupContent() {
         alert('LinkedIn Profile URL is required')
         return
       }
-      const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i
+      // More permissive LinkedIn pattern - allows query params, locales, etc.
+      const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i
       if (!linkedinPattern.test(formData.linkedinUrl)) {
         alert('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)')
         return
+      }
+    }
+    if (step === 3) {
+      // Validate at least 1 nomination exists
+      if (formData.nominations.length === 0) {
+        alert('At least one nomination is required')
+        return
+      }
+      
+      // Validate each nomination has required fields and either email or LinkedIn URL
+      for (let i = 0; i < formData.nominations.length; i++) {
+        const nom = formData.nominations[i]
+        
+        // Check required fields
+        if (!nom.name || !nom.name.trim()) {
+          alert(`Nomination #${i + 1}: Name is required`)
+          return
+        }
+        if (!nom.projectContext || !nom.projectContext.trim()) {
+          alert(`Nomination #${i + 1}: Project context is required`)
+          return
+        }
+        if (!nom.reason || !nom.reason.trim()) {
+          alert(`Nomination #${i + 1}: Reason is required`)
+          return
+        }
+        if (!nom.skills || nom.skills.length === 0) {
+          alert(`Nomination #${i + 1}: Please select at least 1 skill`)
+          return
+        }
+        
+        // Check that either email or LinkedIn URL is provided
+        const hasEmail = nom.email && nom.email.trim() && nom.email.includes('@')
+        const hasLinkedIn = nom.linkedinUrl && nom.linkedinUrl.trim() && /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i.test(nom.linkedinUrl)
+        
+        if (!hasEmail && !hasLinkedIn) {
+          alert(`Nomination #${i + 1}: Please provide either an email address or LinkedIn profile URL for your peer`)
+          return
+        }
       }
     }
     setStep(step + 1)
@@ -500,17 +543,26 @@ function StudentSignupContent() {
 
               {formData.nominations.map((nomination, index) => (
                 <div key={index} className="p-6 border-2 border-gray-200 rounded-xl relative">
-                  {formData.nominations.length > 3 && (
+                  {formData.nominations.length > 1 && (
                     <button type="button" onClick={() => removeNomination(index)} className="absolute top-4 right-4 text-red-600 hover:text-red-800">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   )}
-                  <h3 className="font-semibold text-gray-900 mb-4">Nomination #{index + 1}</h3>
+                  <h3 className="font-semibold text-gray-900 mb-4">Nomination #{index + 1} {index === 0 && <span className="text-red-500">*</span>}</h3>
                   <div className="space-y-4">
                     <input type="text" value={nomination.name} onChange={(e) => handleNominationChange(index, 'name', e.target.value)} placeholder="Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
-                    <input type="email" value={nomination.email} onChange={(e) => handleNominationChange(index, 'email', e.target.value)} placeholder="Email (optional)" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                    
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                      <p className="text-amber-800 text-sm font-medium mb-2">Provide at least one way to contact your peer:</p>
+                      <div className="space-y-3">
+                        <input type="email" value={nomination.email} onChange={(e) => handleNominationChange(index, 'email', e.target.value)} placeholder="Email address" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                        <div className="text-center text-gray-500 text-sm">— OR —</div>
+                        <input type="url" value={nomination.linkedinUrl || ''} onChange={(e) => handleNominationChange(index, 'linkedinUrl', e.target.value)} placeholder="LinkedIn profile URL (e.g., https://linkedin.com/in/username)" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                      </div>
+                    </div>
+                    
                     <input type="text" value={nomination.major} onChange={(e) => handleNominationChange(index, 'major', e.target.value)} placeholder="Major (optional)" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
                     <input type="text" value={nomination.projectContext} onChange={(e) => handleNominationChange(index, 'projectContext', e.target.value)} placeholder="Which group project? *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
                     
