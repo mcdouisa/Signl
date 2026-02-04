@@ -143,10 +143,12 @@ export async function POST(request) {
     }
 
     // Clean nominations data for Firestore
+    // Supports both new firstName/lastName format and legacy name format
     const cleanNominations = (nominations || [])
-      .filter(n => n && n.name && n.name.trim())
+      .filter(n => n && ((n.firstName && n.firstName.trim()) || (n.name && n.name.trim())))
       .map(n => ({
-        name: (n.name || '').trim(),
+        firstName: (n.firstName || n.name || '').trim(),
+        lastName: (n.lastName || '').trim(),
         email: (n.email || '').trim(),
         linkedinUrl: (n.linkedinUrl || '').trim(),
         major: (n.major || '').trim(),

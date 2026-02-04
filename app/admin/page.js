@@ -6,11 +6,13 @@ import Link from 'next/link'
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
-  const [students, setStudents] = useState([])
+  const [people, setPeople] = useState([])
+  const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [selectedResponse, setSelectedResponse] = useState(null)
+  const [selectedPerson, setSelectedPerson] = useState(null)
   const [view, setView] = useState('overview') // 'overview' or 'responses'
+  const [filter, setFilter] = useState('all') // 'all', 'verified', 'unverified'
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -21,30 +23,31 @@ export default function AdminDashboard() {
     }
   }
 
-  // Fetch real students from Firebase after authentication
+  // Fetch data after authentication
   useEffect(() => {
     if (!isAuthenticated) return
 
-    const fetchStudents = async () => {
+    const fetchData = async () => {
       setLoading(true)
       setError('')
       try {
         const res = await fetch('/api/admin/students')
         const data = await res.json()
         if (data.success) {
-          setStudents(data.students || [])
+          setPeople(data.people || [])
+          setStats(data.stats || null)
         } else {
-          setError(data.error || 'Failed to load students')
+          setError(data.error || 'Failed to load data')
         }
       } catch (err) {
-        console.error('Error fetching students:', err)
+        console.error('Error fetching data:', err)
         setError('Failed to connect to server')
       } finally {
         setLoading(false)
       }
     }
 
-    fetchStudents()
+    fetchData()
   }, [isAuthenticated])
 
   if (!isAuthenticated) {
@@ -94,22 +97,26 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading student data...</p>
+          <p className="text-gray-600 font-medium">Loading data...</p>
         </div>
       </div>
     )
   }
 
-  // Stats from real data
-  const totalResponses = students.length
-  const totalNominations = students.reduce((sum, s) => sum + (s.nominations?.length || 0), 0)
-  const avgNominations = totalResponses > 0 ? (totalNominations / totalResponses).toFixed(1) : '0'
+  // Stats
+  const totalPeople = stats?.totalPeople || people.length
+  const verifiedCount = stats?.verifiedStudents || people.filter(p => p.verified).length
+  const unverifiedCount = stats?.unverifiedNominees || people.filter(p => !p.verified).length
+  const totalNominations = stats?.totalNominations || 0
 
-  // Count unique nominees across all students
-  const allNominees = students.flatMap(s => (s.nominations || []).map(n => (n.email || n.name || '').toLowerCase()))
-  const uniqueNominees = new Set(allNominees.filter(Boolean)).size
+  // Filtered list
+  const filteredPeople = filter === 'all'
+    ? people
+    : filter === 'verified'
+      ? people.filter(p => p.verified)
+      : people.filter(p => !p.verified)
 
-  // Format date helper
+  // Format date helpers
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A'
     const d = new Date(dateStr)
@@ -121,6 +128,28 @@ export default function AdminDashboard() {
     const d = new Date(dateStr)
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
       d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+  }
+
+  // Verified badge component
+  const VerifiedBadge = ({ verified, size = 'sm' }) => {
+    if (verified) {
+      return (
+        <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-green-50 text-green-700 font-semibold rounded-full`}>
+          <svg className={size === 'lg' ? 'w-4 h-4' : 'w-3 h-3'} fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+          Verified
+        </span>
+      )
+    }
+    return (
+      <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-amber-50 text-amber-700 font-semibold rounded-full`}>
+        <svg className={size === 'lg' ? 'w-4 h-4' : 'w-3 h-3'} fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+        </svg>
+        Nominated
+      </span>
+    )
   }
 
   return (
@@ -151,7 +180,7 @@ export default function AdminDashboard() {
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                Responses
+                People
               </button>
               <Link href="/" className="text-gray-600 hover:text-gray-900">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,24 +204,24 @@ export default function AdminDashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Total Responses</div>
-                <div className="text-3xl font-bold text-blue-600">{totalResponses}</div>
-                <div className="text-sm text-gray-500 mt-1">Registered students</div>
+                <div className="text-sm font-semibold text-gray-600 mb-2">Total People</div>
+                <div className="text-3xl font-bold text-blue-600">{totalPeople}</div>
+                <div className="text-sm text-gray-500 mt-1">Students & nominees</div>
+              </div>
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="text-sm font-semibold text-gray-600 mb-2">Verified Students</div>
+                <div className="text-3xl font-bold text-green-600">{verifiedCount}</div>
+                <div className="text-sm text-gray-500 mt-1">Registered accounts</div>
+              </div>
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="text-sm font-semibold text-gray-600 mb-2">Unverified Nominees</div>
+                <div className="text-3xl font-bold text-amber-600">{unverifiedCount}</div>
+                <div className="text-sm text-gray-500 mt-1">Pending registration</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Total Nominations</div>
                 <div className="text-3xl font-bold text-teal-600">{totalNominations}</div>
-                <div className="text-sm text-gray-500 mt-1">Peer nominations</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Avg Nominations</div>
-                <div className="text-3xl font-bold text-blue-600">{avgNominations}</div>
-                <div className="text-sm text-gray-500 mt-1">Per student</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Unique Nominees</div>
-                <div className="text-3xl font-bold text-teal-600">{uniqueNominees}</div>
-                <div className="text-sm text-gray-500 mt-1">Different students</div>
+                <div className="text-sm text-gray-500 mt-1">Peer nominations made</div>
               </div>
             </div>
 
@@ -201,84 +230,92 @@ export default function AdminDashboard() {
               <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onClick={() => {
-                  if (students.length === 0) return alert('No students to export')
-                  const headers = 'Name,Email,College,Major,Grad Year,GPA,Nominations Given,Skills,LinkedIn,GitHub,Bio,Registered'
-                  const csvContent = students.map(s => {
-                    const name = `"${(s.name || '').replace(/"/g, '""')}"`
-                    const email = s.schoolEmail || ''
-                    const college = s.college || ''
-                    const major = `"${(s.major || '').replace(/"/g, '""')}"`
-                    const gradYear = s.gradYear || ''
-                    const gpa = s.gpa || ''
-                    const nominations = (s.nominations || []).length
-                    const skills = `"${(s.skills || []).join(', ')}"`
-                    const linkedin = s.linkedinUrl || ''
-                    const github = s.githubUrl || ''
-                    const bio = `"${(s.bio || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`
-                    const registered = s.createdAt ? new Date(s.createdAt).toLocaleDateString() : ''
-                    return [name, email, college, major, gradYear, gpa, nominations, skills, linkedin, github, bio, registered].join(',')
+                  if (people.length === 0) return alert('No data to export')
+                  const headers = 'Name,Email,College,Major,Grad Year,GPA,Verified,Times Nominated,Skills,LinkedIn,GitHub,Bio,Registered'
+                  const csvContent = people.map(p => {
+                    const name = `"${(p.name || '').replace(/"/g, '""')}"`
+                    const email = p.schoolEmail || ''
+                    const college = p.college || ''
+                    const major = `"${(p.major || '').replace(/"/g, '""')}"`
+                    const gradYear = p.gradYear || ''
+                    const gpa = p.gpa || ''
+                    const verified = p.verified ? 'Yes' : 'No'
+                    const timesNom = p.timesNominated || 0
+                    const skills = `"${(p.skills || []).join(', ')}"`
+                    const linkedin = p.linkedinUrl || ''
+                    const github = p.githubUrl || ''
+                    const bio = `"${(p.bio || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`
+                    const registered = p.createdAt ? new Date(p.createdAt).toLocaleDateString() : ''
+                    return [name, email, college, major, gradYear, gpa, verified, timesNom, skills, linkedin, github, bio, registered].join(',')
                   }).join('\n')
                   const blob = new Blob([`${headers}\n${csvContent}`], { type: 'text/csv' })
                   const url = window.URL.createObjectURL(blob)
                   const a = document.createElement('a')
                   a.href = url
-                  a.download = `signl-students-${new Date().toISOString().split('T')[0]}.csv`
+                  a.download = `signl-people-${new Date().toISOString().split('T')[0]}.csv`
                   a.click()
                   window.URL.revokeObjectURL(url)
                 }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
                   <div className="font-semibold text-gray-900 mb-1">Export Data</div>
-                  <div className="text-sm text-gray-600">Download all student data as CSV</div>
+                  <div className="text-sm text-gray-600">Download all data as CSV</div>
                 </button>
                 <button onClick={() => {
                   setView('responses')
                 }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
-                  <div className="font-semibold text-gray-900 mb-1">View All Responses</div>
-                  <div className="text-sm text-gray-600">Browse detailed student profiles</div>
+                  <div className="font-semibold text-gray-900 mb-1">View All People</div>
+                  <div className="text-sm text-gray-600">Browse profiles and nominations</div>
                 </button>
               </div>
             </div>
 
-            {/* Recent Responses */}
+            {/* Recent People */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Responses</h2>
-              {students.length === 0 ? (
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Recent People</h2>
+              {people.length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
                   <svg className="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
-                  <p>No registered students yet</p>
-                  <p className="text-sm mt-1">Students will appear here after completing registration</p>
+                  <p>No people yet</p>
+                  <p className="text-sm mt-1">Students and nominees will appear here</p>
                 </div>
               ) : (
                 <>
                   <div className="space-y-3">
-                    {students.slice(0, 5).map((student) => (
-                      <div key={student.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => { setSelectedResponse(student); setView('responses') }}>
+                    {people.slice(0, 8).map((person) => (
+                      <div key={person.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => { setSelectedPerson(person); setView('responses') }}>
                         <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-semibold text-gray-900">{student.name || 'Unnamed'}</div>
-                            <div className="text-sm text-gray-600">
-                              {student.college && `${student.college} • `}{student.major || 'Undeclared'} • {student.gradYear || 'TBD'}
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-gray-900">{person.name || 'Unnamed'}</span>
+                                <VerifiedBadge verified={person.verified} />
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {person.major || 'Unknown'}{person.college ? ` - ${person.college}` : ''}
+                              </div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm text-gray-600">
-                              {formatDate(student.createdAt)}
-                            </div>
+                            {person.verified && (
+                              <div className="text-sm text-gray-600">
+                                {formatDate(person.createdAt)}
+                              </div>
+                            )}
                             <div className="text-sm font-semibold text-blue-600">
-                              {(student.nominations || []).length} nominations
+                              Nominated {person.timesNominated || 0} time{(person.timesNominated || 0) !== 1 ? 's' : ''}
                             </div>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                  {students.length > 5 && (
+                  {people.length > 8 && (
                     <button
                       onClick={() => setView('responses')}
                       className="mt-4 w-full py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
                     >
-                      View All {students.length} Responses →
+                      View All {people.length} People →
                     </button>
                   )}
                 </>
@@ -289,29 +326,64 @@ export default function AdminDashboard() {
 
         {view === 'responses' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Response List */}
+            {/* People List */}
             <div className="lg:col-span-1 bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">All Responses ({students.length})</h2>
-              {students.length === 0 ? (
+              <h2 className="text-xl font-bold text-gray-900 mb-3">All People ({filteredPeople.length})</h2>
+
+              {/* Filter */}
+              <div className="flex gap-1 mb-4">
+                {[
+                  { id: 'all', label: 'All' },
+                  { id: 'verified', label: 'Verified' },
+                  { id: 'unverified', label: 'Nominated' }
+                ].map(f => (
+                  <button
+                    key={f.id}
+                    onClick={() => setFilter(f.id)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+                      filter === f.id
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+
+              {filteredPeople.length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
-                  <p>No registered students yet</p>
+                  <p>No people found</p>
                 </div>
               ) : (
                 <div className="space-y-2 max-h-[600px] overflow-y-auto">
-                  {students.map((student) => (
+                  {filteredPeople.map((person) => (
                     <button
-                      key={student.id}
-                      onClick={() => setSelectedResponse(student)}
-                      className={`w-full p-4 rounded-lg text-left transition-colors ${
-                        selectedResponse?.id === student.id
+                      key={person.id}
+                      onClick={() => setSelectedPerson(person)}
+                      className={`w-full p-3 rounded-lg text-left transition-colors ${
+                        selectedPerson?.id === person.id
                           ? 'bg-blue-50 border-2 border-blue-500'
-                          : 'border border-gray-200 hover:bg-gray-50'
+                          : person.verified
+                            ? 'border border-gray-200 hover:bg-gray-50'
+                            : 'border border-dashed border-gray-300 hover:bg-gray-50'
                       }`}
                     >
-                      <div className="font-semibold text-gray-900">{student.name || 'Unnamed'}</div>
-                      <div className="text-sm text-gray-600">{student.major || 'Undeclared'}</div>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="font-semibold text-gray-900 text-sm">{person.name || 'Unnamed'}</span>
+                        {person.verified ? (
+                          <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        ) : (
+                          <svg className="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="text-xs text-gray-600">{person.major || 'Unknown'}</div>
                       <div className="text-xs text-gray-500 mt-1">
-                        {(student.nominations || []).length} nominations • {formatDate(student.createdAt)}
+                        Nominated {person.timesNominated || 0} time{(person.timesNominated || 0) !== 1 ? 's' : ''}
                       </div>
                     </button>
                   ))}
@@ -319,46 +391,73 @@ export default function AdminDashboard() {
               )}
             </div>
 
-            {/* Response Detail */}
+            {/* Person Detail */}
             <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
-              {selectedResponse ? (
+              {selectedPerson ? (
                 <>
+                  {/* Header */}
                   <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedResponse.name || 'Unnamed'}</h2>
-                    <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
-                      <span>{selectedResponse.schoolEmail}</span>
-                      {selectedResponse.college && (
-                        <>
-                          <span>•</span>
-                          <span>{selectedResponse.college}</span>
-                        </>
-                      )}
-                      <span>•</span>
-                      <span>{selectedResponse.major || 'Undeclared'}</span>
-                      <span>•</span>
-                      <span>{selectedResponse.gradYear || 'TBD'}</span>
-                    </div>
-                    {selectedResponse.gpa && (
-                      <div className="text-sm text-gray-500 mt-1">GPA: {selectedResponse.gpa}</div>
-                    )}
-                    <div className="text-sm text-gray-500 mt-1">
-                      Registered: {formatDateTime(selectedResponse.createdAt)}
+                    <div className="flex items-center gap-3 mb-2">
+                      <h2 className="text-2xl font-bold text-gray-900">{selectedPerson.name || 'Unnamed'}</h2>
+                      <VerifiedBadge verified={selectedPerson.verified} size="lg" />
                     </div>
 
-                    {/* Bio */}
-                    {selectedResponse.bio && (
+                    <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
+                      {selectedPerson.schoolEmail && (
+                        <span>{selectedPerson.schoolEmail}</span>
+                      )}
+                      {selectedPerson.college && (
+                        <>
+                          <span>•</span>
+                          <span>{selectedPerson.college}</span>
+                        </>
+                      )}
+                      {selectedPerson.major && (
+                        <>
+                          <span>•</span>
+                          <span>{selectedPerson.major}</span>
+                        </>
+                      )}
+                      {selectedPerson.gradYear && (
+                        <>
+                          <span>•</span>
+                          <span>{selectedPerson.gradYear}</span>
+                        </>
+                      )}
+                    </div>
+
+                    {selectedPerson.gpa && (
+                      <div className="text-sm text-gray-500 mt-1">GPA: {selectedPerson.gpa}</div>
+                    )}
+
+                    {selectedPerson.verified && selectedPerson.createdAt && (
+                      <div className="text-sm text-gray-500 mt-1">
+                        Registered: {formatDateTime(selectedPerson.createdAt)}
+                      </div>
+                    )}
+
+                    {/* Nomination count highlight */}
+                    <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg">
+                      <span className="text-2xl font-bold text-blue-600">{selectedPerson.timesNominated || 0}</span>
+                      <span className="text-sm text-blue-700 font-medium">
+                        time{(selectedPerson.timesNominated || 0) !== 1 ? 's' : ''} nominated
+                      </span>
+                    </div>
+
+                    {/* Bio - verified students only */}
+                    {selectedPerson.bio && (
                       <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                         <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Bio</div>
-                        <p className="text-sm text-gray-700">{selectedResponse.bio}</p>
+                        <p className="text-sm text-gray-700">{selectedPerson.bio}</p>
                       </div>
                     )}
 
                     {/* Skills */}
-                    {selectedResponse.skills && selectedResponse.skills.length > 0 && (
+                    {selectedPerson.skills && selectedPerson.skills.length > 0 && (
                       <div className="mt-3">
                         <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Skills</div>
                         <div className="flex flex-wrap gap-2">
-                          {selectedResponse.skills.map((skill, i) => (
+                          {selectedPerson.skills.map((skill, i) => (
                             <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
                               {skill}
                             </span>
@@ -368,37 +467,80 @@ export default function AdminDashboard() {
                     )}
 
                     {/* Links */}
-                    <div className="flex gap-3 mt-3">
-                      {selectedResponse.linkedinUrl && (
-                        <a href={selectedResponse.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
-                          LinkedIn ↗
-                        </a>
-                      )}
-                      {selectedResponse.githubUrl && (
-                        <a href={selectedResponse.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">
-                          GitHub ↗
-                        </a>
-                      )}
-                      {selectedResponse.personalEmail && (
-                        <span className="text-sm text-gray-500">Personal: {selectedResponse.personalEmail}</span>
-                      )}
-                    </div>
+                    {(selectedPerson.linkedinUrl || selectedPerson.githubUrl || selectedPerson.personalEmail) && (
+                      <div className="flex gap-3 mt-3">
+                        {selectedPerson.linkedinUrl && (
+                          <a href={selectedPerson.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                            LinkedIn ↗
+                          </a>
+                        )}
+                        {selectedPerson.githubUrl && (
+                          <a href={selectedPerson.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">
+                            GitHub ↗
+                          </a>
+                        )}
+                        {selectedPerson.personalEmail && (
+                          <span className="text-sm text-gray-500">Personal: {selectedPerson.personalEmail}</span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-4">
-                      Nominations ({(selectedResponse.nominations || []).length})
-                    </h3>
-                    {(selectedResponse.nominations || []).length === 0 ? (
-                      <div className="text-center py-6 text-gray-400 text-sm">
-                        No nominations submitted
+                  {/* Nominated By Section */}
+                  {(selectedPerson.nominatedBy || []).length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-gray-900 mb-4">
+                        Nominated By ({(selectedPerson.nominatedBy || []).length})
+                      </h3>
+                      <div className="space-y-3">
+                        {(selectedPerson.nominatedBy || []).map((nom, index) => (
+                          <div key={index} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="font-semibold text-gray-900 text-sm">{nom.byName}</div>
+                              <span className="text-xs text-gray-500">{nom.byEmail}</span>
+                            </div>
+                            {nom.projectContext && (
+                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-green-100 mb-2">
+                                <span className="text-xs font-semibold text-gray-500">Project: </span>
+                                {nom.projectContext}
+                              </div>
+                            )}
+                            {nom.reason && (
+                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-green-100 mb-2">
+                                <span className="text-xs font-semibold text-gray-500">Reason: </span>
+                                {nom.reason}
+                              </div>
+                            )}
+                            {nom.skills && nom.skills.length > 0 && (
+                              <div className="flex flex-wrap gap-1">
+                                {nom.skills.map((skill, i) => (
+                                  <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {(selectedResponse.nominations || []).map((nomination, index) => (
+                    </div>
+                  )}
+
+                  {/* Nominations Given Section - only for verified students */}
+                  {selectedPerson.verified && (selectedPerson.nominations || []).length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-4">
+                        Nominations Given ({(selectedPerson.nominations || []).length})
+                      </h3>
+                      <div className="space-y-3">
+                        {(selectedPerson.nominations || []).map((nomination, index) => (
                           <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                             <div className="flex items-start justify-between mb-1">
-                              <div className="font-semibold text-gray-900">{nomination.name}</div>
+                              <div className="font-semibold text-gray-900 text-sm">
+                                {nomination.firstName && nomination.lastName
+                                  ? `${nomination.firstName} ${nomination.lastName}`
+                                  : nomination.firstName || nomination.name || 'Unnamed'}
+                              </div>
                               {nomination.major && (
                                 <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">{nomination.major}</span>
                               )}
@@ -422,7 +564,7 @@ export default function AdminDashboard() {
                             )}
                             {nomination.projectContext && (
                               <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200 mb-2">
-                                <span className="text-xs font-semibold text-gray-500">Project Context: </span>
+                                <span className="text-xs font-semibold text-gray-500">Project: </span>
                                 {nomination.projectContext}
                               </div>
                             )}
@@ -435,8 +577,8 @@ export default function AdminDashboard() {
                           </div>
                         ))}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="h-full flex items-center justify-center text-gray-400">
@@ -444,7 +586,7 @@ export default function AdminDashboard() {
                     <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <p>Select a response to view details</p>
+                    <p>Select a person to view details</p>
                   </div>
                 </div>
               )}

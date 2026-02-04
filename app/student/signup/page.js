@@ -34,7 +34,7 @@ function StudentSignupContent() {
 
     // Step 3: Nominations
     nominations: [
-      { name: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }
+      { firstName: '', lastName: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }
     ]
   })
 
@@ -139,7 +139,7 @@ function StudentSignupContent() {
   const addNomination = () => {
     setFormData({
       ...formData,
-      nominations: [...formData.nominations, { name: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }]
+      nominations: [...formData.nominations, { firstName: '', lastName: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }]
     })
   }
 
@@ -190,8 +190,12 @@ function StudentSignupContent() {
         const nom = formData.nominations[i]
         
         // Check required fields
-        if (!nom.name || !nom.name.trim()) {
-          alert(`Nomination #${i + 1}: Name is required`)
+        if (!nom.firstName || !nom.firstName.trim()) {
+          alert(`Nomination #${i + 1}: First name is required`)
+          return
+        }
+        if (!nom.lastName || !nom.lastName.trim()) {
+          alert(`Nomination #${i + 1}: Last name is required`)
           return
         }
         if (!nom.projectContext || !nom.projectContext.trim()) {
@@ -255,7 +259,7 @@ function StudentSignupContent() {
           linkedinUrl: formData.linkedinUrl,
           githubUrl: formData.githubUrl,
           bio: formData.bio,
-          nominations: formData.nominations.filter(n => n.name && n.name.trim())
+          nominations: formData.nominations.filter(n => n.firstName && n.firstName.trim())
         }),
       })
 
@@ -560,7 +564,10 @@ function StudentSignupContent() {
                   )}
                   <h3 className="font-semibold text-gray-900 mb-4">Nomination #{index + 1} {index === 0 && <span className="text-red-500">*</span>}</h3>
                   <div className="space-y-4">
-                    <input type="text" value={nomination.name} onChange={(e) => handleNominationChange(index, 'name', e.target.value)} placeholder="Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <input type="text" value={nomination.firstName} onChange={(e) => handleNominationChange(index, 'firstName', e.target.value)} placeholder="First Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                      <input type="text" value={nomination.lastName} onChange={(e) => handleNominationChange(index, 'lastName', e.target.value)} placeholder="Last Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                    </div>
                     
                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                       <p className="text-amber-800 text-sm font-medium mb-2">Provide at least one way to contact your peer:</p>
@@ -621,7 +628,7 @@ function StudentSignupContent() {
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <h3 className="font-semibold text-gray-900 mb-2">Your Nominations ({formData.nominations.length})</h3>
                   {formData.nominations.map((nom, idx) => (
-                    <p key={idx} className="text-gray-700">• {nom.name || `Nomination ${idx + 1}`}</p>
+                    <p key={idx} className="text-gray-700">• {nom.firstName && nom.lastName ? `${nom.firstName} ${nom.lastName}` : nom.firstName || `Nomination ${idx + 1}`}</p>
                   ))}
                 </div>
               </div>
