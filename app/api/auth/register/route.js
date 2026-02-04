@@ -114,9 +114,10 @@ export async function POST(request) {
       })
     }
 
-    // Check if email already exists
+    // Check if email already exists (case-insensitive)
+    const normalizedEmail = schoolEmail.trim().toLowerCase()
     const studentsRef = collection(db, 'students')
-    const emailQuery = query(studentsRef, where('schoolEmail', '==', schoolEmail))
+    const emailQuery = query(studentsRef, where('schoolEmail', '==', normalizedEmail))
     const existingStudents = await getDocs(emailQuery)
 
     if (!existingStudents.empty) {
@@ -132,24 +133,46 @@ export async function POST(request) {
     // Calculate initial peer score (base score, will increase with nominations)
     const initialPeerScore = 70
 
+    // Parse GPA safely (avoid NaN in Firestore)
+    let parsedGpa = null
+    if (gpa && String(gpa).trim() !== '') {
+      const num = parseFloat(gpa)
+      if (!isNaN(num) && num >= 0 && num <= 4.0) {
+        parsedGpa = num
+      }
+    }
+
+    // Clean nominations data for Firestore
+    const cleanNominations = (nominations || [])
+      .filter(n => n && n.name && n.name.trim())
+      .map(n => ({
+        name: (n.name || '').trim(),
+        email: (n.email || '').trim(),
+        linkedinUrl: (n.linkedinUrl || '').trim(),
+        major: (n.major || '').trim(),
+        projectContext: (n.projectContext || '').trim(),
+        skills: Array.isArray(n.skills) ? n.skills : [],
+        reason: (n.reason || '').trim()
+      }))
+
     // Create student document
     const studentData = {
-      firstName,
-      lastName,
-      schoolEmail,
-      personalEmail: personalEmail || null,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      schoolEmail: schoolEmail.trim().toLowerCase(),
+      personalEmail: personalEmail ? personalEmail.trim() : null,
       passwordHash: hash,
       passwordSalt: salt,
-      gpa: gpa ? parseFloat(gpa) : null,
+      gpa: parsedGpa,
       college: college || null,
       major: major || null,
       gradYear: gradYear || null,
       careerInterests: careerInterests || null,
-      skills: skills || [],
-      linkedinUrl: linkedinUrl,
-      githubUrl: githubUrl || null,
-      bio: bio || null,
-      nominations: nominations || [],
+      skills: Array.isArray(skills) ? skills : [],
+      linkedinUrl: linkedinUrl.trim(),
+      githubUrl: githubUrl ? githubUrl.trim() : null,
+      bio: bio ? bio.trim() : null,
+      nominations: cleanNominations,
       peerScore: initialPeerScore,
       nominationCount: 0,
       endorsementsGiven: 0,

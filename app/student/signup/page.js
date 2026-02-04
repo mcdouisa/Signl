@@ -39,6 +39,8 @@ function StudentSignupContent() {
   })
 
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [availableMajors, setAvailableMajors] = useState([])
 
   // Update available majors when college changes
@@ -226,6 +228,10 @@ function StudentSignupContent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (submitting) return
+
+    setSubmitting(true)
+    setSubmitError('')
 
     try {
       // Register student via API
@@ -249,7 +255,7 @@ function StudentSignupContent() {
           linkedinUrl: formData.linkedinUrl,
           githubUrl: formData.githubUrl,
           bio: formData.bio,
-          nominations: formData.nominations.filter(n => n.name) // Only include nominations with names
+          nominations: formData.nominations.filter(n => n.name && n.name.trim())
         }),
       })
 
@@ -263,7 +269,9 @@ function StudentSignupContent() {
       setSubmitted(true)
     } catch (error) {
       console.error('Error creating account:', error)
-      alert(error.message || 'There was an error creating your account. Please try again.')
+      setSubmitError(error.message || 'There was an error creating your account. Please try again.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -628,9 +636,17 @@ function StudentSignupContent() {
                 </label>
               </div>
 
+              {submitError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-700 text-sm font-medium">{submitError}</p>
+                </div>
+              )}
+
               <div className="flex gap-4">
-                <button type="button" onClick={prevStep} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
-                <button type="submit" className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">Create Account</button>
+                <button type="button" onClick={prevStep} disabled={submitting} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 disabled:opacity-50">Back</button>
+                <button type="submit" disabled={submitting} className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                  {submitting ? 'Creating Account...' : 'Create Account'}
+                </button>
               </div>
             </div>
           )}

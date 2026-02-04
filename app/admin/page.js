@@ -1,67 +1,51 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-
-// Mock data - replace with real Firebase data
-const mockResponses = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john.doe@byu.edu',
-    major: 'Computer Science',
-    gradYear: 'May 2026',
-    submittedAt: '2025-01-08T10:30:00',
-    nominations: [
-      { name: 'Jane Smith', email: 'jane@byu.edu', major: 'CS', reason: 'Excellent team player, always delivers quality work' },
-      { name: 'Bob Johnson', email: 'bob@byu.edu', major: 'CS', reason: 'Strong technical skills and great communicator' },
-      { name: 'Alice Williams', email: 'alice@byu.edu', major: 'CS', reason: 'Very organized and helps others succeed' },
-    ]
-  },
-  {
-    id: 2,
-    name: 'Sarah Miller',
-    email: 'sarah.m@byu.edu',
-    major: 'Business Analytics',
-    gradYear: 'December 2026',
-    submittedAt: '2025-01-08T11:45:00',
-    nominations: [
-      { name: 'Mike Davis', email: 'mike@byu.edu', major: 'BA', reason: 'Great at problem solving and data analysis' },
-      { name: 'Lisa Chen', email: 'lisa@byu.edu', major: 'BA', reason: 'Incredibly detail-oriented and reliable' },
-      { name: 'Tom Anderson', email: 'tom@byu.edu', major: 'BA', reason: 'Strong leadership and collaboration skills' },
-    ]
-  },
-  {
-    id: 3,
-    name: 'Michael Brown',
-    email: 'mbrown@byu.edu',
-    major: 'Mechanical Engineering',
-    gradYear: 'May 2026',
-    submittedAt: '2025-01-08T14:20:00',
-    nominations: [
-      { name: 'Emma Wilson', email: 'emma@byu.edu', major: 'ME', reason: 'Innovative thinker with excellent technical skills' },
-      { name: 'David Lee', email: 'david@byu.edu', major: 'ME', reason: 'Very thorough and great at explaining concepts' },
-      { name: 'Rachel Kim', email: 'rachel@byu.edu', major: 'ME', reason: 'Hard worker who always meets deadlines' },
-      { name: 'Chris Martinez', email: 'chris@byu.edu', major: 'ME', reason: 'Positive attitude and helps team stay motivated' },
-    ]
-  },
-]
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
+  const [students, setStudents] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [selectedResponse, setSelectedResponse] = useState(null)
   const [view, setView] = useState('overview') // 'overview' or 'responses'
 
   const handleLogin = (e) => {
     e.preventDefault()
-    // Simple password protection - replace with real auth
     if (password === 'signl2025') {
       setIsAuthenticated(true)
     } else {
       alert('Incorrect password')
     }
   }
+
+  // Fetch real students from Firebase after authentication
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    const fetchStudents = async () => {
+      setLoading(true)
+      setError('')
+      try {
+        const res = await fetch('/api/admin/students')
+        const data = await res.json()
+        if (data.success) {
+          setStudents(data.students || [])
+        } else {
+          setError(data.error || 'Failed to load students')
+        }
+      } catch (err) {
+        console.error('Error fetching students:', err)
+        setError('Failed to connect to server')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStudents()
+  }, [isAuthenticated])
 
   if (!isAuthenticated) {
     return (
@@ -105,13 +89,39 @@ export default function AdminDashboard() {
     )
   }
 
-  const totalResponses = mockResponses.length
-  const totalNominations = mockResponses.reduce((sum, r) => sum + r.nominations.length, 0)
-  const avgNominations = (totalNominations / totalResponses).toFixed(1)
-  
-  // Count unique nominees
-  const allNominees = mockResponses.flatMap(r => r.nominations.map(n => n.name.toLowerCase()))
-  const uniqueNominees = new Set(allNominees).size
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading student data...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Stats from real data
+  const totalResponses = students.length
+  const totalNominations = students.reduce((sum, s) => sum + (s.nominations?.length || 0), 0)
+  const avgNominations = totalResponses > 0 ? (totalNominations / totalResponses).toFixed(1) : '0'
+
+  // Count unique nominees across all students
+  const allNominees = students.flatMap(s => (s.nominations || []).map(n => (n.email || n.name || '').toLowerCase()))
+  const uniqueNominees = new Set(allNominees.filter(Boolean)).size
+
+  // Format date helper
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A'
+    const d = new Date(dateStr)
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  const formatDateTime = (dateStr) => {
+    if (!dateStr) return 'N/A'
+    const d = new Date(dateStr)
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+      d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
@@ -126,8 +136,8 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setView('overview')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                  view === 'overview' 
-                    ? 'bg-blue-100 text-blue-700' 
+                  view === 'overview'
+                    ? 'bg-blue-100 text-blue-700'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -136,8 +146,8 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setView('responses')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                  view === 'responses' 
-                    ? 'bg-blue-100 text-blue-700' 
+                  view === 'responses'
+                    ? 'bg-blue-100 text-blue-700'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -154,6 +164,12 @@ export default function AdminDashboard() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-700 text-sm font-medium">{error}</p>
+          </div>
+        )}
+
         {view === 'overview' && (
           <>
             {/* Stats Grid */}
@@ -161,7 +177,7 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Total Responses</div>
                 <div className="text-3xl font-bold text-blue-600">{totalResponses}</div>
-                <div className="text-sm text-gray-500 mt-1">Survey submissions</div>
+                <div className="text-sm text-gray-500 mt-1">Registered students</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Total Nominations</div>
@@ -171,7 +187,7 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Avg Nominations</div>
                 <div className="text-3xl font-bold text-blue-600">{avgNominations}</div>
-                <div className="text-sm text-gray-500 mt-1">Per response</div>
+                <div className="text-sm text-gray-500 mt-1">Per student</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Unique Nominees</div>
@@ -183,26 +199,41 @@ export default function AdminDashboard() {
             {/* Quick Actions */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onClick={() => {
-                  const csvContent = mockResponses.map(r => `${r.name},${r.email},${r.major},${r.gradYear},${r.nominations.length}`).join('\n')
-                  const blob = new Blob([`Name,Email,Major,Graduation,Nominations\n${csvContent}`], { type: 'text/csv' })
+                  if (students.length === 0) return alert('No students to export')
+                  const headers = 'Name,Email,College,Major,Grad Year,GPA,Nominations Given,Skills,LinkedIn,GitHub,Bio,Registered'
+                  const csvContent = students.map(s => {
+                    const name = `"${(s.name || '').replace(/"/g, '""')}"`
+                    const email = s.schoolEmail || ''
+                    const college = s.college || ''
+                    const major = `"${(s.major || '').replace(/"/g, '""')}"`
+                    const gradYear = s.gradYear || ''
+                    const gpa = s.gpa || ''
+                    const nominations = (s.nominations || []).length
+                    const skills = `"${(s.skills || []).join(', ')}"`
+                    const linkedin = s.linkedinUrl || ''
+                    const github = s.githubUrl || ''
+                    const bio = `"${(s.bio || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`
+                    const registered = s.createdAt ? new Date(s.createdAt).toLocaleDateString() : ''
+                    return [name, email, college, major, gradYear, gpa, nominations, skills, linkedin, github, bio, registered].join(',')
+                  }).join('\n')
+                  const blob = new Blob([`${headers}\n${csvContent}`], { type: 'text/csv' })
                   const url = window.URL.createObjectURL(blob)
                   const a = document.createElement('a')
                   a.href = url
-                  a.download = `signl-responses-${new Date().toISOString().split('T')[0]}.csv`
+                  a.download = `signl-students-${new Date().toISOString().split('T')[0]}.csv`
                   a.click()
+                  window.URL.revokeObjectURL(url)
                 }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
                   <div className="font-semibold text-gray-900 mb-1">Export Data</div>
-                  <div className="text-sm text-gray-600">Download all responses as CSV</div>
+                  <div className="text-sm text-gray-600">Download all student data as CSV</div>
                 </button>
-                <button onClick={() => alert('Ranking algorithm running...\n\nCalculating peer scores:\n• Nominations (60%)\n• GPA (20%)\n• Skills (20%)\n\nDone!')} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
-                  <div className="font-semibold text-gray-900 mb-1">Calculate Rankings</div>
-                  <div className="text-sm text-gray-600">Run peer validation algorithm</div>
-                </button>
-                <button onClick={() => alert('Sending opt-in emails to:\n\n• Jane Smith (8 nominations)\n• Bob Johnson (7 nominations)\n• Alice Williams (6 nominations)\n\nEmails sent!')} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
-                  <div className="font-semibold text-gray-900 mb-1">Send Opt-In Emails</div>
-                  <div className="text-sm text-gray-600">Contact top nominees</div>
+                <button onClick={() => {
+                  setView('responses')
+                }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
+                  <div className="font-semibold text-gray-900 mb-1">View All Responses</div>
+                  <div className="text-sm text-gray-600">Browse detailed student profiles</div>
                 </button>
               </div>
             </div>
@@ -210,32 +241,48 @@ export default function AdminDashboard() {
             {/* Recent Responses */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Responses</h2>
-              <div className="space-y-3">
-                {mockResponses.slice(0, 5).map((response) => (
-                  <div key={response.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-gray-900">{response.name}</div>
-                        <div className="text-sm text-gray-600">{response.major} • {response.gradYear}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm text-gray-600">
-                          {new Date(response.submittedAt).toLocaleDateString()}
+              {students.length === 0 ? (
+                <div className="text-center py-8 text-gray-400">
+                  <svg className="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <p>No registered students yet</p>
+                  <p className="text-sm mt-1">Students will appear here after completing registration</p>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-3">
+                    {students.slice(0, 5).map((student) => (
+                      <div key={student.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => { setSelectedResponse(student); setView('responses') }}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-semibold text-gray-900">{student.name || 'Unnamed'}</div>
+                            <div className="text-sm text-gray-600">
+                              {student.college && `${student.college} • `}{student.major || 'Undeclared'} • {student.gradYear || 'TBD'}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm text-gray-600">
+                              {formatDate(student.createdAt)}
+                            </div>
+                            <div className="text-sm font-semibold text-blue-600">
+                              {(student.nominations || []).length} nominations
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-sm font-semibold text-blue-600">
-                          {response.nominations.length} nominations
-                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <button 
-                onClick={() => setView('responses')}
-                className="mt-4 w-full py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                View All Responses →
-              </button>
+                  {students.length > 5 && (
+                    <button
+                      onClick={() => setView('responses')}
+                      className="mt-4 w-full py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
+                    >
+                      View All {students.length} Responses →
+                    </button>
+                  )}
+                </>
+              )}
             </div>
           </>
         )}
@@ -244,26 +291,32 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Response List */}
             <div className="lg:col-span-1 bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">All Responses ({mockResponses.length})</h2>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
-                {mockResponses.map((response) => (
-                  <button
-                    key={response.id}
-                    onClick={() => setSelectedResponse(response)}
-                    className={`w-full p-4 rounded-lg text-left transition-colors ${
-                      selectedResponse?.id === response.id
-                        ? 'bg-blue-50 border-2 border-blue-500'
-                        : 'border border-gray-200 hover:bg-gray-50'
-                    }`}
-                  >
-                    <div className="font-semibold text-gray-900">{response.name}</div>
-                    <div className="text-sm text-gray-600">{response.major}</div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {response.nominations.length} nominations
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">All Responses ({students.length})</h2>
+              {students.length === 0 ? (
+                <div className="text-center py-8 text-gray-400">
+                  <p>No registered students yet</p>
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                  {students.map((student) => (
+                    <button
+                      key={student.id}
+                      onClick={() => setSelectedResponse(student)}
+                      className={`w-full p-4 rounded-lg text-left transition-colors ${
+                        selectedResponse?.id === student.id
+                          ? 'bg-blue-50 border-2 border-blue-500'
+                          : 'border border-gray-200 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="font-semibold text-gray-900">{student.name || 'Unnamed'}</div>
+                      <div className="text-sm text-gray-600">{student.major || 'Undeclared'}</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {(student.nominations || []).length} nominations • {formatDate(student.createdAt)}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Response Detail */}
@@ -271,39 +324,118 @@ export default function AdminDashboard() {
               {selectedResponse ? (
                 <>
                   <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedResponse.name}</h2>
-                    <div className="flex items-center space-x-4 text-gray-600">
-                      <span>{selectedResponse.email}</span>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedResponse.name || 'Unnamed'}</h2>
+                    <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
+                      <span>{selectedResponse.schoolEmail}</span>
+                      {selectedResponse.college && (
+                        <>
+                          <span>•</span>
+                          <span>{selectedResponse.college}</span>
+                        </>
+                      )}
                       <span>•</span>
-                      <span>{selectedResponse.major}</span>
+                      <span>{selectedResponse.major || 'Undeclared'}</span>
                       <span>•</span>
-                      <span>{selectedResponse.gradYear}</span>
+                      <span>{selectedResponse.gradYear || 'TBD'}</span>
                     </div>
-                    <div className="text-sm text-gray-500 mt-2">
-                      Submitted: {new Date(selectedResponse.submittedAt).toLocaleString()}
+                    {selectedResponse.gpa && (
+                      <div className="text-sm text-gray-500 mt-1">GPA: {selectedResponse.gpa}</div>
+                    )}
+                    <div className="text-sm text-gray-500 mt-1">
+                      Registered: {formatDateTime(selectedResponse.createdAt)}
+                    </div>
+
+                    {/* Bio */}
+                    {selectedResponse.bio && (
+                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                        <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Bio</div>
+                        <p className="text-sm text-gray-700">{selectedResponse.bio}</p>
+                      </div>
+                    )}
+
+                    {/* Skills */}
+                    {selectedResponse.skills && selectedResponse.skills.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Skills</div>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedResponse.skills.map((skill, i) => (
+                            <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Links */}
+                    <div className="flex gap-3 mt-3">
+                      {selectedResponse.linkedinUrl && (
+                        <a href={selectedResponse.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                          LinkedIn ↗
+                        </a>
+                      )}
+                      {selectedResponse.githubUrl && (
+                        <a href={selectedResponse.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">
+                          GitHub ↗
+                        </a>
+                      )}
+                      {selectedResponse.personalEmail && (
+                        <span className="text-sm text-gray-500">Personal: {selectedResponse.personalEmail}</span>
+                      )}
                     </div>
                   </div>
 
                   <div>
                     <h3 className="text-lg font-bold text-gray-900 mb-4">
-                      Nominations ({selectedResponse.nominations.length})
+                      Nominations ({(selectedResponse.nominations || []).length})
                     </h3>
-                    <div className="space-y-4">
-                      {selectedResponse.nominations.map((nomination, index) => (
-                        <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                          <div className="font-semibold text-gray-900 mb-1">{nomination.name}</div>
-                          {nomination.email && (
-                            <div className="text-sm text-gray-600 mb-1">{nomination.email}</div>
-                          )}
-                          {nomination.major && (
-                            <div className="text-sm text-gray-600 mb-2">{nomination.major}</div>
-                          )}
-                          <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200">
-                            {nomination.reason}
+                    {(selectedResponse.nominations || []).length === 0 ? (
+                      <div className="text-center py-6 text-gray-400 text-sm">
+                        No nominations submitted
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {(selectedResponse.nominations || []).map((nomination, index) => (
+                          <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <div className="flex items-start justify-between mb-1">
+                              <div className="font-semibold text-gray-900">{nomination.name}</div>
+                              {nomination.major && (
+                                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">{nomination.major}</span>
+                              )}
+                            </div>
+                            {nomination.email && (
+                              <div className="text-sm text-gray-600 mb-1">{nomination.email}</div>
+                            )}
+                            {nomination.linkedinUrl && (
+                              <a href={nomination.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline mb-1 inline-block">
+                                LinkedIn ↗
+                              </a>
+                            )}
+                            {nomination.skills && nomination.skills.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mb-2">
+                                {nomination.skills.map((skill, i) => (
+                                  <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                            {nomination.projectContext && (
+                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200 mb-2">
+                                <span className="text-xs font-semibold text-gray-500">Project Context: </span>
+                                {nomination.projectContext}
+                              </div>
+                            )}
+                            {nomination.reason && (
+                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200">
+                                <span className="text-xs font-semibold text-gray-500">Reason: </span>
+                                {nomination.reason}
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </>
               ) : (
