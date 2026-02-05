@@ -58,30 +58,27 @@ export async function POST(request) {
       )
     }
 
-    // Validate nominations - at least 1 required with email or LinkedIn
-    if (!nominations || nominations.length === 0) {
+    // Filter out empty nominations and validate
+    const validNominations = (nominations || []).filter(nom => nom.name && nom.name.trim())
+    
+    // Validate at least 1 nomination with content
+    if (validNominations.length === 0) {
       return NextResponse.json(
         { error: 'At least one peer nomination is required' },
         { status: 400 }
       )
     }
 
-    // Validate each nomination has either email or LinkedIn URL
-    for (let i = 0; i < nominations.length; i++) {
-      const nom = nominations[i]
-      if (!nom.name || !nom.name.trim()) {
-        return NextResponse.json(
-          { error: `Nomination #${i + 1}: Name is required` },
-          { status: 400 }
-        )
-      }
+    // Validate each valid nomination has either email or LinkedIn URL
+    for (let i = 0; i < validNominations.length; i++) {
+      const nom = validNominations[i]
       
       const hasEmail = nom.email && nom.email.trim() && nom.email.includes('@')
       const hasLinkedIn = nom.linkedinUrl && nom.linkedinUrl.trim() && linkedinPattern.test(nom.linkedinUrl)
       
       if (!hasEmail && !hasLinkedIn) {
         return NextResponse.json(
-          { error: `Nomination #${i + 1}: Either email or LinkedIn URL is required` },
+          { error: `Nomination for "${nom.name}": Either email or LinkedIn URL is required` },
           { status: 400 }
         )
       }
@@ -114,10 +111,9 @@ export async function POST(request) {
       })
     }
 
-    // Check if email already exists (case-insensitive)
-    const normalizedEmail = schoolEmail.trim().toLowerCase()
+    // Check if email already exists
     const studentsRef = collection(db, 'students')
-    const emailQuery = query(studentsRef, where('schoolEmail', '==', normalizedEmail))
+    const emailQuery = query(studentsRef, where('schoolEmail', '==', schoolEmail))
     const existingStudents = await getDocs(emailQuery)
 
     if (!existingStudents.empty) {
@@ -133,48 +129,24 @@ export async function POST(request) {
     // Calculate initial peer score (base score, will increase with nominations)
     const initialPeerScore = 70
 
-    // Parse GPA safely (avoid NaN in Firestore)
-    let parsedGpa = null
-    if (gpa && String(gpa).trim() !== '') {
-      const num = parseFloat(gpa)
-      if (!isNaN(num) && num >= 0 && num <= 4.0) {
-        parsedGpa = num
-      }
-    }
-
-    // Clean nominations data for Firestore
-    // Supports both new firstName/lastName format and legacy name format
-    const cleanNominations = (nominations || [])
-      .filter(n => n && ((n.firstName && n.firstName.trim()) || (n.name && n.name.trim())))
-      .map(n => ({
-        firstName: (n.firstName || n.name || '').trim(),
-        lastName: (n.lastName || '').trim(),
-        email: (n.email || '').trim(),
-        linkedinUrl: (n.linkedinUrl || '').trim(),
-        major: (n.major || '').trim(),
-        projectContext: (n.projectContext || '').trim(),
-        skills: Array.isArray(n.skills) ? n.skills : [],
-        reason: (n.reason || '').trim()
-      }))
-
     // Create student document
     const studentData = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      schoolEmail: schoolEmail.trim().toLowerCase(),
-      personalEmail: personalEmail ? personalEmail.trim() : null,
+      firstName,
+      lastName,
+      schoolEmail,
+      personalEmail: personalEmail || null,
       passwordHash: hash,
       passwordSalt: salt,
-      gpa: parsedGpa,
+      gpa: gpa ? parseFloat(gpa) : null,
       college: college || null,
       major: major || null,
       gradYear: gradYear || null,
       careerInterests: careerInterests || null,
-      skills: Array.isArray(skills) ? skills : [],
-      linkedinUrl: linkedinUrl.trim(),
-      githubUrl: githubUrl ? githubUrl.trim() : null,
-      bio: bio ? bio.trim() : null,
-      nominations: cleanNominations,
+      skills: skills || [],
+      linkedinUrl: linkedinUrl,
+      githubUrl: githubUrl || null,
+      bio: bio || null,
+      nominations: validNominations,
       peerScore: initialPeerScore,
       nominationCount: 0,
       endorsementsGiven: 0,

@@ -34,13 +34,11 @@ function StudentSignupContent() {
 
     // Step 3: Nominations
     nominations: [
-      { firstName: '', lastName: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }
+      { name: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }
     ]
   })
 
   const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState('')
   const [availableMajors, setAvailableMajors] = useState([])
 
   // Update available majors when college changes
@@ -139,7 +137,7 @@ function StudentSignupContent() {
   const addNomination = () => {
     setFormData({
       ...formData,
-      nominations: [...formData.nominations, { firstName: '', lastName: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }]
+      nominations: [...formData.nominations, { name: '', email: '', linkedinUrl: '', major: '', projectContext: '', skills: [], reason: '' }]
     })
   }
 
@@ -190,12 +188,8 @@ function StudentSignupContent() {
         const nom = formData.nominations[i]
         
         // Check required fields
-        if (!nom.firstName || !nom.firstName.trim()) {
-          alert(`Nomination #${i + 1}: First name is required`)
-          return
-        }
-        if (!nom.lastName || !nom.lastName.trim()) {
-          alert(`Nomination #${i + 1}: Last name is required`)
+        if (!nom.name || !nom.name.trim()) {
+          alert(`Nomination #${i + 1}: Name is required`)
           return
         }
         if (!nom.projectContext || !nom.projectContext.trim()) {
@@ -232,10 +226,6 @@ function StudentSignupContent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (submitting) return
-
-    setSubmitting(true)
-    setSubmitError('')
 
     try {
       // Register student via API
@@ -259,7 +249,7 @@ function StudentSignupContent() {
           linkedinUrl: formData.linkedinUrl,
           githubUrl: formData.githubUrl,
           bio: formData.bio,
-          nominations: formData.nominations.filter(n => n.firstName && n.firstName.trim())
+          nominations: formData.nominations.filter(n => n.name) // Only include nominations with names
         }),
       })
 
@@ -273,9 +263,7 @@ function StudentSignupContent() {
       setSubmitted(true)
     } catch (error) {
       console.error('Error creating account:', error)
-      setSubmitError(error.message || 'There was an error creating your account. Please try again.')
-    } finally {
-      setSubmitting(false)
+      alert(error.message || 'There was an error creating your account. Please try again.')
     }
   }
 
@@ -564,10 +552,7 @@ function StudentSignupContent() {
                   )}
                   <h3 className="font-semibold text-gray-900 mb-4">Nomination #{index + 1} {index === 0 && <span className="text-red-500">*</span>}</h3>
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <input type="text" value={nomination.firstName} onChange={(e) => handleNominationChange(index, 'firstName', e.target.value)} placeholder="First Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
-                      <input type="text" value={nomination.lastName} onChange={(e) => handleNominationChange(index, 'lastName', e.target.value)} placeholder="Last Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
-                    </div>
+                    <input type="text" value={nomination.name} onChange={(e) => handleNominationChange(index, 'name', e.target.value)} placeholder="Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
                     
                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                       <p className="text-amber-800 text-sm font-medium mb-2">Provide at least one way to contact your peer:</p>
@@ -628,7 +613,7 @@ function StudentSignupContent() {
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <h3 className="font-semibold text-gray-900 mb-2">Your Nominations ({formData.nominations.length})</h3>
                   {formData.nominations.map((nom, idx) => (
-                    <p key={idx} className="text-gray-700">• {nom.firstName && nom.lastName ? `${nom.firstName} ${nom.lastName}` : nom.firstName || `Nomination ${idx + 1}`}</p>
+                    <p key={idx} className="text-gray-700">• {nom.name || `Nomination ${idx + 1}`}</p>
                   ))}
                 </div>
               </div>
@@ -643,17 +628,9 @@ function StudentSignupContent() {
                 </label>
               </div>
 
-              {submitError && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-red-700 text-sm font-medium">{submitError}</p>
-                </div>
-              )}
-
               <div className="flex gap-4">
-                <button type="button" onClick={prevStep} disabled={submitting} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 disabled:opacity-50">Back</button>
-                <button type="submit" disabled={submitting} className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                  {submitting ? 'Creating Account...' : 'Create Account'}
-                </button>
+                <button type="button" onClick={prevStep} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
+                <button type="submit" className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">Create Account</button>
               </div>
             </div>
           )}

@@ -1,54 +1,67 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
+
+// Mock data - replace with real Firebase data
+const mockResponses = [
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john.doe@byu.edu',
+    major: 'Computer Science',
+    gradYear: 'May 2026',
+    submittedAt: '2025-01-08T10:30:00',
+    nominations: [
+      { name: 'Jane Smith', email: 'jane@byu.edu', major: 'CS', reason: 'Excellent team player, always delivers quality work' },
+      { name: 'Bob Johnson', email: 'bob@byu.edu', major: 'CS', reason: 'Strong technical skills and great communicator' },
+      { name: 'Alice Williams', email: 'alice@byu.edu', major: 'CS', reason: 'Very organized and helps others succeed' },
+    ]
+  },
+  {
+    id: 2,
+    name: 'Sarah Miller',
+    email: 'sarah.m@byu.edu',
+    major: 'Business Analytics',
+    gradYear: 'December 2026',
+    submittedAt: '2025-01-08T11:45:00',
+    nominations: [
+      { name: 'Mike Davis', email: 'mike@byu.edu', major: 'BA', reason: 'Great at problem solving and data analysis' },
+      { name: 'Lisa Chen', email: 'lisa@byu.edu', major: 'BA', reason: 'Incredibly detail-oriented and reliable' },
+      { name: 'Tom Anderson', email: 'tom@byu.edu', major: 'BA', reason: 'Strong leadership and collaboration skills' },
+    ]
+  },
+  {
+    id: 3,
+    name: 'Michael Brown',
+    email: 'mbrown@byu.edu',
+    major: 'Mechanical Engineering',
+    gradYear: 'May 2026',
+    submittedAt: '2025-01-08T14:20:00',
+    nominations: [
+      { name: 'Emma Wilson', email: 'emma@byu.edu', major: 'ME', reason: 'Innovative thinker with excellent technical skills' },
+      { name: 'David Lee', email: 'david@byu.edu', major: 'ME', reason: 'Very thorough and great at explaining concepts' },
+      { name: 'Rachel Kim', email: 'rachel@byu.edu', major: 'ME', reason: 'Hard worker who always meets deadlines' },
+      { name: 'Chris Martinez', email: 'chris@byu.edu', major: 'ME', reason: 'Positive attitude and helps team stay motivated' },
+    ]
+  },
+]
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
-  const [people, setPeople] = useState([])
-  const [stats, setStats] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [selectedPerson, setSelectedPerson] = useState(null)
+  const [selectedResponse, setSelectedResponse] = useState(null)
   const [view, setView] = useState('overview') // 'overview' or 'responses'
-  const [filter, setFilter] = useState('all') // 'all', 'verified', 'unverified'
 
   const handleLogin = (e) => {
     e.preventDefault()
+    // Simple password protection - replace with real auth
     if (password === 'signl2025') {
       setIsAuthenticated(true)
     } else {
       alert('Incorrect password')
     }
   }
-
-  // Fetch data after authentication
-  useEffect(() => {
-    if (!isAuthenticated) return
-
-    const fetchData = async () => {
-      setLoading(true)
-      setError('')
-      try {
-        const res = await fetch('/api/admin/students')
-        const data = await res.json()
-        if (data.success) {
-          setPeople(data.people || [])
-          setStats(data.stats || null)
-        } else {
-          setError(data.error || 'Failed to load data')
-        }
-      } catch (err) {
-        console.error('Error fetching data:', err)
-        setError('Failed to connect to server')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [isAuthenticated])
 
   if (!isAuthenticated) {
     return (
@@ -92,65 +105,13 @@ export default function AdminDashboard() {
     )
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading data...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Stats
-  const totalPeople = stats?.totalPeople || people.length
-  const verifiedCount = stats?.verifiedStudents || people.filter(p => p.verified).length
-  const unverifiedCount = stats?.unverifiedNominees || people.filter(p => !p.verified).length
-  const totalNominations = stats?.totalNominations || 0
-
-  // Filtered list
-  const filteredPeople = filter === 'all'
-    ? people
-    : filter === 'verified'
-      ? people.filter(p => p.verified)
-      : people.filter(p => !p.verified)
-
-  // Format date helpers
-  const formatDate = (dateStr) => {
-    if (!dateStr) return 'N/A'
-    const d = new Date(dateStr)
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  }
-
-  const formatDateTime = (dateStr) => {
-    if (!dateStr) return 'N/A'
-    const d = new Date(dateStr)
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
-      d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-  }
-
-  // Verified badge component
-  const VerifiedBadge = ({ verified, size = 'sm' }) => {
-    if (verified) {
-      return (
-        <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-green-50 text-green-700 font-semibold rounded-full`}>
-          <svg className={size === 'lg' ? 'w-4 h-4' : 'w-3 h-3'} fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-          </svg>
-          Verified
-        </span>
-      )
-    }
-    return (
-      <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-amber-50 text-amber-700 font-semibold rounded-full`}>
-        <svg className={size === 'lg' ? 'w-4 h-4' : 'w-3 h-3'} fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-        </svg>
-        Nominated
-      </span>
-    )
-  }
+  const totalResponses = mockResponses.length
+  const totalNominations = mockResponses.reduce((sum, r) => sum + r.nominations.length, 0)
+  const avgNominations = (totalNominations / totalResponses).toFixed(1)
+  
+  // Count unique nominees
+  const allNominees = mockResponses.flatMap(r => r.nominations.map(n => n.name.toLowerCase()))
+  const uniqueNominees = new Set(allNominees).size
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
@@ -165,8 +126,8 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setView('overview')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                  view === 'overview'
-                    ? 'bg-blue-100 text-blue-700'
+                  view === 'overview' 
+                    ? 'bg-blue-100 text-blue-700' 
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -175,12 +136,12 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setView('responses')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                  view === 'responses'
-                    ? 'bg-blue-100 text-blue-700'
+                  view === 'responses' 
+                    ? 'bg-blue-100 text-blue-700' 
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                People
+                Responses
               </button>
               <Link href="/" className="text-gray-600 hover:text-gray-900">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,392 +154,157 @@ export default function AdminDashboard() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-700 text-sm font-medium">{error}</p>
-          </div>
-        )}
-
         {view === 'overview' && (
           <>
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Total People</div>
-                <div className="text-3xl font-bold text-blue-600">{totalPeople}</div>
-                <div className="text-sm text-gray-500 mt-1">Students & nominees</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Verified Students</div>
-                <div className="text-3xl font-bold text-green-600">{verifiedCount}</div>
-                <div className="text-sm text-gray-500 mt-1">Registered accounts</div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Unverified Nominees</div>
-                <div className="text-3xl font-bold text-amber-600">{unverifiedCount}</div>
-                <div className="text-sm text-gray-500 mt-1">Pending registration</div>
+                <div className="text-sm font-semibold text-gray-600 mb-2">Total Responses</div>
+                <div className="text-3xl font-bold text-blue-600">{totalResponses}</div>
+                <div className="text-sm text-gray-500 mt-1">Survey submissions</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Total Nominations</div>
                 <div className="text-3xl font-bold text-teal-600">{totalNominations}</div>
-                <div className="text-sm text-gray-500 mt-1">Peer nominations made</div>
+                <div className="text-sm text-gray-500 mt-1">Peer nominations</div>
+              </div>
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="text-sm font-semibold text-gray-600 mb-2">Avg Nominations</div>
+                <div className="text-3xl font-bold text-blue-600">{avgNominations}</div>
+                <div className="text-sm text-gray-500 mt-1">Per response</div>
+              </div>
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <div className="text-sm font-semibold text-gray-600 mb-2">Unique Nominees</div>
+                <div className="text-3xl font-bold text-teal-600">{uniqueNominees}</div>
+                <div className="text-sm text-gray-500 mt-1">Different students</div>
               </div>
             </div>
 
             {/* Quick Actions */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button onClick={() => {
-                  if (people.length === 0) return alert('No data to export')
-                  const headers = 'Name,Email,College,Major,Grad Year,GPA,Verified,Times Nominated,Skills,LinkedIn,GitHub,Bio,Registered'
-                  const csvContent = people.map(p => {
-                    const name = `"${(p.name || '').replace(/"/g, '""')}"`
-                    const email = p.schoolEmail || ''
-                    const college = p.college || ''
-                    const major = `"${(p.major || '').replace(/"/g, '""')}"`
-                    const gradYear = p.gradYear || ''
-                    const gpa = p.gpa || ''
-                    const verified = p.verified ? 'Yes' : 'No'
-                    const timesNom = p.timesNominated || 0
-                    const skills = `"${(p.skills || []).join(', ')}"`
-                    const linkedin = p.linkedinUrl || ''
-                    const github = p.githubUrl || ''
-                    const bio = `"${(p.bio || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`
-                    const registered = p.createdAt ? new Date(p.createdAt).toLocaleDateString() : ''
-                    return [name, email, college, major, gradYear, gpa, verified, timesNom, skills, linkedin, github, bio, registered].join(',')
-                  }).join('\n')
-                  const blob = new Blob([`${headers}\n${csvContent}`], { type: 'text/csv' })
+                  const csvContent = mockResponses.map(r => `${r.name},${r.email},${r.major},${r.gradYear},${r.nominations.length}`).join('\n')
+                  const blob = new Blob([`Name,Email,Major,Graduation,Nominations\n${csvContent}`], { type: 'text/csv' })
                   const url = window.URL.createObjectURL(blob)
                   const a = document.createElement('a')
                   a.href = url
-                  a.download = `signl-people-${new Date().toISOString().split('T')[0]}.csv`
+                  a.download = `signl-responses-${new Date().toISOString().split('T')[0]}.csv`
                   a.click()
-                  window.URL.revokeObjectURL(url)
                 }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
                   <div className="font-semibold text-gray-900 mb-1">Export Data</div>
-                  <div className="text-sm text-gray-600">Download all data as CSV</div>
+                  <div className="text-sm text-gray-600">Download all responses as CSV</div>
                 </button>
-                <button onClick={() => {
-                  setView('responses')
-                }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
-                  <div className="font-semibold text-gray-900 mb-1">View All People</div>
-                  <div className="text-sm text-gray-600">Browse profiles and nominations</div>
+                <button onClick={() => alert('Ranking algorithm running...\n\nCalculating peer scores:\n• Nominations (60%)\n• GPA (20%)\n• Skills (20%)\n\nDone!')} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
+                  <div className="font-semibold text-gray-900 mb-1">Calculate Rankings</div>
+                  <div className="text-sm text-gray-600">Run peer validation algorithm</div>
+                </button>
+                <button onClick={() => alert('Sending opt-in emails to:\n\n• Jane Smith (8 nominations)\n• Bob Johnson (7 nominations)\n• Alice Williams (6 nominations)\n\nEmails sent!')} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
+                  <div className="font-semibold text-gray-900 mb-1">Send Opt-In Emails</div>
+                  <div className="text-sm text-gray-600">Contact top nominees</div>
                 </button>
               </div>
             </div>
 
-            {/* Recent People */}
+            {/* Recent Responses */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Recent People</h2>
-              {people.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
-                  <svg className="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                  <p>No people yet</p>
-                  <p className="text-sm mt-1">Students and nominees will appear here</p>
-                </div>
-              ) : (
-                <>
-                  <div className="space-y-3">
-                    {people.slice(0, 8).map((person) => (
-                      <div key={person.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => { setSelectedPerson(person); setView('responses') }}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-gray-900">{person.name || 'Unnamed'}</span>
-                                <VerifiedBadge verified={person.verified} />
-                              </div>
-                              <div className="text-sm text-gray-600">
-                                {person.major || 'Unknown'}{person.college ? ` - ${person.college}` : ''}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            {person.verified && (
-                              <div className="text-sm text-gray-600">
-                                {formatDate(person.createdAt)}
-                              </div>
-                            )}
-                            <div className="text-sm font-semibold text-blue-600">
-                              Nominated {person.timesNominated || 0} time{(person.timesNominated || 0) !== 1 ? 's' : ''}
-                            </div>
-                          </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Responses</h2>
+              <div className="space-y-3">
+                {mockResponses.slice(0, 5).map((response) => (
+                  <div key={response.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-semibold text-gray-900">{response.name}</div>
+                        <div className="text-sm text-gray-600">{response.major} • {response.gradYear}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm text-gray-600">
+                          {new Date(response.submittedAt).toLocaleDateString()}
+                        </div>
+                        <div className="text-sm font-semibold text-blue-600">
+                          {response.nominations.length} nominations
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                  {people.length > 8 && (
-                    <button
-                      onClick={() => setView('responses')}
-                      className="mt-4 w-full py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
-                    >
-                      View All {people.length} People →
-                    </button>
-                  )}
-                </>
-              )}
+                ))}
+              </div>
+              <button 
+                onClick={() => setView('responses')}
+                className="mt-4 w-full py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                View All Responses →
+              </button>
             </div>
           </>
         )}
 
         {view === 'responses' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* People List */}
+            {/* Response List */}
             <div className="lg:col-span-1 bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-3">All People ({filteredPeople.length})</h2>
-
-              {/* Filter */}
-              <div className="flex gap-1 mb-4">
-                {[
-                  { id: 'all', label: 'All' },
-                  { id: 'verified', label: 'Verified' },
-                  { id: 'unverified', label: 'Nominated' }
-                ].map(f => (
+              <h2 className="text-xl font-bold text-gray-900 mb-4">All Responses ({mockResponses.length})</h2>
+              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                {mockResponses.map((response) => (
                   <button
-                    key={f.id}
-                    onClick={() => setFilter(f.id)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-                      filter === f.id
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    key={response.id}
+                    onClick={() => setSelectedResponse(response)}
+                    className={`w-full p-4 rounded-lg text-left transition-colors ${
+                      selectedResponse?.id === response.id
+                        ? 'bg-blue-50 border-2 border-blue-500'
+                        : 'border border-gray-200 hover:bg-gray-50'
                     }`}
                   >
-                    {f.label}
+                    <div className="font-semibold text-gray-900">{response.name}</div>
+                    <div className="text-sm text-gray-600">{response.major}</div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {response.nominations.length} nominations
+                    </div>
                   </button>
                 ))}
               </div>
-
-              {filteredPeople.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
-                  <p>No people found</p>
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-[600px] overflow-y-auto">
-                  {filteredPeople.map((person) => (
-                    <button
-                      key={person.id}
-                      onClick={() => setSelectedPerson(person)}
-                      className={`w-full p-3 rounded-lg text-left transition-colors ${
-                        selectedPerson?.id === person.id
-                          ? 'bg-blue-50 border-2 border-blue-500'
-                          : person.verified
-                            ? 'border border-gray-200 hover:bg-gray-50'
-                            : 'border border-dashed border-gray-300 hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="font-semibold text-gray-900 text-sm">{person.name || 'Unnamed'}</span>
-                        {person.verified ? (
-                          <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <svg className="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </div>
-                      <div className="text-xs text-gray-600">{person.major || 'Unknown'}</div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        Nominated {person.timesNominated || 0} time{(person.timesNominated || 0) !== 1 ? 's' : ''}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {/* Person Detail */}
+            {/* Response Detail */}
             <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
-              {selectedPerson ? (
+              {selectedResponse ? (
                 <>
-                  {/* Header */}
                   <div className="mb-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h2 className="text-2xl font-bold text-gray-900">{selectedPerson.name || 'Unnamed'}</h2>
-                      <VerifiedBadge verified={selectedPerson.verified} size="lg" />
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedResponse.name}</h2>
+                    <div className="flex items-center space-x-4 text-gray-600">
+                      <span>{selectedResponse.email}</span>
+                      <span>•</span>
+                      <span>{selectedResponse.major}</span>
+                      <span>•</span>
+                      <span>{selectedResponse.gradYear}</span>
                     </div>
-
-                    <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
-                      {selectedPerson.schoolEmail && (
-                        <span>{selectedPerson.schoolEmail}</span>
-                      )}
-                      {selectedPerson.college && (
-                        <>
-                          <span>•</span>
-                          <span>{selectedPerson.college}</span>
-                        </>
-                      )}
-                      {selectedPerson.major && (
-                        <>
-                          <span>•</span>
-                          <span>{selectedPerson.major}</span>
-                        </>
-                      )}
-                      {selectedPerson.gradYear && (
-                        <>
-                          <span>•</span>
-                          <span>{selectedPerson.gradYear}</span>
-                        </>
-                      )}
+                    <div className="text-sm text-gray-500 mt-2">
+                      Submitted: {new Date(selectedResponse.submittedAt).toLocaleString()}
                     </div>
-
-                    {selectedPerson.gpa && (
-                      <div className="text-sm text-gray-500 mt-1">GPA: {selectedPerson.gpa}</div>
-                    )}
-
-                    {selectedPerson.verified && selectedPerson.createdAt && (
-                      <div className="text-sm text-gray-500 mt-1">
-                        Registered: {formatDateTime(selectedPerson.createdAt)}
-                      </div>
-                    )}
-
-                    {/* Nomination count highlight */}
-                    <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg">
-                      <span className="text-2xl font-bold text-blue-600">{selectedPerson.timesNominated || 0}</span>
-                      <span className="text-sm text-blue-700 font-medium">
-                        time{(selectedPerson.timesNominated || 0) !== 1 ? 's' : ''} nominated
-                      </span>
-                    </div>
-
-                    {/* Bio - verified students only */}
-                    {selectedPerson.bio && (
-                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                        <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Bio</div>
-                        <p className="text-sm text-gray-700">{selectedPerson.bio}</p>
-                      </div>
-                    )}
-
-                    {/* Skills */}
-                    {selectedPerson.skills && selectedPerson.skills.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Skills</div>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedPerson.skills.map((skill, i) => (
-                            <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Links */}
-                    {(selectedPerson.linkedinUrl || selectedPerson.githubUrl || selectedPerson.personalEmail) && (
-                      <div className="flex gap-3 mt-3">
-                        {selectedPerson.linkedinUrl && (
-                          <a href={selectedPerson.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
-                            LinkedIn ↗
-                          </a>
-                        )}
-                        {selectedPerson.githubUrl && (
-                          <a href={selectedPerson.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">
-                            GitHub ↗
-                          </a>
-                        )}
-                        {selectedPerson.personalEmail && (
-                          <span className="text-sm text-gray-500">Personal: {selectedPerson.personalEmail}</span>
-                        )}
-                      </div>
-                    )}
                   </div>
 
-                  {/* Nominated By Section */}
-                  {(selectedPerson.nominatedBy || []).length > 0 && (
-                    <div className="mb-6">
-                      <h3 className="text-lg font-bold text-gray-900 mb-4">
-                        Nominated By ({(selectedPerson.nominatedBy || []).length})
-                      </h3>
-                      <div className="space-y-3">
-                        {(selectedPerson.nominatedBy || []).map((nom, index) => (
-                          <div key={index} className="p-4 bg-green-50 rounded-lg border border-green-200">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="font-semibold text-gray-900 text-sm">{nom.byName}</div>
-                              <span className="text-xs text-gray-500">{nom.byEmail}</span>
-                            </div>
-                            {nom.projectContext && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-green-100 mb-2">
-                                <span className="text-xs font-semibold text-gray-500">Project: </span>
-                                {nom.projectContext}
-                              </div>
-                            )}
-                            {nom.reason && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-green-100 mb-2">
-                                <span className="text-xs font-semibold text-gray-500">Reason: </span>
-                                {nom.reason}
-                              </div>
-                            )}
-                            {nom.skills && nom.skills.length > 0 && (
-                              <div className="flex flex-wrap gap-1">
-                                {nom.skills.map((skill, i) => (
-                                  <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
-                                    {skill}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-4">
+                      Nominations ({selectedResponse.nominations.length})
+                    </h3>
+                    <div className="space-y-4">
+                      {selectedResponse.nominations.map((nomination, index) => (
+                        <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <div className="font-semibold text-gray-900 mb-1">{nomination.name}</div>
+                          {nomination.email && (
+                            <div className="text-sm text-gray-600 mb-1">{nomination.email}</div>
+                          )}
+                          {nomination.major && (
+                            <div className="text-sm text-gray-600 mb-2">{nomination.major}</div>
+                          )}
+                          <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200">
+                            {nomination.reason}
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  )}
-
-                  {/* Nominations Given Section - only for verified students */}
-                  {selectedPerson.verified && (selectedPerson.nominations || []).length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-4">
-                        Nominations Given ({(selectedPerson.nominations || []).length})
-                      </h3>
-                      <div className="space-y-3">
-                        {(selectedPerson.nominations || []).map((nomination, index) => (
-                          <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div className="flex items-start justify-between mb-1">
-                              <div className="font-semibold text-gray-900 text-sm">
-                                {nomination.firstName && nomination.lastName
-                                  ? `${nomination.firstName} ${nomination.lastName}`
-                                  : nomination.firstName || nomination.name || 'Unnamed'}
-                              </div>
-                              {nomination.major && (
-                                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">{nomination.major}</span>
-                              )}
-                            </div>
-                            {nomination.email && (
-                              <div className="text-sm text-gray-600 mb-1">{nomination.email}</div>
-                            )}
-                            {nomination.linkedinUrl && (
-                              <a href={nomination.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline mb-1 inline-block">
-                                LinkedIn ↗
-                              </a>
-                            )}
-                            {nomination.skills && nomination.skills.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mb-2">
-                                {nomination.skills.map((skill, i) => (
-                                  <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
-                                    {skill}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                            {nomination.projectContext && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200 mb-2">
-                                <span className="text-xs font-semibold text-gray-500">Project: </span>
-                                {nomination.projectContext}
-                              </div>
-                            )}
-                            {nomination.reason && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200">
-                                <span className="text-xs font-semibold text-gray-500">Reason: </span>
-                                {nomination.reason}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </>
               ) : (
                 <div className="h-full flex items-center justify-center text-gray-400">
@@ -586,7 +312,7 @@ export default function AdminDashboard() {
                     <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <p>Select a person to view details</p>
+                    <p>Select a response to view details</p>
                   </div>
                 </div>
               )}
