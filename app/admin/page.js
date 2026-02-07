@@ -457,45 +457,94 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Contact Outreach - for unverified nominees */}
-                    {!selectedPerson.verified && (selectedPerson.schoolEmail || selectedPerson.linkedinUrl) && (
-                      <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                        <div className="text-sm font-semibold text-amber-800 mb-3">Contact to Invite</div>
-                        <div className="space-y-2">
-                          {selectedPerson.schoolEmail && (
-                            <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-200">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <span className="text-sm text-gray-700 truncate">{selectedPerson.schoolEmail}</span>
+                    {!selectedPerson.verified && (selectedPerson.schoolEmail || selectedPerson.linkedinUrl) && (() => {
+                      const firstName = selectedPerson.firstName || selectedPerson.name?.split(' ')[0] || 'there'
+                      const nominatorNames = (selectedPerson.nominatedBy || []).map(n => n.byName).filter(Boolean)
+                      const nominatedByText = nominatorNames.length > 0
+                        ? nominatorNames.length === 1
+                          ? nominatorNames[0]
+                          : nominatorNames.slice(0, -1).join(', ') + ' and ' + nominatorNames[nominatorNames.length - 1]
+                        : 'your peers'
+                      const emailMessage = `Subject: You've been nominated by your peers on Signl\n\nHey ${firstName},\n\nGood news - ${nominatedByText} nominated you on Signl, a peer-validated recruiting platform we're building.\n\nWhat this means: Someone you worked with in a group project said they'd want to work with you again and vouched for your skills. We're connecting students like you with recruiters who want peer-validated talent, not just resumes.\n\nNext step: Claim your profile and opt in to be visible to recruiters. Takes 2 minutes:\n\n1. Verify your student email\n2. Add your LinkedIn/portfolio (optional)\n3. Choose whether you want companies to see you\n\nImportant: This is 100% opt-in. If you don't want to be visible to recruiters, just don't complete your profile. But if you're interested in opportunities, this is a way to get noticed based on what your peers actually think of your work.\n\nhttps://signl.cc/student/signup\n\nLet me know if you have questions!\n\nIsaac\nSignl`
+                      const linkedinMessage = `Hey ${firstName}! Good news - ${nominatedByText} nominated you on Signl, a peer-validated recruiting platform we're building. Someone you worked with vouched for your skills, and we're connecting students like you with recruiters who want peer-validated talent. It's 100% opt-in and takes 2 min to claim your profile: signl.cc/student/signup`
+
+                      return (
+                        <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                          <div className="text-sm font-semibold text-amber-800 mb-3">Outreach</div>
+
+                          {/* Contact Info */}
+                          <div className="space-y-2 mb-4">
+                            {selectedPerson.schoolEmail && (
+                              <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-200">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                  </svg>
+                                  <span className="text-sm text-gray-700 truncate">{selectedPerson.schoolEmail}</span>
+                                </div>
+                                <button
+                                  onClick={() => copyToClipboard(selectedPerson.schoolEmail, `email-${selectedPerson.id}`)}
+                                  className="ml-2 px-3 py-1 text-xs font-semibold rounded-md transition-colors flex-shrink-0 bg-blue-600 text-white hover:bg-blue-700"
+                                >
+                                  {copiedField === `email-${selectedPerson.id}` ? 'Copied!' : 'Copy'}
+                                </button>
                               </div>
-                              <button
-                                onClick={() => copyToClipboard(selectedPerson.schoolEmail, `email-${selectedPerson.id}`)}
-                                className="ml-2 px-3 py-1 text-xs font-semibold rounded-md transition-colors flex-shrink-0 bg-blue-600 text-white hover:bg-blue-700"
-                              >
-                                {copiedField === `email-${selectedPerson.id}` ? 'Copied!' : 'Copy'}
-                              </button>
+                            )}
+                            {selectedPerson.linkedinUrl && (
+                              <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-200">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <svg className="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                  </svg>
+                                  <span className="text-sm text-gray-700 truncate">{selectedPerson.linkedinUrl}</span>
+                                </div>
+                                <button
+                                  onClick={() => copyToClipboard(selectedPerson.linkedinUrl, `linkedin-${selectedPerson.id}`)}
+                                  className="ml-2 px-3 py-1 text-xs font-semibold rounded-md transition-colors flex-shrink-0 bg-blue-600 text-white hover:bg-blue-700"
+                                >
+                                  {copiedField === `linkedin-${selectedPerson.id}` ? 'Copied!' : 'Copy'}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Pre-written Messages */}
+                          {selectedPerson.schoolEmail && (
+                            <div className="mb-3">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-semibold text-amber-700 uppercase">Email Message</span>
+                                <button
+                                  onClick={() => copyToClipboard(emailMessage, `msg-email-${selectedPerson.id}`)}
+                                  className="px-3 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                                >
+                                  {copiedField === `msg-email-${selectedPerson.id}` ? 'Copied!' : 'Copy Message'}
+                                </button>
+                              </div>
+                              <div className="bg-white rounded-lg p-3 border border-amber-200 text-xs text-gray-600 whitespace-pre-line max-h-32 overflow-y-auto">
+                                {emailMessage}
+                              </div>
                             </div>
                           )}
+
                           {selectedPerson.linkedinUrl && (
-                            <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-200">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <svg className="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
-                                <span className="text-sm text-gray-700 truncate">{selectedPerson.linkedinUrl}</span>
+                            <div>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-semibold text-amber-700 uppercase">LinkedIn Message</span>
+                                <button
+                                  onClick={() => copyToClipboard(linkedinMessage, `msg-linkedin-${selectedPerson.id}`)}
+                                  className="px-3 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                                >
+                                  {copiedField === `msg-linkedin-${selectedPerson.id}` ? 'Copied!' : 'Copy Message'}
+                                </button>
                               </div>
-                              <button
-                                onClick={() => copyToClipboard(selectedPerson.linkedinUrl, `linkedin-${selectedPerson.id}`)}
-                                className="ml-2 px-3 py-1 text-xs font-semibold rounded-md transition-colors flex-shrink-0 bg-blue-600 text-white hover:bg-blue-700"
-                              >
-                                {copiedField === `linkedin-${selectedPerson.id}` ? 'Copied!' : 'Copy'}
-                              </button>
+                              <div className="bg-white rounded-lg p-3 border border-amber-200 text-xs text-gray-600 whitespace-pre-line max-h-32 overflow-y-auto">
+                                {linkedinMessage}
+                              </div>
                             </div>
                           )}
                         </div>
-                      </div>
-                    )}
+                      )
+                    })()}
 
                     {/* Bio - verified students only */}
                     {selectedPerson.bio && (
