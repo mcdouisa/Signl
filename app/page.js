@@ -15,14 +15,14 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#0f172a] text-white">
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? 'bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/5' : 'bg-transparent'
+        scrolled ? 'bg-[#0f172a]/95 backdrop-blur-md border-b border-white/5' : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/">
-            <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain cursor-pointer hover:opacity-90 transition-opacity brightness-0 invert" />
+            <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain cursor-pointer hover:opacity-90 transition-opacity" />
           </Link>
           <div className="hidden md:flex items-center space-x-10">
             <a href="#how-it-works" className="text-gray-400 hover:text-white transition-colors text-sm tracking-wide">How It Works</a>
@@ -38,7 +38,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="pt-40 pb-32 px-6 relative overflow-hidden">
         {/* Subtle radial gradient background */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.08)_0%,_transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.15)_0%,_transparent_60%)]"></div>
 
         <div className="max-w-7xl mx-auto relative">
           <div className="text-center max-w-4xl mx-auto">
@@ -197,7 +197,7 @@ export default function Home() {
 
       {/* For Students */}
       <section id="for-students" className="py-28 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(20,184,166,0.06)_0%,_transparent_60%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(20,184,166,0.12)_0%,_transparent_60%)]"></div>
         <div className="max-w-4xl mx-auto text-center relative">
           <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-4 font-medium">For Students</p>
           <h2 className="font-serif text-5xl md:text-6xl font-bold mb-6 text-white">
@@ -258,7 +258,7 @@ export default function Home() {
       <footer className="border-t border-white/5 py-16 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <Link href="/" className="flex justify-center mb-6">
-            <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity brightness-0 invert" />
+            <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
           </Link>
           <p className="text-gray-600 mb-6 text-sm">Peer-validated college recruiting platform</p>
           <div className="flex items-center justify-center space-x-8 mb-10">
