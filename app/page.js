@@ -40,7 +40,7 @@ export default function Home() {
         {/* Futuristic light effects */}
         <div className="absolute inset-0">
           {/* Main bright orb - top center */}
-          <div className="glow-orb animate-pulse-slow" style={{
+          <div className="glow-orb" style={{
             top: '-10%',
             left: '50%',
             transform: 'translateX(-50%)',
@@ -49,7 +49,7 @@ export default function Home() {
             background: 'radial-gradient(ellipse, rgba(96,165,250,0.25) 0%, rgba(59,130,246,0.1) 40%, transparent 70%)',
           }}></div>
           {/* Secondary teal orb - right */}
-          <div className="glow-orb animate-pulse-slower" style={{
+          <div className="glow-orb" style={{
             top: '20%',
             right: '-5%',
             width: '500px',
@@ -57,7 +57,7 @@ export default function Home() {
             background: 'radial-gradient(circle, rgba(94,234,212,0.15) 0%, transparent 70%)',
           }}></div>
           {/* Accent orb - left */}
-          <div className="glow-orb animate-pulse-slower" style={{
+          <div className="glow-orb" style={{
             top: '30%',
             left: '-8%',
             width: '400px',
@@ -117,7 +117,7 @@ export default function Home() {
       <section id="how-it-works" className="py-28 px-6 relative">
         {/* Subtle ambient light */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="glow-orb animate-pulse-slower" style={{
+          <div className="glow-orb" style={{
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
@@ -261,7 +261,7 @@ export default function Home() {
       <section id="for-students" className="py-28 px-6 relative overflow-hidden">
         {/* Dramatic light burst */}
         <div className="absolute inset-0">
-          <div className="glow-orb animate-pulse-slow" style={{
+          <div className="glow-orb" style={{
             bottom: '-30%',
             left: '50%',
             transform: 'translateX(-50%)',
