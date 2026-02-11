@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export default function Pricing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      <nav className="bg-white/90 backdrop-blur-md shadow-sm">
+    <div className="min-h-screen bg-black text-white">
+      <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
             <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
@@ -15,17 +15,17 @@ export default function Pricing() {
 
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Simple, Transparent Pricing
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-400">
             Choose the plan that fits your hiring needs
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {/* Tiers with Contact Sales CTAs */}
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8">
             <h3 className="text-2xl font-bold mb-4">Starter</h3>
             <div className="text-4xl font-bold mb-6">Contact Sales</div>
             <ul className="space-y-3 mb-8">
@@ -45,7 +45,7 @@ export default function Pricing() {
             <Link href="/demo" className="block w-full bg-gray-900 text-white text-center px-6 py-3 rounded-lg font-semibold">Contact Sales</Link>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-blue-500 transform scale-105">
+          <div className="bg-white/[0.04] backdrop-blur-md border-2 border-blue-500 rounded-2xl p-8 transform scale-105">
             <div className="text-center mb-4">
               <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">Most Popular</span>
             </div>
@@ -72,7 +72,7 @@ export default function Pricing() {
             <Link href="/demo" className="block w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white text-center px-6 py-3 rounded-lg font-semibold">Contact Sales</Link>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8">
             <h3 className="text-2xl font-bold mb-4">Enterprise</h3>
             <div className="text-4xl font-bold mb-6">Contact Sales</div>
             <ul className="space-y-3 mb-8">

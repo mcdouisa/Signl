@@ -57,13 +57,13 @@ export default function StudentLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      <nav className="bg-white/90 backdrop-blur-md shadow-sm">
+    <div className="min-h-screen bg-black text-white">
+      <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
             <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
           </Link>
-          <Link href="/signin" className="text-gray-600 hover:text-gray-900">
+          <Link href="/signin" className="text-gray-400 hover:text-white">
             ← Back
           </Link>
         </div>
@@ -72,18 +72,18 @@ export default function StudentLogin() {
       <div className="flex items-center justify-center px-6 py-20">
         <div className="max-w-md w-full">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-white mb-2">
               Student Login
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Sign in to access your profile and nominations
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
                   Email
                 </label>
                 <input
@@ -92,13 +92,13 @@ export default function StudentLogin() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="your.email@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
                   Password
                 </label>
                 <input
@@ -107,21 +107,21 @@ export default function StudentLogin() {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="••••••••"
                 />
               </div>
 
               {error && (
-                <div className="text-red-600 text-sm">{error}</div>
+                <div className="text-red-400 text-sm">{error}</div>
               )}
 
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
                   <input type="checkbox" className="mr-2" />
-                  <span className="text-sm text-gray-600">Remember me</span>
+                  <span className="text-sm text-gray-400">Remember me</span>
                 </label>
-                <a href="#" className="text-sm text-blue-600 hover:underline">
+                <a href="#" className="text-sm text-blue-400 hover:underline">
                   Forgot password?
                 </a>
               </div>
@@ -136,9 +136,9 @@ export default function StudentLogin() {
             </form>
 
             <div className="mt-6 text-center">
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-400 text-sm">
                 Don't have an account?{' '}
-                <Link href="/verify" className="text-blue-600 hover:underline font-semibold">
+                <Link href="/verify" className="text-blue-400 hover:underline font-semibold">
                   Create Account
                 </Link>
               </p>

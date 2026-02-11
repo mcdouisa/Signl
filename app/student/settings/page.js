@@ -224,10 +224,10 @@ export default function StudentSettings() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-400">Loading...</p>
         </div>
       </div>
     )
@@ -238,21 +238,21 @@ export default function StudentSettings() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+    <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md shadow-sm">
+      <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
               <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
             </Link>
             <div className="flex items-center space-x-4">
-              <Link href="/student/dashboard" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <Link href="/student/dashboard" className="text-gray-400 hover:text-white text-sm font-medium">
                 Dashboard
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                className="text-gray-400 hover:text-white text-sm font-medium"
               >
                 Sign Out
               </button>
@@ -263,56 +263,56 @@ export default function StudentSettings() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Account Settings</h1>
-          <p className="text-gray-600 mt-2">Update your profile and security settings</p>
+          <h1 className="text-3xl font-bold text-white">Account Settings</h1>
+          <p className="text-gray-400 mt-2">Update your profile and security settings</p>
         </div>
 
         {/* Profile Information */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Profile Information</h2>
+        <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 mb-8">
+          <h2 className="text-xl font-bold text-white mb-6">Profile Information</h2>
 
           <form onSubmit={handleProfileSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">LinkedIn URL</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">LinkedIn URL</label>
                 <input
                   type="url"
                   value={profileForm.linkedinUrl}
                   onChange={(e) => setProfileForm({ ...profileForm, linkedinUrl: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="https://linkedin.com/in/yourprofile"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">GitHub URL</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">GitHub URL</label>
                 <input
                   type="url"
                   value={profileForm.githubUrl}
                   onChange={(e) => setProfileForm({ ...profileForm, githubUrl: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="https://github.com/yourusername"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Portfolio URL</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Portfolio URL</label>
               <input
                 type="url"
                 value={profileForm.portfolioUrl}
                 onChange={(e) => setProfileForm({ ...profileForm, portfolioUrl: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="https://yourportfolio.com"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">College/University</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">College/University</label>
                 <select
                   value={profileForm.college}
                   onChange={(e) => handleCollegeChange(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select your college</option>
                   {colleges.map(college => (
@@ -321,9 +321,9 @@ export default function StudentSettings() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Major</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Major</label>
                 {profileForm.major && profileForm.college && !availableMajors.includes(profileForm.major) && (
-                  <p className="text-amber-600 text-sm mb-2">
+                  <p className="text-amber-400 text-sm mb-2">
                     Current: "{profileForm.major}" - Please select from standardized list below
                   </p>
                 )}
@@ -331,7 +331,7 @@ export default function StudentSettings() {
                   value={availableMajors.includes(profileForm.major) ? profileForm.major : ''}
                   onChange={(e) => setProfileForm({ ...profileForm, major: e.target.value })}
                   disabled={!profileForm.college}
-                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!profileForm.college ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                  className={`w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!profileForm.college ? 'bg-white/10 cursor-not-allowed' : ''}`}
                 >
                   <option value="">{profileForm.college ? 'Select your major' : 'Select college first'}</option>
                   {availableMajors.map(major => (
@@ -342,7 +342,7 @@ export default function StudentSettings() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">GPA</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">GPA</label>
               <input
                 type="number"
                 step="0.01"
@@ -350,35 +350,35 @@ export default function StudentSettings() {
                 max="4.0"
                 value={profileForm.gpa}
                 onChange={(e) => setProfileForm({ ...profileForm, gpa: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="3.75"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Career Interests</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Career Interests</label>
               <input
                 type="text"
                 value={profileForm.careerInterests}
                 onChange={(e) => setProfileForm({ ...profileForm, careerInterests: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Software Engineering, Product Management..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Bio</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Bio</label>
               <textarea
                 value={profileForm.bio}
                 onChange={(e) => setProfileForm({ ...profileForm, bio: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Tell us about yourself..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Skills (up to 5)</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Skills (up to 5)</label>
               <div className="flex flex-wrap gap-2">
                 {allSkills.map(skill => (
                   <button
@@ -388,7 +388,7 @@ export default function StudentSettings() {
                     className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
                       profileForm.skills.includes(skill)
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-white/10 text-gray-300 hover:bg-white/10'
                     }`}
                   >
                     {skill}
@@ -398,7 +398,7 @@ export default function StudentSettings() {
             </div>
 
             {profileMessage.text && (
-              <div className={`p-4 rounded-lg ${profileMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+              <div className={`p-4 rounded-lg ${profileMessage.type === 'success' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                 {profileMessage.text}
               </div>
             )}
@@ -414,48 +414,48 @@ export default function StudentSettings() {
         </div>
 
         {/* Change Password */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Change Password</h2>
+        <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 mb-8">
+          <h2 className="text-xl font-bold text-white mb-6">Change Password</h2>
 
           <form onSubmit={handlePasswordSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Current Password</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Current Password</label>
               <input
                 type="password"
                 value={passwordForm.currentPassword}
                 onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">New Password</label>
                 <input
                   type="password"
                   value={passwordForm.newPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm New Password</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Confirm New Password</label>
                 <input
                   type="password"
                   value={passwordForm.confirmPassword}
                   onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             {passwordMessage.text && (
-              <div className={`p-4 rounded-lg ${passwordMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+              <div className={`p-4 rounded-lg ${passwordMessage.type === 'success' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                 {passwordMessage.text}
               </div>
             )}
@@ -471,45 +471,45 @@ export default function StudentSettings() {
         </div>
 
         {/* Change Email */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Change Email</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8">
+          <h2 className="text-xl font-bold text-white mb-2">Change Email</h2>
+          <p className="text-gray-400 mb-6">
             Current email: <strong>{student.schoolEmail}</strong>
           </p>
 
           <form onSubmit={handleEmailSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">New Email Address</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">New Email Address</label>
               <input
                 type="email"
                 value={emailForm.newEmail}
                 onChange={(e) => setEmailForm({ ...emailForm, newEmail: e.target.value })}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="newemail@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm with Password</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Confirm with Password</label>
               <input
                 type="password"
                 value={emailForm.password}
                 onChange={(e) => setEmailForm({ ...emailForm, password: e.target.value })}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter your current password"
               />
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-blue-800 text-sm">
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+              <p className="text-blue-300 text-sm">
                 A verification link will be sent to your new email address. You'll need to click the link to confirm the change. After confirming, you'll need to log in again with your new email.
               </p>
             </div>
 
             {emailMessage.text && (
-              <div className={`p-4 rounded-lg ${emailMessage.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+              <div className={`p-4 rounded-lg ${emailMessage.type === 'success' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                 {emailMessage.text}
               </div>
             )}

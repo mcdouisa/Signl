@@ -270,16 +270,16 @@ function StudentSignupContent() {
   // Loading state while verifying token
   if (isVerifying) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center px-6">
-        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="animate-spin w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="max-w-2xl w-full bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+          <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="animate-spin w-10 h-10 text-blue-400" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Verifying your email...</h2>
-          <p className="text-gray-600">Please wait while we verify your verification link.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Verifying your email...</h2>
+          <p className="text-gray-400">Please wait while we verify your verification link.</p>
         </div>
       </div>
     )
@@ -288,15 +288,15 @@ function StudentSignupContent() {
   // Error state if verification failed
   if (verificationError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center px-6">
-        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="max-w-2xl w-full bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+          <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Verification Failed</h2>
-          <p className="text-lg text-gray-600 mb-8">{verificationError}</p>
+          <h2 className="text-2xl font-bold text-white mb-4">Verification Failed</h2>
+          <p className="text-lg text-gray-400 mb-8">{verificationError}</p>
           <Link href="/verify" className="inline-block bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
             Request New Link
           </Link>
@@ -307,15 +307,15 @@ function StudentSignupContent() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center px-6">
-        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="max-w-2xl w-full bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
           <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome to Signl!</h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <h2 className="text-3xl font-bold text-white mb-4">Welcome to Signl!</h2>
+          <p className="text-xl text-gray-400 mb-8">
             Your account has been created successfully. Check your email ({formData.schoolEmail}) for next steps.
           </p>
           <Link href="/student/login" className="inline-block bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
@@ -329,13 +329,13 @@ function StudentSignupContent() {
   const totalSteps = 4
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      <nav className="bg-white/90 backdrop-blur-md shadow-sm">
+    <div className="min-h-screen bg-black text-white">
+      <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
             <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
           </Link>
-          <Link href="/signin" className="text-gray-600 hover:text-gray-900">
+          <Link href="/signin" className="text-gray-400 hover:text-white">
             ← Back
           </Link>
         </div>
@@ -343,40 +343,40 @@ function StudentSignupContent() {
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Account</h1>
-          <p className="text-gray-600">Join Signl and connect with top companies</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Create Your Account</h1>
+          <p className="text-gray-400">Join Signl and connect with top companies</p>
         </div>
 
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-gray-700">Step {step} of {totalSteps}</span>
-            <span className="text-sm text-gray-600">{Math.round((step / totalSteps) * 100)}% Complete</span>
+            <span className="text-sm font-semibold text-gray-300">Step {step} of {totalSteps}</span>
+            <span className="text-sm text-gray-400">{Math.round((step / totalSteps) * 100)}% Complete</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-white/10 rounded-full h-2">
             <div className="bg-gradient-to-r from-blue-600 to-teal-500 h-2 rounded-full transition-all" style={{ width: `${(step / totalSteps) * 100}%` }}></div>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8">
+        <form onSubmit={handleSubmit} className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8">
           {/* Step 1: Account Info */}
           {step === 1 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Account Information</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">First Name *</label>
-                  <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="John" />
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">First Name *</label>
+                  <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="John" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name *</label>
-                  <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Doe" />
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Last Name *</label>
+                  <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Doe" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Email *</label>
                 <input
                   type="email"
                   name="schoolEmail"
@@ -384,7 +384,7 @@ function StudentSignupContent() {
                   onChange={handleChange}
                   required
                   readOnly={!!verifiedEmail}
-                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 ${verifiedEmail ? 'bg-gray-50 cursor-not-allowed' : ''}`}
+                  className={`w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 ${verifiedEmail ? 'bg-white/5 cursor-not-allowed' : ''}`}
                   placeholder="your.email@example.com"
                 />
                 {verifiedEmail && (
@@ -401,29 +401,29 @@ function StudentSignupContent() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Personal Email (Optional)</label>
-                <input type="email" name="personalEmail" value={formData.personalEmail} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="john@gmail.com" />
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Personal Email (Optional)</label>
+                <input type="email" name="personalEmail" value={formData.personalEmail} onChange={handleChange} className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="john@gmail.com" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
-                  <input type="password" name="password" value={formData.password} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="••••••••" />
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Password *</label>
+                  <input type="password" name="password" value={formData.password} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="••••••••" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password *</label>
-                  <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="••••••••" />
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Confirm Password *</label>
+                  <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="••••••••" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">GPA (Optional)</label>
-                <input type="number" step="0.01" min="0" max="4.0" name="gpa" value={formData.gpa} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="3.75" />
+                <label className="block text-sm font-semibold text-gray-300 mb-2">GPA (Optional)</label>
+                <input type="number" step="0.01" min="0" max="4.0" name="gpa" value={formData.gpa} onChange={handleChange} className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="3.75" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Resume (Optional)</label>
-                <input type="file" name="resume" onChange={handleChange} accept=".pdf,.doc,.docx" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Resume (Optional)</label>
+                <input type="file" name="resume" onChange={handleChange} accept=".pdf,.doc,.docx" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" />
                 <p className="text-sm text-gray-500 mt-1">PDF, DOC, or DOCX format</p>
               </div>
 
@@ -436,12 +436,12 @@ function StudentSignupContent() {
           {/* Step 2: Profile Info */}
           {step === 2 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">College/University *</label>
-                  <select name="college" value={formData.college} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">College/University *</label>
+                  <select name="college" value={formData.college} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Select your college</option>
                     {colleges.map(college => (
                       <option key={college} value={college}>{college}</option>
@@ -450,14 +450,14 @@ function StudentSignupContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Major *</label>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Major *</label>
                   <select
                     name="major"
                     value={formData.major}
                     onChange={handleChange}
                     required
                     disabled={!formData.college}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 ${!formData.college ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    className={`w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 ${!formData.college ? 'bg-white/10 cursor-not-allowed' : ''}`}
                   >
                     <option value="">{formData.college ? 'Select your major' : 'Select college first'}</option>
                     {availableMajors.map(major => (
@@ -468,8 +468,8 @@ function StudentSignupContent() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Expected Graduation *</label>
-                <select name="gradYear" value={formData.gradYear} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Expected Graduation *</label>
+                <select name="gradYear" value={formData.gradYear} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option value="">Select graduation date</option>
                   <option value="May 2026">May 2026</option>
                   <option value="August 2026">August 2026</option>
@@ -490,15 +490,15 @@ function StudentSignupContent() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Career Interests *</label>
-                <input type="text" name="careerInterests" value={formData.careerInterests} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Software Engineering, Product Management..." />
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Career Interests *</label>
+                <input type="text" name="careerInterests" value={formData.careerInterests} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Software Engineering, Product Management..." />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Select Your Top Skills (up to 5) *</label>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Select Your Top Skills (up to 5) *</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {allSkills.map(skill => (
-                    <button key={skill} type="button" onClick={() => toggleSkill(skill)} className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all ${formData.skills.includes(skill) ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                    <button key={skill} type="button" onClick={() => toggleSkill(skill)} className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all ${formData.skills.includes(skill) ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/10'}`}>
                       {skill}
                     </button>
                   ))}
@@ -507,23 +507,23 @@ function StudentSignupContent() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">LinkedIn Profile URL *</label>
-                <input type="url" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleChange} required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/yourprofile" />
+                <label className="block text-sm font-semibold text-gray-300 mb-2">LinkedIn Profile URL *</label>
+                <input type="url" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/yourprofile" />
                 <p className="text-sm text-gray-500 mt-1">Companies use this to learn more about you</p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">GitHub / Portfolio URL (Optional)</label>
-                <input type="url" name="githubUrl" value={formData.githubUrl} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://github.com/yourusername" />
+                <label className="block text-sm font-semibold text-gray-300 mb-2">GitHub / Portfolio URL (Optional)</label>
+                <input type="url" name="githubUrl" value={formData.githubUrl} onChange={handleChange} className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://github.com/yourusername" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Bio (Optional)</label>
-                <textarea name="bio" value={formData.bio} onChange={handleChange} rows={4} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Tell companies about yourself..."></textarea>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Bio (Optional)</label>
+                <textarea name="bio" value={formData.bio} onChange={handleChange} rows={4} className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Tell companies about yourself..."></textarea>
               </div>
 
               <div className="flex gap-4">
-                <button type="button" onClick={prevStep} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
+                <button type="button" onClick={prevStep} className="flex-1 bg-white/10 text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
                 <button type="button" onClick={nextStep} className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">Continue</button>
               </div>
             </div>
@@ -532,45 +532,45 @@ function StudentSignupContent() {
           {/* Step 3: Nominations */}
           {step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Nominate Your Peers</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">Nominate Your Peers</h2>
               
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <p className="text-blue-900 font-semibold mb-2">📋 Focus on Group Projects</p>
-                <p className="text-blue-800 text-sm">
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6">
+                <p className="text-blue-200 font-semibold mb-2">📋 Focus on Group Projects</p>
+                <p className="text-blue-300 text-sm">
                   Think about classmates you've worked with on <strong>group projects in your major</strong>. Who delivered quality work and you'd actually want to work with again?
                 </p>
               </div>
 
               {formData.nominations.map((nomination, index) => (
-                <div key={index} className="p-6 border-2 border-gray-200 rounded-xl relative">
+                <div key={index} className="p-6 border-2 border-white/10 rounded-xl relative">
                   {formData.nominations.length > 1 && (
-                    <button type="button" onClick={() => removeNomination(index)} className="absolute top-4 right-4 text-red-600 hover:text-red-800">
+                    <button type="button" onClick={() => removeNomination(index)} className="absolute top-4 right-4 text-red-400 hover:text-red-300">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   )}
-                  <h3 className="font-semibold text-gray-900 mb-4">Nomination #{index + 1} {index === 0 && <span className="text-red-500">*</span>}</h3>
+                  <h3 className="font-semibold text-white mb-4">Nomination #{index + 1} {index === 0 && <span className="text-red-500">*</span>}</h3>
                   <div className="space-y-4">
-                    <input type="text" value={nomination.name} onChange={(e) => handleNominationChange(index, 'name', e.target.value)} placeholder="Name *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                    <input type="text" value={nomination.name} onChange={(e) => handleNominationChange(index, 'name', e.target.value)} placeholder="Name *" required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
                     
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                      <p className="text-amber-800 text-sm font-medium mb-2">Provide at least one way to contact your peer:</p>
+                    <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+                      <p className="text-amber-300 text-sm font-medium mb-2">Provide at least one way to contact your peer:</p>
                       <div className="space-y-3">
-                        <input type="email" value={nomination.email} onChange={(e) => handleNominationChange(index, 'email', e.target.value)} placeholder="Email address" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                        <input type="email" value={nomination.email} onChange={(e) => handleNominationChange(index, 'email', e.target.value)} placeholder="Email address" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
                         <div className="text-center text-gray-500 text-sm">— OR —</div>
-                        <input type="url" value={nomination.linkedinUrl || ''} onChange={(e) => handleNominationChange(index, 'linkedinUrl', e.target.value)} placeholder="LinkedIn profile URL (e.g., https://linkedin.com/in/username)" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                        <input type="url" value={nomination.linkedinUrl || ''} onChange={(e) => handleNominationChange(index, 'linkedinUrl', e.target.value)} placeholder="LinkedIn profile URL (e.g., https://linkedin.com/in/username)" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
                       </div>
                     </div>
                     
-                    <input type="text" value={nomination.major} onChange={(e) => handleNominationChange(index, 'major', e.target.value)} placeholder="Major (optional)" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
-                    <input type="text" value={nomination.projectContext} onChange={(e) => handleNominationChange(index, 'projectContext', e.target.value)} placeholder="Which group project? *" required className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                    <input type="text" value={nomination.major} onChange={(e) => handleNominationChange(index, 'major', e.target.value)} placeholder="Major (optional)" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
+                    <input type="text" value={nomination.projectContext} onChange={(e) => handleNominationChange(index, 'projectContext', e.target.value)} placeholder="Which group project? *" required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
                     
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Select 1-3 key skills *</label>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2">Select 1-3 key skills *</label>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                         {allSkills.map(skill => (
-                          <button key={skill} type="button" onClick={() => toggleNominationSkill(index, skill)} className={`px-3 py-2 rounded-lg text-sm font-semibold ${(nomination.skills || []).includes(skill) ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'}`}>
+                          <button key={skill} type="button" onClick={() => toggleNominationSkill(index, skill)} className={`px-3 py-2 rounded-lg text-sm font-semibold ${(nomination.skills || []).includes(skill) ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300'}`}>
                             {skill}
                           </button>
                         ))}
@@ -578,17 +578,17 @@ function StudentSignupContent() {
                       <p className="text-sm text-gray-500 mt-2">Selected: {(nomination.skills || []).length}/3</p>
                     </div>
 
-                    <textarea value={nomination.reason} onChange={(e) => handleNominationChange(index, 'reason', e.target.value)} placeholder="Why would you work with them again? *" required rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-lg"></textarea>
+                    <textarea value={nomination.reason} onChange={(e) => handleNominationChange(index, 'reason', e.target.value)} placeholder="Why would you work with them again? *" required rows={3} className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg"></textarea>
                   </div>
                 </div>
               ))}
 
-              <button type="button" onClick={addNomination} className="w-full border-2 border-dashed border-gray-300 rounded-lg py-3 text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-all">
+              <button type="button" onClick={addNomination} className="w-full border-2 border-dashed border-white/10 rounded-lg py-3 text-gray-400 hover:border-blue-500 hover:text-blue-400 transition-all">
                 + Add Another Nomination
               </button>
 
               <div className="flex gap-4">
-                <button type="button" onClick={prevStep} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
+                <button type="button" onClick={prevStep} className="flex-1 bg-white/10 text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
                 <button type="button" onClick={nextStep} className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">Continue</button>
               </div>
             </div>
@@ -597,39 +597,39 @@ function StudentSignupContent() {
           {/* Step 4: Review & Submit */}
           {step === 4 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Review & Submit</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Review & Submit</h2>
 
               <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-2">Your Information</h3>
-                  <p className="text-gray-700"><strong>Name:</strong> {formData.firstName} {formData.lastName}</p>
-                  <p className="text-gray-700"><strong>Email:</strong> {formData.schoolEmail}</p>
-                  <p className="text-gray-700"><strong>College:</strong> {formData.college}</p>
-                  <p className="text-gray-700"><strong>Major:</strong> {formData.major}</p>
-                  <p className="text-gray-700"><strong>Graduation:</strong> {formData.gradYear}</p>
-                  <p className="text-gray-700"><strong>LinkedIn:</strong> <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{formData.linkedinUrl}</a></p>
+                <div className="p-4 bg-white/5 rounded-lg">
+                  <h3 className="font-semibold text-white mb-2">Your Information</h3>
+                  <p className="text-gray-300"><strong>Name:</strong> {formData.firstName} {formData.lastName}</p>
+                  <p className="text-gray-300"><strong>Email:</strong> {formData.schoolEmail}</p>
+                  <p className="text-gray-300"><strong>College:</strong> {formData.college}</p>
+                  <p className="text-gray-300"><strong>Major:</strong> {formData.major}</p>
+                  <p className="text-gray-300"><strong>Graduation:</strong> {formData.gradYear}</p>
+                  <p className="text-gray-300"><strong>LinkedIn:</strong> <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{formData.linkedinUrl}</a></p>
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-2">Your Nominations ({formData.nominations.length})</h3>
+                <div className="p-4 bg-white/5 rounded-lg">
+                  <h3 className="font-semibold text-white mb-2">Your Nominations ({formData.nominations.length})</h3>
                   {formData.nominations.map((nom, idx) => (
-                    <p key={idx} className="text-gray-700">• {nom.name || `Nomination ${idx + 1}`}</p>
+                    <p key={idx} className="text-gray-300">• {nom.name || `Nomination ${idx + 1}`}</p>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">Privacy & Consent</h3>
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6">
+                <h3 className="font-semibold text-blue-200 mb-2">Privacy & Consent</h3>
                 <label className="flex items-start">
                   <input type="checkbox" required className="mt-1 mr-3" />
-                  <span className="text-sm text-blue-800">
+                  <span className="text-sm text-blue-300">
                     I consent to Signl sharing my profile with verified companies for recruiting purposes. I understand I can opt out at any time and companies can only contact me through my provided email.
                   </span>
                 </label>
               </div>
 
               <div className="flex gap-4">
-                <button type="button" onClick={prevStep} className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
+                <button type="button" onClick={prevStep} className="flex-1 bg-white/10 text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300">Back</button>
                 <button type="submit" className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">Create Account</button>
               </div>
             </div>
@@ -643,10 +643,10 @@ function StudentSignupContent() {
 export default function StudentSignup() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-400">Loading...</p>
         </div>
       </div>
     }>

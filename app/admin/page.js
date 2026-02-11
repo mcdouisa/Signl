@@ -59,25 +59,25 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center px-6">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="max-w-md w-full bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center mx-auto mb-6">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">Admin Access</h2>
-          <p className="text-gray-600 text-center mb-6">Enter password to access dashboard</p>
+          <h2 className="text-2xl font-bold text-white text-center mb-2">Admin Access</h2>
+          <p className="text-gray-400 text-center mb-6">Enter password to access dashboard</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
                 Password
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter admin password"
                 required
               />
@@ -89,8 +89,8 @@ export default function AdminDashboard() {
               Login
             </button>
           </form>
-          <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-            <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
+          <div className="mt-6 pt-6 border-t border-white/10 text-center">
+            <Link href="/" className="text-sm text-gray-400 hover:text-white">
               ← Back to Home
             </Link>
           </div>
@@ -101,10 +101,10 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading data...</p>
+          <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 font-medium">Loading data...</p>
         </div>
       </div>
     )
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
   const VerifiedBadge = ({ verified, size = 'sm' }) => {
     if (verified) {
       return (
-        <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-green-50 text-green-700 font-semibold rounded-full`}>
+        <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-green-500/10 text-green-400 font-semibold rounded-full`}>
           <svg className={size === 'lg' ? 'w-4 h-4' : 'w-3 h-3'} fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
           </svg>
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
       )
     }
     return (
-      <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-amber-50 text-amber-700 font-semibold rounded-full`}>
+      <span className={`inline-flex items-center gap-1 ${size === 'lg' ? 'px-3 py-1 text-sm' : 'px-2 py-0.5 text-xs'} bg-amber-500/10 text-amber-400 font-semibold rounded-full`}>
         <svg className={size === 'lg' ? 'w-4 h-4' : 'w-3 h-3'} fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
         </svg>
@@ -160,9 +160,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+    <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md shadow-sm">
+      <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
@@ -173,8 +173,8 @@ export default function AdminDashboard() {
                 onClick={() => setView('overview')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                   view === 'overview'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-blue-500/10 text-blue-400'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 Overview
@@ -183,13 +183,13 @@ export default function AdminDashboard() {
                 onClick={() => setView('responses')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                   view === 'responses'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-blue-500/10 text-blue-400'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 People
               </button>
-              <Link href="/" className="text-gray-600 hover:text-gray-900">
+              <Link href="/" className="text-gray-400 hover:text-white">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
@@ -201,8 +201,8 @@ export default function AdminDashboard() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-700 text-sm font-medium">{error}</p>
+          <div className="mb-6 bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+            <p className="text-red-400 text-sm font-medium">{error}</p>
           </div>
         )}
 
@@ -210,31 +210,31 @@ export default function AdminDashboard() {
           <>
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Total People</div>
-                <div className="text-3xl font-bold text-blue-600">{totalPeople}</div>
+              <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
+                <div className="text-sm font-semibold text-gray-400 mb-2">Total People</div>
+                <div className="text-3xl font-bold text-blue-400">{totalPeople}</div>
                 <div className="text-sm text-gray-500 mt-1">Students & nominees</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Verified Students</div>
+              <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
+                <div className="text-sm font-semibold text-gray-400 mb-2">Verified Students</div>
                 <div className="text-3xl font-bold text-green-600">{verifiedCount}</div>
                 <div className="text-sm text-gray-500 mt-1">Registered accounts</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Unverified Nominees</div>
-                <div className="text-3xl font-bold text-amber-600">{unverifiedCount}</div>
+              <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
+                <div className="text-sm font-semibold text-gray-400 mb-2">Unverified Nominees</div>
+                <div className="text-3xl font-bold text-amber-400">{unverifiedCount}</div>
                 <div className="text-sm text-gray-500 mt-1">Pending registration</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="text-sm font-semibold text-gray-600 mb-2">Total Nominations</div>
-                <div className="text-3xl font-bold text-teal-600">{totalNominations}</div>
+              <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
+                <div className="text-sm font-semibold text-gray-400 mb-2">Total Nominations</div>
+                <div className="text-3xl font-bold text-teal-400">{totalNominations}</div>
                 <div className="text-sm text-gray-500 mt-1">Peer nominations made</div>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+            <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6 mb-8">
+              <h2 className="text-xl font-bold text-white mb-4">Quick Actions</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onClick={() => {
                   if (people.length === 0) return alert('No data to export')
@@ -262,22 +262,22 @@ export default function AdminDashboard() {
                   a.download = `signl-people-${new Date().toISOString().split('T')[0]}.csv`
                   a.click()
                   window.URL.revokeObjectURL(url)
-                }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
-                  <div className="font-semibold text-gray-900 mb-1">Export Data</div>
-                  <div className="text-sm text-gray-600">Download all data as CSV</div>
+                }} className="p-4 border-2 border-white/10 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-colors text-left cursor-pointer">
+                  <div className="font-semibold text-white mb-1">Export Data</div>
+                  <div className="text-sm text-gray-400">Download all data as CSV</div>
                 </button>
                 <button onClick={() => {
                   setView('responses')
-                }} className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left cursor-pointer">
-                  <div className="font-semibold text-gray-900 mb-1">View All People</div>
-                  <div className="text-sm text-gray-600">Browse profiles and nominations</div>
+                }} className="p-4 border-2 border-white/10 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-colors text-left cursor-pointer">
+                  <div className="font-semibold text-white mb-1">View All People</div>
+                  <div className="text-sm text-gray-400">Browse profiles and nominations</div>
                 </button>
               </div>
             </div>
 
             {/* Recent People */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Recent People</h2>
+            <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
+              <h2 className="text-xl font-bold text-white mb-4">Recent People</h2>
               {people.length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
                   <svg className="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -290,26 +290,26 @@ export default function AdminDashboard() {
                 <>
                   <div className="space-y-3">
                     {people.slice(0, 8).map((person) => (
-                      <div key={person.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => { setSelectedPerson(person); setView('responses') }}>
+                      <div key={person.id} className="p-4 border border-white/10 rounded-lg hover:bg-white/5 transition-colors cursor-pointer" onClick={() => { setSelectedPerson(person); setView('responses') }}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-semibold text-gray-900">{person.name || 'Unnamed'}</span>
+                                <span className="font-semibold text-white">{person.name || 'Unnamed'}</span>
                                 <VerifiedBadge verified={person.verified} />
                               </div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-gray-400">
                                 {person.major || 'Unknown'}{person.college ? ` - ${person.college}` : ''}
                               </div>
                             </div>
                           </div>
                           <div className="text-right">
                             {person.verified && (
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-gray-400">
                                 {formatDate(person.createdAt)}
                               </div>
                             )}
-                            <div className="text-sm font-semibold text-blue-600">
+                            <div className="text-sm font-semibold text-blue-400">
                               Nominated {person.timesNominated || 0} time{(person.timesNominated || 0) !== 1 ? 's' : ''}
                             </div>
                           </div>
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
                   {people.length > 8 && (
                     <button
                       onClick={() => setView('responses')}
-                      className="mt-4 w-full py-2 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
+                      className="mt-4 w-full py-2 text-blue-400 font-semibold hover:bg-blue-500/10 rounded-lg transition-colors"
                     >
                       View All {people.length} People →
                     </button>
@@ -334,8 +334,8 @@ export default function AdminDashboard() {
         {view === 'responses' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* People List */}
-            <div className="lg:col-span-1 bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-3">All People ({filteredPeople.length})</h2>
+            <div className="lg:col-span-1 bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
+              <h2 className="text-xl font-bold text-white mb-3">All People ({filteredPeople.length})</h2>
 
               {/* Filter */}
               <div className="flex gap-1 mb-4">
@@ -350,7 +350,7 @@ export default function AdminDashboard() {
                     className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
                       filter === f.id
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        : 'bg-white/10 text-gray-400 hover:bg-white/10'
                     }`}
                   >
                     {f.label}
@@ -370,14 +370,14 @@ export default function AdminDashboard() {
                       onClick={() => setSelectedPerson(person)}
                       className={`w-full p-3 rounded-lg text-left transition-colors ${
                         selectedPerson?.id === person.id
-                          ? 'bg-blue-50 border-2 border-blue-500'
+                          ? 'bg-blue-500/10 border-2 border-blue-500'
                           : person.verified
-                            ? 'border border-gray-200 hover:bg-gray-50'
-                            : 'border border-dashed border-gray-300 hover:bg-gray-50'
+                            ? 'border border-white/10 hover:bg-white/5'
+                            : 'border border-dashed border-white/10 hover:bg-white/5'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="font-semibold text-gray-900 text-sm">{person.name || 'Unnamed'}</span>
+                        <span className="font-semibold text-white text-sm">{person.name || 'Unnamed'}</span>
                         {person.verified ? (
                           <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -388,12 +388,12 @@ export default function AdminDashboard() {
                           </svg>
                         )}
                       </div>
-                      <div className="text-xs text-gray-600">{person.major || 'Unknown'}</div>
+                      <div className="text-xs text-gray-400">{person.major || 'Unknown'}</div>
                       <div className="text-xs text-gray-500 mt-1">
                         Nominated {person.timesNominated || 0} time{(person.timesNominated || 0) !== 1 ? 's' : ''}
                       </div>
                       {!person.verified && (person.schoolEmail || person.linkedinUrl) && (
-                        <div className="text-xs text-blue-600 mt-1 truncate">
+                        <div className="text-xs text-blue-400 mt-1 truncate">
                           {person.schoolEmail || person.linkedinUrl}
                         </div>
                       )}
@@ -404,17 +404,17 @@ export default function AdminDashboard() {
             </div>
 
             {/* Person Detail */}
-            <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+            <div className="lg:col-span-2 bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
               {selectedPerson ? (
                 <>
                   {/* Header */}
                   <div className="mb-6">
                     <div className="flex items-center gap-3 mb-2">
-                      <h2 className="text-2xl font-bold text-gray-900">{selectedPerson.name || 'Unnamed'}</h2>
+                      <h2 className="text-2xl font-bold text-white">{selectedPerson.name || 'Unnamed'}</h2>
                       <VerifiedBadge verified={selectedPerson.verified} size="lg" />
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
+                    <div className="flex flex-wrap items-center gap-2 text-gray-400 text-sm">
                       {selectedPerson.schoolEmail && (
                         <span>{selectedPerson.schoolEmail}</span>
                       )}
@@ -449,9 +449,9 @@ export default function AdminDashboard() {
                     )}
 
                     {/* Nomination count highlight */}
-                    <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg">
-                      <span className="text-2xl font-bold text-blue-600">{selectedPerson.timesNominated || 0}</span>
-                      <span className="text-sm text-blue-700 font-medium">
+                    <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 rounded-lg">
+                      <span className="text-2xl font-bold text-blue-400">{selectedPerson.timesNominated || 0}</span>
+                      <span className="text-sm text-blue-400 font-medium">
                         time{(selectedPerson.timesNominated || 0) !== 1 ? 's' : ''} nominated
                       </span>
                     </div>
@@ -469,18 +469,18 @@ export default function AdminDashboard() {
                       const linkedinMessage = `Hey ${firstName}! Good news - ${nominatedByText} nominated you on Signl, a peer-validated recruiting platform we're building. Someone you worked with vouched for your skills, and we're connecting students like you with recruiters who want peer-validated talent. It's 100% opt-in and takes 2 min to claim your profile: signl.cc/student/signup`
 
                       return (
-                        <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                          <div className="text-sm font-semibold text-amber-800 mb-3">Outreach</div>
+                        <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                          <div className="text-sm font-semibold text-amber-300 mb-3">Outreach</div>
 
                           {/* Contact Info */}
                           <div className="space-y-2 mb-4">
                             {selectedPerson.schoolEmail && (
-                              <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-200">
+                              <div className="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-amber-500/20">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                   </svg>
-                                  <span className="text-sm text-gray-700 truncate">{selectedPerson.schoolEmail}</span>
+                                  <span className="text-sm text-gray-300 truncate">{selectedPerson.schoolEmail}</span>
                                 </div>
                                 <button
                                   onClick={() => copyToClipboard(selectedPerson.schoolEmail, `email-${selectedPerson.id}`)}
@@ -491,12 +491,12 @@ export default function AdminDashboard() {
                               </div>
                             )}
                             {selectedPerson.linkedinUrl && (
-                              <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-200">
+                              <div className="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-amber-500/20">
                                 <div className="flex items-center gap-2 min-w-0">
-                                  <svg className="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                  <svg className="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                   </svg>
-                                  <span className="text-sm text-gray-700 truncate">{selectedPerson.linkedinUrl}</span>
+                                  <span className="text-sm text-gray-300 truncate">{selectedPerson.linkedinUrl}</span>
                                 </div>
                                 <button
                                   onClick={() => copyToClipboard(selectedPerson.linkedinUrl, `linkedin-${selectedPerson.id}`)}
@@ -512,7 +512,7 @@ export default function AdminDashboard() {
                           {selectedPerson.schoolEmail && (
                             <div className="mb-3">
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-xs font-semibold text-amber-700 uppercase">Email Message</span>
+                                <span className="text-xs font-semibold text-amber-400 uppercase">Email Message</span>
                                 <button
                                   onClick={() => copyToClipboard(emailMessage, `msg-email-${selectedPerson.id}`)}
                                   className="px-3 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
@@ -520,7 +520,7 @@ export default function AdminDashboard() {
                                   {copiedField === `msg-email-${selectedPerson.id}` ? 'Copied!' : 'Copy Message'}
                                 </button>
                               </div>
-                              <div className="bg-white rounded-lg p-3 border border-amber-200 text-xs text-gray-600 whitespace-pre-line max-h-32 overflow-y-auto">
+                              <div className="bg-white/5 rounded-lg p-3 border border-amber-500/20 text-xs text-gray-400 whitespace-pre-line max-h-32 overflow-y-auto">
                                 {emailMessage}
                               </div>
                             </div>
@@ -529,7 +529,7 @@ export default function AdminDashboard() {
                           {selectedPerson.linkedinUrl && (
                             <div>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-xs font-semibold text-amber-700 uppercase">LinkedIn Message</span>
+                                <span className="text-xs font-semibold text-amber-400 uppercase">LinkedIn Message</span>
                                 <button
                                   onClick={() => copyToClipboard(linkedinMessage, `msg-linkedin-${selectedPerson.id}`)}
                                   className="px-3 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
@@ -537,7 +537,7 @@ export default function AdminDashboard() {
                                   {copiedField === `msg-linkedin-${selectedPerson.id}` ? 'Copied!' : 'Copy Message'}
                                 </button>
                               </div>
-                              <div className="bg-white rounded-lg p-3 border border-amber-200 text-xs text-gray-600 whitespace-pre-line max-h-32 overflow-y-auto">
+                              <div className="bg-white/5 rounded-lg p-3 border border-amber-500/20 text-xs text-gray-400 whitespace-pre-line max-h-32 overflow-y-auto">
                                 {linkedinMessage}
                               </div>
                             </div>
@@ -548,9 +548,9 @@ export default function AdminDashboard() {
 
                     {/* Bio - verified students only */}
                     {selectedPerson.bio && (
-                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="mt-3 p-3 bg-white/5 rounded-lg">
                         <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Bio</div>
-                        <p className="text-sm text-gray-700">{selectedPerson.bio}</p>
+                        <p className="text-sm text-gray-300">{selectedPerson.bio}</p>
                       </div>
                     )}
 
@@ -560,7 +560,7 @@ export default function AdminDashboard() {
                         <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Skills</div>
                         <div className="flex flex-wrap gap-2">
                           {selectedPerson.skills.map((skill, i) => (
-                            <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                            <span key={i} className="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full">
                               {skill}
                             </span>
                           ))}
@@ -572,12 +572,12 @@ export default function AdminDashboard() {
                     {(selectedPerson.linkedinUrl || selectedPerson.githubUrl || selectedPerson.personalEmail) && (
                       <div className="flex gap-3 mt-3">
                         {selectedPerson.linkedinUrl && (
-                          <a href={selectedPerson.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                          <a href={selectedPerson.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline">
                             LinkedIn ↗
                           </a>
                         )}
                         {selectedPerson.githubUrl && (
-                          <a href={selectedPerson.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">
+                          <a href={selectedPerson.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:underline">
                             GitHub ↗
                           </a>
                         )}
@@ -591,24 +591,24 @@ export default function AdminDashboard() {
                   {/* Nominated By Section */}
                   {(selectedPerson.nominatedBy || []).length > 0 && (
                     <div className="mb-6">
-                      <h3 className="text-lg font-bold text-gray-900 mb-4">
+                      <h3 className="text-lg font-bold text-white mb-4">
                         Nominated By ({(selectedPerson.nominatedBy || []).length})
                       </h3>
                       <div className="space-y-3">
                         {(selectedPerson.nominatedBy || []).map((nom, index) => (
-                          <div key={index} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                          <div key={index} className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
                             <div className="flex items-center justify-between mb-2">
-                              <div className="font-semibold text-gray-900 text-sm">{nom.byName}</div>
+                              <div className="font-semibold text-white text-sm">{nom.byName}</div>
                               <span className="text-xs text-gray-500">{nom.byEmail}</span>
                             </div>
                             {nom.projectContext && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-green-100 mb-2">
+                              <div className="text-sm text-gray-300 bg-white/5 p-3 rounded border border-white/10 mb-2">
                                 <span className="text-xs font-semibold text-gray-500">Project: </span>
                                 {nom.projectContext}
                               </div>
                             )}
                             {nom.reason && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-green-100 mb-2">
+                              <div className="text-sm text-gray-300 bg-white/5 p-3 rounded border border-white/10 mb-2">
                                 <span className="text-xs font-semibold text-gray-500">Reason: </span>
                                 {nom.reason}
                               </div>
@@ -616,7 +616,7 @@ export default function AdminDashboard() {
                             {nom.skills && nom.skills.length > 0 && (
                               <div className="flex flex-wrap gap-1">
                                 {nom.skills.map((skill, i) => (
-                                  <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
+                                  <span key={i} className="px-2 py-0.5 bg-teal-500/10 text-teal-400 text-xs rounded-full">
                                     {skill}
                                   </span>
                                 ))}
@@ -631,47 +631,47 @@ export default function AdminDashboard() {
                   {/* Nominations Given Section - only for verified students */}
                   {selectedPerson.verified && (selectedPerson.nominations || []).length > 0 && (
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-4">
+                      <h3 className="text-lg font-bold text-white mb-4">
                         Nominations Given ({(selectedPerson.nominations || []).length})
                       </h3>
                       <div className="space-y-3">
                         {(selectedPerson.nominations || []).map((nomination, index) => (
-                          <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
                             <div className="flex items-start justify-between mb-1">
-                              <div className="font-semibold text-gray-900 text-sm">
+                              <div className="font-semibold text-white text-sm">
                                 {nomination.firstName && nomination.lastName
                                   ? `${nomination.firstName} ${nomination.lastName}`
                                   : nomination.firstName || nomination.name || 'Unnamed'}
                               </div>
                               {nomination.major && (
-                                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">{nomination.major}</span>
+                                <span className="text-xs bg-white/10 text-gray-400 px-2 py-0.5 rounded-full">{nomination.major}</span>
                               )}
                             </div>
                             {nomination.email && (
-                              <div className="text-sm text-gray-600 mb-1">{nomination.email}</div>
+                              <div className="text-sm text-gray-400 mb-1">{nomination.email}</div>
                             )}
                             {nomination.linkedinUrl && (
-                              <a href={nomination.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline mb-1 inline-block">
+                              <a href={nomination.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:underline mb-1 inline-block">
                                 LinkedIn ↗
                               </a>
                             )}
                             {nomination.skills && nomination.skills.length > 0 && (
                               <div className="flex flex-wrap gap-1 mb-2">
                                 {nomination.skills.map((skill, i) => (
-                                  <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
+                                  <span key={i} className="px-2 py-0.5 bg-teal-500/10 text-teal-400 text-xs rounded-full">
                                     {skill}
                                   </span>
                                 ))}
                               </div>
                             )}
                             {nomination.projectContext && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200 mb-2">
+                              <div className="text-sm text-gray-300 bg-white/5 p-3 rounded border border-white/10 mb-2">
                                 <span className="text-xs font-semibold text-gray-500">Project: </span>
                                 {nomination.projectContext}
                               </div>
                             )}
                             {nomination.reason && (
-                              <div className="text-sm text-gray-700 bg-white p-3 rounded border border-gray-200">
+                              <div className="text-sm text-gray-300 bg-white/5 p-3 rounded border border-white/10">
                                 <span className="text-xs font-semibold text-gray-500">Reason: </span>
                                 {nomination.reason}
                               </div>

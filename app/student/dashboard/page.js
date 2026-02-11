@@ -35,10 +35,10 @@ export default function StudentDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-400">Loading...</p>
         </div>
       </div>
     )
@@ -49,33 +49,33 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+    <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md shadow-sm">
+      <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
               <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
             </Link>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-400">
                 Welcome, {student.firstName}!
               </span>
               <Link
                 href="/student/peers"
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                className="text-gray-400 hover:text-white text-sm font-medium"
               >
                 Peers
               </Link>
               <Link
                 href="/student/settings"
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                className="text-gray-400 hover:text-white text-sm font-medium"
               >
                 Settings
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                className="text-gray-400 hover:text-white text-sm font-medium"
               >
                 Sign Out
               </button>
@@ -86,50 +86,50 @@ export default function StudentDashboard() {
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Welcome Section */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 mb-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               Welcome back, {student.firstName}!
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-400 mt-2">
               Manage your profile and endorse your peers
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-sm font-semibold text-gray-600 mb-1">College</div>
-              <div className="text-gray-900">{student.college || 'Not specified'}</div>
+            <div className="bg-white/5 rounded-xl p-4">
+              <div className="text-sm font-semibold text-gray-400 mb-1">College</div>
+              <div className="text-white">{student.college || 'Not specified'}</div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-sm font-semibold text-gray-600 mb-1">Major</div>
-              <div className="text-gray-900">{student.major || 'Not specified'}</div>
+            <div className="bg-white/5 rounded-xl p-4">
+              <div className="text-sm font-semibold text-gray-400 mb-1">Major</div>
+              <div className="text-white">{student.major || 'Not specified'}</div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-sm font-semibold text-gray-600 mb-1">Graduation</div>
-              <div className="text-gray-900">{student.gradYear || 'Not specified'}</div>
+            <div className="bg-white/5 rounded-xl p-4">
+              <div className="text-sm font-semibold text-gray-400 mb-1">Graduation</div>
+              <div className="text-white">{student.gradYear || 'Not specified'}</div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4">
-              <div className="text-sm font-semibold text-gray-600 mb-1">Endorsements Given</div>
-              <div className="text-gray-900">{student.endorsementsGiven || 0} / 5</div>
+            <div className="bg-white/5 rounded-xl p-4">
+              <div className="text-sm font-semibold text-gray-400 mb-1">Endorsements Given</div>
+              <div className="text-white">{student.endorsementsGiven || 0} / 5</div>
             </div>
           </div>
         </div>
 
         {/* Early Access Status Banner */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl shadow-sm p-6 mb-8">
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-500/20 rounded-2xl shadow-sm p-6 mb-8">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-bold text-amber-900 mb-1">You're an Early Member!</h2>
-              <p className="text-amber-800 text-sm mb-3">
+              <h2 className="text-lg font-bold text-amber-300 mb-1">You're an Early Member!</h2>
+              <p className="text-amber-300 text-sm mb-3">
                 We're still building our student network before reaching out to recruiters. Once we hit critical mass, your profile will be front and center for companies looking for peer-validated talent. The earlier you join, the stronger your profile will be.
               </p>
-              <div className="text-xs text-amber-700 font-medium">
+              <div className="text-xs text-amber-400 font-medium">
                 What you can do right now: invite classmates you've worked with so we can grow faster and get you noticed sooner.
               </div>
             </div>
@@ -137,13 +137,13 @@ export default function StudentDashboard() {
         </div>
 
         {/* Spread the Word CTA */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Help Us Grow</h2>
-          <p className="text-gray-600 mb-4">
+        <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 mb-8">
+          <h2 className="text-xl font-bold text-white mb-2">Help Us Grow</h2>
+          <p className="text-gray-400 mb-4">
             The more students on Signl, the sooner we start connecting you with recruiters. Share the signup link with classmates you'd vouch for.
           </p>
-          <div className="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 mb-4">
-            <span className="text-sm text-gray-700 truncate flex-1" id="share-link">https://signl.cc/student/signup</span>
+          <div className="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10 mb-4">
+            <span className="text-sm text-gray-300 truncate flex-1" id="share-link">https://signl.cc/student/signup</span>
             <button
               onClick={() => {
                 navigator.clipboard.writeText('https://signl.cc/student/signup')
@@ -168,28 +168,28 @@ export default function StudentDashboard() {
         </div>
 
         {/* Profile Overview */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Your Profile</h2>
+        <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 mb-8">
+          <h2 className="text-xl font-bold text-white mb-6">Your Profile</h2>
 
           <div className="space-y-4">
             <div>
-              <div className="text-sm font-semibold text-gray-600 mb-1">Email</div>
-              <div className="text-gray-900">{student.schoolEmail}</div>
+              <div className="text-sm font-semibold text-gray-400 mb-1">Email</div>
+              <div className="text-white">{student.schoolEmail}</div>
             </div>
 
             {student.careerInterests && (
               <div>
-                <div className="text-sm font-semibold text-gray-600 mb-1">Career Interests</div>
-                <div className="text-gray-900">{student.careerInterests}</div>
+                <div className="text-sm font-semibold text-gray-400 mb-1">Career Interests</div>
+                <div className="text-white">{student.careerInterests}</div>
               </div>
             )}
 
             {student.skills && student.skills.length > 0 && (
               <div>
-                <div className="text-sm font-semibold text-gray-600 mb-2">Skills</div>
+                <div className="text-sm font-semibold text-gray-400 mb-2">Skills</div>
                 <div className="flex flex-wrap gap-2">
                   {student.skills.map((skill, index) => (
-                    <span key={index} className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full font-semibold">
+                    <span key={index} className="px-3 py-1 bg-blue-500/10 text-blue-400 text-sm rounded-full font-semibold">
                       {skill}
                     </span>
                   ))}
@@ -199,15 +199,15 @@ export default function StudentDashboard() {
 
             {student.bio && (
               <div>
-                <div className="text-sm font-semibold text-gray-600 mb-1">Bio</div>
-                <div className="text-gray-900">{student.bio}</div>
+                <div className="text-sm font-semibold text-gray-400 mb-1">Bio</div>
+                <div className="text-white">{student.bio}</div>
               </div>
             )}
 
             {student.githubUrl && (
               <div>
-                <div className="text-sm font-semibold text-gray-600 mb-1">GitHub/Portfolio</div>
-                <a href={student.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                <div className="text-sm font-semibold text-gray-400 mb-1">GitHub/Portfolio</div>
+                <a href={student.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
                   {student.githubUrl}
                 </a>
               </div>
