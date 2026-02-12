@@ -12,6 +12,10 @@ export default function StudentLogin() {
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetMessage, setResetMessage] = useState({ type: '', text: '' })
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -53,6 +57,35 @@ export default function StudentLogin() {
       setError(error.message || 'Invalid email or password')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault()
+    setResetMessage({ type: '', text: '' })
+    setResetLoading(true)
+
+    try {
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: resetEmail })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send reset email')
+      }
+
+      setResetMessage({
+        type: 'success',
+        text: 'If an account with that email exists, a reset link has been sent. Check your inbox.'
+      })
+    } catch (err) {
+      setResetMessage({ type: 'error', text: err.message })
+    } finally {
+      setResetLoading(false)
     }
   }
 
@@ -121,9 +154,17 @@ export default function StudentLogin() {
                   <input type="checkbox" className="mr-2" />
                   <span className="text-sm text-gray-400">Remember me</span>
                 </label>
-                <a href="#" className="text-sm text-blue-400 hover:underline">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgotPassword(true)
+                    setResetEmail(formData.email)
+                    setResetMessage({ type: '', text: '' })
+                  }}
+                  className="text-sm text-blue-400 hover:underline"
+                >
                   Forgot password?
-                </a>
+                </button>
               </div>
 
               <button
@@ -146,6 +187,61 @@ export default function StudentLogin() {
           </div>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+          <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-2xl max-w-md w-full p-8">
+            <h2 className="text-xl font-bold text-white mb-2">Reset Password</h2>
+            <p className="text-gray-400 text-sm mb-6">
+              Enter your email address and we'll send you a link to reset your password.
+            </p>
+
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="your.email@example.com"
+                />
+              </div>
+
+              {resetMessage.text && (
+                <div className={`p-3 rounded-lg text-sm ${
+                  resetMessage.type === 'success'
+                    ? 'bg-green-500/10 text-green-400'
+                    : 'bg-red-500/10 text-red-400'
+                }`}>
+                  {resetMessage.text}
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="flex-1 bg-white/10 text-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-white/15 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={resetLoading}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                >
+                  {resetLoading ? 'Sending...' : 'Send Reset Link'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
