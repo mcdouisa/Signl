@@ -16,27 +16,43 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Navigation */}
+      {/* Navigation - transforms on scroll */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? 'bg-black/90 backdrop-blur-md border-b border-white/5' : 'bg-transparent'
+        scrolled
+          ? 'bg-black/90 backdrop-blur-md border-b border-white/5'
+          : 'bg-white'
       }`}>
-        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div className={`max-w-7xl mx-auto px-6 flex items-center justify-between transition-all duration-500 ${
+          scrolled ? 'py-3' : 'py-1'
+        }`}>
           <Link href="/">
-            <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain cursor-pointer hover:opacity-90 transition-opacity" />
+            <img
+              src="/logo.png.png"
+              alt="Signl Logo"
+              className={`object-contain cursor-pointer hover:opacity-90 transition-all duration-500 ${
+                scrolled ? 'h-10 rounded-md' : 'h-24'
+              }`}
+            />
           </Link>
-          <div className="hidden md:flex items-center space-x-10">
-            <a href="#how-it-works" className="text-gray-400 hover:text-white transition-colors text-sm tracking-wide">How It Works</a>
-            <a href="#for-companies" className="text-gray-400 hover:text-white transition-colors text-sm tracking-wide">For Companies</a>
-            <a href="#for-students" className="text-gray-400 hover:text-white transition-colors text-sm tracking-wide">For Students</a>
+          <div className={`hidden md:flex items-center space-x-10 transition-all duration-500 ${
+            scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}>
+            <a href="#how-it-works" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">How It Works</a>
+            <a href="#for-companies" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">For Companies</a>
+            <a href="#for-students" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">For Students</a>
           </div>
-          <Link href="/signin" className="border border-white/20 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-white hover:text-black transition-all duration-300">
+          <Link href="/signin" className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-500 border ${
+            scrolled
+              ? 'border-white/20 text-white hover:bg-white hover:text-black'
+              : 'border-black/20 text-black hover:bg-black hover:text-white'
+          }`}>
             Sign In
           </Link>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-40 pb-32 px-6 relative overflow-hidden">
+      <section className="pt-44 pb-12 px-6 relative overflow-hidden">
         {/* Futuristic light effects */}
         <div className="absolute inset-0">
           {/* Main bright orb - top center */}
@@ -72,7 +88,7 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto relative">
           <div className="text-center max-w-4xl mx-auto">
-            <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6 font-medium">Peer-Validated Recruiting</p>
+            <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6 font-medium">Find College Talent</p>
             <h1 className="font-serif text-6xl md:text-8xl font-bold text-white mb-8 leading-[1.05] tracking-tight">
               Connecting Talent<br />
               <span className="text-gradient-light">with Opportunity</span>
@@ -90,26 +106,23 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-4xl mx-auto">
-            <div className="text-center p-8 glass-dark rounded-2xl border-glow">
-              <div className="text-5xl font-bold text-white mb-2 font-serif">60%</div>
-              <div className="text-gray-500 text-sm tracking-wide">Based on Peer Validation</div>
-            </div>
-            <div className="text-center p-8 glass-dark rounded-2xl border-glow">
-              <div className="text-5xl font-bold text-white mb-2 font-serif">$36B</div>
-              <div className="text-gray-500 text-sm tracking-wide">College Recruiting Market</div>
-            </div>
-            <div className="text-center p-8 glass-dark rounded-2xl border-glow">
-              <div className="text-5xl font-bold text-white mb-2 font-serif">30+</div>
-              <div className="text-gray-500 text-sm tracking-wide">Hours Saved Per Hire</div>
+          {/* Hero Image - scrolls with page */}
+          <div className="mt-20 max-w-5xl mx-auto">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50">
+              <img
+                src="/hero-library.jpg"
+                alt="Students collaborating in university library"
+                className="w-full h-auto object-cover"
+                style={{ maxHeight: '500px', objectPosition: 'center 40%' }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Divider */}
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6 mt-16">
         <div className="border-t border-white/5"></div>
       </div>
 
