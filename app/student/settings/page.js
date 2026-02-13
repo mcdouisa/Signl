@@ -20,7 +20,9 @@ export default function StudentSettings() {
     skills: [],
     college: '',
     major: '',
-    gpa: ''
+    gpa: '',
+    lookingFor: '',
+    targetIndustries: ''
   })
   const [profileSaving, setProfileSaving] = useState(false)
   const [profileMessage, setProfileMessage] = useState({ type: '', text: '' })
@@ -72,7 +74,9 @@ export default function StudentSettings() {
         skills: studentData.skills || [],
         college: studentCollege,
         major: studentData.major || '',
-        gpa: studentData.gpa || ''
+        gpa: studentData.gpa || '',
+        lookingFor: studentData.lookingFor || '',
+        targetIndustries: studentData.targetIndustries || ''
       })
       // availableMajors will be set by the useEffect watching profileForm.college
     } catch (error) {
@@ -250,6 +254,12 @@ export default function StudentSettings() {
               <Link href="/student/dashboard" className="text-gray-400 hover:text-white text-sm font-medium">
                 Dashboard
               </Link>
+              <Link href="/student/peers" className="text-gray-400 hover:text-white text-sm font-medium">
+                Peers
+              </Link>
+              <Link href="/student/companies" className="text-gray-400 hover:text-white text-sm font-medium">
+                Companies
+              </Link>
               <button
                 onClick={handleLogout}
                 className="text-gray-400 hover:text-white text-sm font-medium"
@@ -374,6 +384,29 @@ export default function StudentSettings() {
                 rows={3}
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Tell us about yourself..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">What I'm Looking For</label>
+              <textarea
+                value={profileForm.lookingFor}
+                onChange={(e) => setProfileForm({ ...profileForm, lookingFor: e.target.value })}
+                rows={2}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="e.g., Summer 2026 internship in software engineering, full-time PM role starting June..."
+              />
+              <p className="text-sm text-gray-600 mt-1">Companies see this when reviewing your profile</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Target Industries</label>
+              <input
+                type="text"
+                value={profileForm.targetIndustries}
+                onChange={(e) => setProfileForm({ ...profileForm, targetIndustries: e.target.value })}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="e.g., Tech, Finance, Healthcare, Consulting..."
               />
             </div>
 

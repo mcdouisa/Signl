@@ -13,7 +13,9 @@ const ALLOWED_FIELDS = [
   'college',
   'major',
   'gpa',
-  'gradYear'
+  'gradYear',
+  'lookingFor',
+  'targetIndustries'
 ]
 
 export async function PUT(request) {
