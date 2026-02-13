@@ -38,8 +38,8 @@ export default function Home() {
             scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}>
             <a href="#how-it-works" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">How It Works</a>
-            <a href="#for-companies" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">For Companies</a>
-            <a href="#for-students" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">For Students</a>
+            <Link href="/for-companies" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">For Companies</Link>
+            <Link href="/for-students" className="text-gray-500 hover:text-black transition-colors text-sm tracking-wide font-medium">For Students</Link>
           </div>
           <Link href="/signin" className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-500 border ${
             scrolled
@@ -52,7 +52,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-44 pb-12 px-6 relative overflow-hidden">
+      <section className="pt-44 pb-12 px-6 relative">
         {/* Futuristic light effects */}
         <div className="absolute inset-0">
           {/* Main bright orb - top center */}
@@ -62,7 +62,7 @@ export default function Home() {
             transform: 'translateX(-50%)',
             width: '800px',
             height: '600px',
-            background: 'radial-gradient(ellipse, rgba(96,165,250,0.25) 0%, rgba(59,130,246,0.1) 40%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(96,165,250,0.18) 0%, rgba(52,211,153,0.12) 40%, transparent 70%)',
           }}></div>
           {/* Secondary teal orb - right */}
           <div className="glow-orb" style={{
@@ -70,7 +70,7 @@ export default function Home() {
             right: '-5%',
             width: '500px',
             height: '500px',
-            background: 'radial-gradient(circle, rgba(94,234,212,0.15) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(74,222,128,0.18) 0%, transparent 70%)',
           }}></div>
           {/* Accent orb - left */}
           <div className="glow-orb" style={{
@@ -78,10 +78,10 @@ export default function Home() {
             left: '-8%',
             width: '400px',
             height: '400px',
-            background: 'radial-gradient(circle, rgba(147,51,234,0.12) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(52,211,153,0.12) 0%, transparent 70%)',
           }}></div>
           {/* Bright spotlight beam effect */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-[300px] bg-gradient-to-b from-white/20 via-blue-400/10 to-transparent"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-[300px] bg-gradient-to-b from-white/20 via-emerald-400/15 to-transparent"></div>
           {/* Grid pattern overlay */}
           <div className="absolute inset-0 grid-pattern opacity-40"></div>
         </div>
@@ -94,15 +94,15 @@ export default function Home() {
               <span className="text-gradient-light">with Opportunity</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto">
-              Stop relying on resumes and GPAs. Connect with university students who their classmates actually want to work with — verified through peer validation.
+              Stop relying on resumes and GPA's. Whether hiring or a student, there is a better way to SIGNL the right person for the job.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <Link href="/student/signup" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-lg font-semibold text-base hover:bg-gray-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300">
-                Get Started as Student
+              <Link href="/for-students" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-lg font-semibold text-base hover:bg-gray-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300">
+                I'm a Student
               </Link>
-              <a href="#for-companies" className="w-full sm:w-auto border border-white/20 text-white px-10 py-4 rounded-lg font-semibold text-base hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all duration-300">
-                For Companies
-              </a>
+              <Link href="/for-companies" className="w-full sm:w-auto border border-white/20 text-white px-10 py-4 rounded-lg font-semibold text-base hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all duration-300">
+                I'm a Company
+              </Link>
             </div>
           </div>
 
@@ -121,22 +121,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="max-w-7xl mx-auto px-6 mt-16">
-        <div className="border-t border-white/5"></div>
-      </div>
-
       {/* How It Works */}
       <section id="how-it-works" className="py-28 px-6 relative">
-        {/* Subtle ambient light */}
-        <div className="absolute inset-0 overflow-hidden">
+        {/* Ambient light effects */}
+        <div className="absolute inset-0">
           <div className="glow-orb" style={{
-            top: '50%',
+            top: '-15%',
             left: '50%',
-            transform: 'translate(-50%, -50%)',
+            transform: 'translateX(-50%)',
             width: '900px',
             height: '500px',
-            background: 'radial-gradient(ellipse, rgba(96,165,250,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(52,211,153,0.12) 0%, rgba(96,165,250,0.06) 50%, transparent 70%)',
+          }}></div>
+          <div className="glow-orb" style={{
+            top: '40%',
+            left: '-10%',
+            width: '500px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%)',
+          }}></div>
+          <div className="glow-orb" style={{
+            top: '30%',
+            right: '-10%',
+            width: '500px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(96,165,250,0.1) 0%, transparent 70%)',
           }}></div>
         </div>
 
@@ -147,22 +156,22 @@ export default function Home() {
               How Signl Works
             </h2>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Three simple steps to connect companies with peer-validated talent
+              Three simple steps to connect companies and students
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-10 glass-dark rounded-2xl hover:border-white/15 transition-all duration-500 group relative">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative">
-                <div className="w-14 h-14 border border-white/10 rounded-xl flex items-center justify-center text-xl font-serif font-bold mb-8 text-white group-hover:border-blue-400/40 group-hover:shadow-[0_0_15px_rgba(96,165,250,0.15)] transition-all duration-500">
+                <div className="w-14 h-14 border border-white/10 rounded-xl flex items-center justify-center text-xl font-serif font-bold mb-8 text-white group-hover:border-emerald-400/40 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.15)] transition-all duration-500">
                   1
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 font-serif">
                   Students Nominate Peers
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  University students nominate 3-5 classmates they'd actually want to work with — especially from group projects in their major.
+                  University students nominate classmates they'd actually want to work with — especially from group projects in their major.
                 </p>
               </div>
             </div>
@@ -183,9 +192,9 @@ export default function Home() {
             </div>
 
             <div className="p-10 glass-dark rounded-2xl hover:border-white/15 transition-all duration-500 group relative">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative">
-                <div className="w-14 h-14 border border-white/10 rounded-xl flex items-center justify-center text-xl font-serif font-bold mb-8 text-white group-hover:border-blue-400/40 group-hover:shadow-[0_0_15px_rgba(96,165,250,0.15)] transition-all duration-500">
+                <div className="w-14 h-14 border border-white/10 rounded-xl flex items-center justify-center text-xl font-serif font-bold mb-8 text-white group-hover:border-green-400/40 group-hover:shadow-[0_0_15px_rgba(74,222,128,0.15)] transition-all duration-500">
                   3
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 font-serif">
@@ -200,121 +209,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="border-t border-white/5"></div>
-      </div>
-
-      {/* For Companies */}
-      <section id="for-companies" className="py-28 px-6 relative">
-        {/* Light accent */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="glow-orb" style={{
-            bottom: '-20%',
-            right: '10%',
-            width: '600px',
-            height: '400px',
-            background: 'radial-gradient(ellipse, rgba(94,234,212,0.08) 0%, transparent 70%)',
-          }}></div>
-        </div>
-
-        <div className="max-w-5xl mx-auto relative">
-          <div className="text-center">
-            <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-4 font-medium">For Companies</p>
-            <h2 className="font-serif text-5xl md:text-6xl font-bold text-white mb-6">
-              Stop wasting time on<br />the wrong candidates
-            </h2>
-            <p className="text-lg text-gray-400 mb-16 max-w-3xl mx-auto">
-              Traditional recruiting misses 40% of underperformers. Peer validation catches red flags that resumes can't.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="glass-dark rounded-2xl p-10 text-center group hover:border-white/15 transition-all duration-500">
-              <div className="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:border-blue-400/30 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.1)] transition-all duration-500">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="font-bold text-xl text-white mb-3 font-serif">Pre-Vetted Talent</div>
-              <div className="text-gray-500">Access students who peers actually vouch for</div>
-            </div>
-
-            <div className="glass-dark rounded-2xl p-10 text-center group hover:border-white/15 transition-all duration-500">
-              <div className="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:border-teal-400/30 group-hover:shadow-[0_0_20px_rgba(94,234,212,0.1)] transition-all duration-500">
-                <svg className="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="font-bold text-xl text-white mb-3 font-serif">Save 30+ Hours</div>
-              <div className="text-gray-500">Skip screening hundreds of unqualified applications</div>
-            </div>
-
-            <div className="glass-dark rounded-2xl p-10 text-center group hover:border-white/15 transition-all duration-500">
-              <div className="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:border-blue-400/30 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.1)] transition-all duration-500">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="font-bold text-xl text-white mb-3 font-serif">Better Quality Hires</div>
-              <div className="text-gray-500">Reduce underperformance and early turnover</div>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <Link href="/demo" className="inline-block bg-white text-black px-12 py-5 rounded-lg font-semibold text-lg hover:bg-gray-100 hover:shadow-[0_0_40px_rgba(255,255,255,0.15)] transition-all duration-300">
-              Schedule a Demo
-            </Link>
-            <p className="text-gray-600 mt-4 text-sm">Contact us to learn about pricing and get started</p>
-          </div>
-        </div>
-      </section>
-
-      {/* For Students */}
-      <section id="for-students" className="py-28 px-6 relative overflow-hidden">
-        {/* Dramatic light burst */}
-        <div className="absolute inset-0">
-          <div className="glow-orb" style={{
-            bottom: '-30%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '800px',
-            height: '600px',
-            background: 'radial-gradient(ellipse, rgba(94,234,212,0.15) 0%, rgba(96,165,250,0.08) 40%, transparent 70%)',
-          }}></div>
-          {/* Light rays */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1px] h-[200px] bg-gradient-to-t from-teal-400/20 to-transparent"></div>
-          <div className="absolute bottom-0 left-[calc(50%-60px)] w-[1px] h-[150px] bg-gradient-to-t from-blue-400/10 to-transparent rotate-[8deg] origin-bottom"></div>
-          <div className="absolute bottom-0 left-[calc(50%+60px)] w-[1px] h-[150px] bg-gradient-to-t from-blue-400/10 to-transparent -rotate-[8deg] origin-bottom"></div>
-        </div>
-        <div className="max-w-4xl mx-auto text-center relative">
-          <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-4 font-medium">For Students</p>
-          <h2 className="font-serif text-5xl md:text-6xl font-bold mb-6 text-white">
-            Get Found,<br />Don't Get Lost
-          </h2>
-          <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
-            Stop mass-applying to hundreds of jobs. Let your peers vouch for you and companies find you.
-          </p>
-          <Link href="/student/signup" className="inline-block bg-white text-black px-10 py-4 rounded-lg font-semibold text-base hover:bg-gray-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300">
-            Join Signl Today
-          </Link>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="border-t border-white/5"></div>
-      </div>
 
       {/* Testimonials */}
       <section className="py-28 px-6 relative">
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0">
           <div className="glow-orb" style={{
-            top: '10%',
-            left: '20%',
-            width: '400px',
-            height: '300px',
-            background: 'radial-gradient(ellipse, rgba(147,51,234,0.06) 0%, transparent 70%)',
+            top: '-10%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '800px',
+            height: '500px',
+            background: 'radial-gradient(ellipse, rgba(52,211,153,0.1) 0%, rgba(96,165,250,0.06) 50%, transparent 70%)',
+          }}></div>
+          <div className="glow-orb" style={{
+            top: '30%',
+            right: '-10%',
+            width: '450px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%)',
+          }}></div>
+          <div className="glow-orb" style={{
+            bottom: '-15%',
+            left: '10%',
+            width: '500px',
+            height: '350px',
+            background: 'radial-gradient(circle, rgba(96,165,250,0.08) 0%, transparent 70%)',
           }}></div>
         </div>
 
@@ -353,18 +272,87 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Get Started */}
+      <section className="py-28 px-6 relative">
+        <div className="absolute inset-0">
+          <div className="glow-orb" style={{
+            top: '-10%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '900px',
+            height: '600px',
+            background: 'radial-gradient(ellipse, rgba(52,211,153,0.15) 0%, rgba(96,165,250,0.08) 40%, transparent 70%)',
+          }}></div>
+          <div className="glow-orb" style={{
+            bottom: '-15%',
+            right: '-5%',
+            width: '500px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(74,222,128,0.1) 0%, transparent 70%)',
+          }}></div>
+          <div className="glow-orb" style={{
+            top: '40%',
+            left: '-8%',
+            width: '450px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(96,165,250,0.08) 0%, transparent 70%)',
+          }}></div>
+        </div>
+
+        <div className="max-w-5xl mx-auto relative">
+          <div className="text-center mb-16">
+            <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-4 font-medium">Join SIGNL</p>
+            <h2 className="font-serif text-5xl md:text-6xl font-bold text-white mb-6">
+              Get Started
+            </h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Whether you're a student looking to get discovered or a company searching for top talent, SIGNL has you covered.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Link href="/for-students" className="glass-dark rounded-2xl p-12 text-center group hover:border-white/15 transition-all duration-500 block">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative">
+                <div className="w-16 h-16 border border-white/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:border-emerald-400/40 group-hover:shadow-[0_0_20px_rgba(52,211,153,0.15)] transition-all duration-500">
+                  <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif">I'm a Student</h3>
+                <p className="text-gray-400 mb-6">Get found by actively hiring recruiters. Let your peers vouch for you.</p>
+                <span className="text-emerald-400 font-semibold text-sm group-hover:underline">Learn More &rarr;</span>
+              </div>
+            </Link>
+
+            <Link href="/for-companies" className="glass-dark rounded-2xl p-12 text-center group hover:border-white/15 transition-all duration-500 block">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative">
+                <div className="w-16 h-16 border border-white/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:border-blue-400/40 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.15)] transition-all duration-500">
+                  <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif">I'm a Company</h3>
+                <p className="text-gray-400 mb-6">Access pre-vetted, peer-validated college talent. Hire smarter.</p>
+                <span className="text-blue-400 font-semibold text-sm group-hover:underline">Learn More &rarr;</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="border-t border-white/5 py-16 px-6">
+      <footer className="border-t border-white/5 py-16 px-6 bg-white">
         <div className="max-w-7xl mx-auto text-center">
           <Link href="/" className="flex justify-center mb-6">
             <img src="/logo.png.png" alt="Signl Logo" className="h-14 object-contain hover:opacity-90 transition-opacity" />
           </Link>
-          <p className="text-gray-600 mb-6 text-sm">Peer-validated college recruiting platform</p>
           <div className="flex items-center justify-center space-x-8 mb-10">
-            <Link href="/student/signup" className="text-gray-500 hover:text-white transition-colors text-sm">For Students</Link>
-            <a href="#for-companies" className="text-gray-500 hover:text-white transition-colors text-sm">For Companies</a>
+            <Link href="/for-students" className="text-gray-500 hover:text-black transition-colors text-sm">For Students</Link>
+            <Link href="/for-companies" className="text-gray-500 hover:text-black transition-colors text-sm">For Companies</Link>
           </div>
-          <p className="text-gray-700 text-xs">&copy; 2025 Signl. All rights reserved.</p>
+          <p className="text-gray-400 text-xs">&copy; 2025 Signl. All rights reserved.</p>
         </div>
       </footer>
     </div>
