@@ -164,16 +164,13 @@ function StudentSignupContent() {
       }
     }
     if (step === 2) {
-      // Validate LinkedIn URL is provided and looks like a LinkedIn URL
-      if (!formData.linkedinUrl) {
-        alert('LinkedIn Profile URL is required')
-        return
-      }
-      // More permissive LinkedIn pattern - allows query params, locales, etc.
-      const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i
-      if (!linkedinPattern.test(formData.linkedinUrl)) {
-        alert('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)')
-        return
+      // Validate LinkedIn URL format only if provided (it is now optional)
+      if (formData.linkedinUrl && formData.linkedinUrl.trim()) {
+        const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i
+        if (!linkedinPattern.test(formData.linkedinUrl)) {
+          alert('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)')
+          return
+        }
       }
     }
     if (step === 3) {
@@ -507,9 +504,9 @@ function StudentSignupContent() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-2">LinkedIn Profile URL *</label>
-                <input type="url" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleChange} required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/yourprofile" />
-                <p className="text-sm text-gray-500 mt-1">Companies use this to learn more about you</p>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">LinkedIn Profile URL <span className="text-gray-500 font-normal">(Optional)</span></label>
+                <input type="url" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleChange} className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://linkedin.com/in/yourprofile" />
+                <p className="text-sm text-gray-500 mt-1">Adding your LinkedIn helps companies learn more about you and boosts your profile visibility.</p>
               </div>
 
               <div>

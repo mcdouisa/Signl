@@ -21,6 +21,7 @@ export async function GET(request) {
           hiringRoles: ['Software Engineer Intern', 'Product Manager Intern', 'Data Analyst'],
           logo: null,
           website: 'https://techventurelabs.com',
+          applicationUrl: 'https://techventurelabs.com/careers',
           activelyHiring: true,
           joinedAt: new Date(Date.now() - 604800000).toISOString()
         },
@@ -34,6 +35,7 @@ export async function GET(request) {
           hiringRoles: ['Financial Analyst Intern', 'Investment Banking Analyst'],
           logo: null,
           website: 'https://summitfg.com',
+          applicationUrl: 'https://summitfg.com/jobs',
           activelyHiring: true,
           joinedAt: new Date(Date.now() - 1209600000).toISOString()
         },
@@ -47,6 +49,7 @@ export async function GET(request) {
           hiringRoles: ['Strategy Consultant Intern', 'Research Analyst'],
           logo: null,
           website: 'https://greenpath.co',
+          applicationUrl: 'https://greenpath.co/apply',
           activelyHiring: true,
           joinedAt: new Date(Date.now() - 2592000000).toISOString()
         },
@@ -60,6 +63,7 @@ export async function GET(request) {
           hiringRoles: ['Biotech Research Intern', 'Lab Technician', 'Data Science Intern'],
           logo: null,
           website: 'https://novabiohealth.com',
+          applicationUrl: null,
           activelyHiring: false,
           joinedAt: new Date(Date.now() - 3888000000).toISOString()
         },
@@ -73,6 +77,7 @@ export async function GET(request) {
           hiringRoles: ['UX Design Intern', 'Frontend Developer'],
           logo: null,
           website: 'https://pixelframe.io',
+          applicationUrl: 'https://pixelframe.io/work-with-us',
           activelyHiring: true,
           joinedAt: new Date(Date.now() - 5184000000).toISOString()
         },
@@ -86,6 +91,7 @@ export async function GET(request) {
           hiringRoles: ['Civil Engineering Intern', 'Structural Analyst'],
           logo: null,
           website: 'https://crestline-eng.com',
+          applicationUrl: 'https://crestline-eng.com/careers',
           activelyHiring: true,
           joinedAt: new Date(Date.now() - 1728000000).toISOString()
         }
@@ -135,6 +141,7 @@ export async function GET(request) {
         hiringRoles: data.hiringRoles || [],
         logo: data.logo || null,
         website: data.website || null,
+        applicationUrl: data.applicationUrl || null,
         activelyHiring: data.activelyHiring || false,
         joinedAt: data.createdAt
       })

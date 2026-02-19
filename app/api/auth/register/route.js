@@ -41,17 +41,9 @@ export async function POST(request) {
       )
     }
 
-    // Validate LinkedIn URL is provided
-    if (!linkedinUrl) {
-      return NextResponse.json(
-        { error: 'LinkedIn Profile URL is required' },
-        { status: 400 }
-      )
-    }
-
-    // Validate LinkedIn URL format (more permissive - allows query params, locales, etc.)
+    // Validate LinkedIn URL format only if provided (it is optional)
     const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i
-    if (!linkedinPattern.test(linkedinUrl)) {
+    if (linkedinUrl && linkedinUrl.trim() && !linkedinPattern.test(linkedinUrl)) {
       return NextResponse.json(
         { error: 'Please provide a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)' },
         { status: 400 }

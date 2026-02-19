@@ -139,6 +139,7 @@ export default function StudentDashboard() {
               </Link>
               <Link href="/student/peers" className="text-gray-400 hover:text-white text-sm font-medium">Peers</Link>
               <Link href="/student/network" className="text-gray-400 hover:text-white text-sm font-medium">Network</Link>
+              <Link href="/student/nominations" className="text-gray-400 hover:text-white text-sm font-medium">Nominations</Link>
               <Link href="/student/companies" className="text-gray-400 hover:text-white text-sm font-medium">Companies</Link>
               <Link href="/student/leaderboard" className="text-gray-400 hover:text-white text-sm font-medium">Leaderboard</Link>
               <Link href="/student/settings" className="text-gray-400 hover:text-white text-sm font-medium">Settings</Link>
@@ -280,9 +281,16 @@ export default function StudentDashboard() {
             <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6">
               <h2 className="text-lg font-bold text-white mb-3">Explore</h2>
               <div className="space-y-2">
+                <Link href="/student/nominations" className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                  <div className="w-8 h-8 bg-green-500/10 rounded-lg flex items-center justify-center"><svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg></div>
+                  <div>
+                    <div className="flex items-center gap-2"><div className="text-sm font-medium text-white group-hover:text-green-400 transition-colors">Nominations</div>{stats?.nominationsReceived > 0 && <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">{stats.nominationsReceived}</span>}</div>
+                    <div className="text-xs text-gray-500">View who nominated you</div>
+                  </div>
+                </Link>
                 <Link href="/student/companies" className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
                   <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center"><svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div>
-                  <div><div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">Browse Companies</div><div className="text-xs text-gray-500">See who's hiring</div></div>
+                  <div><div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">Browse Companies</div><div className="text-xs text-gray-500">Find jobs &amp; apply</div></div>
                 </Link>
                 <Link href="/student/network" className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
                   <div className="w-8 h-8 bg-teal-500/10 rounded-lg flex items-center justify-center"><svg className="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></div>

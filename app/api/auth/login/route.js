@@ -77,15 +77,22 @@ export async function POST(request) {
       lastName: studentData.lastName,
       schoolEmail: studentData.schoolEmail,
       personalEmail: studentData.personalEmail,
+      college: studentData.college,
       major: studentData.major,
       gradYear: studentData.gradYear,
       careerInterests: studentData.careerInterests,
       skills: studentData.skills,
+      linkedinUrl: studentData.linkedinUrl,
       githubUrl: studentData.githubUrl,
+      portfolioUrl: studentData.portfolioUrl,
       bio: studentData.bio,
       gpa: studentData.gpa,
+      lookingFor: studentData.lookingFor,
+      targetIndustries: studentData.targetIndustries,
       peerScore: studentData.peerScore,
-      nominationCount: studentData.nominationCount
+      nominationCount: studentData.nominationCount,
+      endorsementsGiven: studentData.endorsementsGiven || 0,
+      nominations: studentData.nominations || []
     }
 
     return NextResponse.json({

@@ -97,13 +97,17 @@ export default function Home() {
               Stop relying on resumes and GPA's. Whether hiring or a student, there is a better way to SIGNL the right person for the job.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <Link href="/for-students" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-lg font-semibold text-base hover:bg-gray-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300">
-                I'm a Student
+              <Link href="/verify" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-lg font-semibold text-base hover:bg-gray-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300 flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                Sign Up as a Student
               </Link>
               <Link href="/for-companies" className="w-full sm:w-auto border border-white/20 text-white px-10 py-4 rounded-lg font-semibold text-base hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all duration-300">
                 I'm a Company
               </Link>
             </div>
+            <p className="text-sm text-gray-600 mt-4">
+              Already have an account? <Link href="/student/login" className="text-gray-400 hover:text-white underline underline-offset-2 transition-colors">Sign in</Link>
+            </p>
           </div>
 
           {/* Hero Image - scrolls with page */}
@@ -168,10 +172,10 @@ export default function Home() {
                   1
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 font-serif">
-                  Students Nominate Peers
+                  Create Your Profile
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  University students nominate classmates they'd actually want to work with — especially from group projects in their major.
+                  Students sign up and build their profile — skills, major, GPA, and career interests. During signup, you nominate real classmates you've worked with on group projects, creating an immediate trust network.
                 </p>
               </div>
             </div>
@@ -183,10 +187,10 @@ export default function Home() {
                   2
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 font-serif">
-                  Peer Verification
+                  Earn Peer Validation
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Nomination patterns are analyzed to eliminate gaming and bias, ensuring authentic validation of student capabilities.
+                  Classmates endorse your skills and nominate you for specific project contributions. Your Peer Score reflects genuine reputation — not self-reported claims — and rises as your network validates you.
                 </p>
               </div>
             </div>
@@ -198,10 +202,10 @@ export default function Home() {
                   3
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 font-serif">
-                  Companies Hire Better
+                  Get Discovered &amp; Apply
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Companies access pre-vetted talent with quantified peer validation scores alongside traditional credentials.
+                  Recruiters browse peer-validated talent ranked by real peer scores. Students can explore hiring companies and apply directly through each company's external job portal — all from one place.
                 </p>
               </div>
             </div>

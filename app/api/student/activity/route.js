@@ -107,7 +107,7 @@ export async function GET(request) {
       rank: { position: 0, total: 0, percentile: 0 }
     }
 
-    // Get nomination count and rank
+    // Get nomination count, rank, and build nomination activity items
     if (studentData?.college && studentData?.major) {
       const peersQuery = query(
         studentsRef,
@@ -120,13 +120,30 @@ export async function GET(request) {
       let nominationsReceived = 0
 
       peersSnapshot.forEach(doc => {
+        if (doc.id === studentId) {
+          allScores.push({ id: doc.id, score: studentData.peerScore || 70 })
+          return
+        }
         const data = doc.data()
         allScores.push({ id: doc.id, score: data.peerScore || 70 })
-        // Count nominations where this student is nominated
+        // Count and record nominations where this student is nominated
         if (data.nominations) {
           data.nominations.forEach(nom => {
-            if (nom.email === studentData.schoolEmail || nom.linkedinUrl === studentData.linkedinUrl) {
+            const matchesEmail = nom.email && studentData.schoolEmail &&
+              nom.email.toLowerCase() === studentData.schoolEmail.toLowerCase()
+            const matchesLinkedIn = nom.linkedinUrl && studentData.linkedinUrl &&
+              nom.linkedinUrl.toLowerCase() === studentData.linkedinUrl.toLowerCase()
+
+            if (matchesEmail || matchesLinkedIn) {
               nominationsReceived++
+              // Add a nomination_received activity item
+              activity.push({
+                id: `nom-${doc.id}`,
+                type: 'nomination_received',
+                message: `${data.firstName} ${data.lastName} nominated you for ${(nom.skills || []).join(', ') || 'your skills'}`,
+                timestamp: data.createdAt || new Date(Date.now() - 86400000 * nominationsReceived).toISOString(),
+                icon: 'user-plus'
+              })
             }
           })
         }
@@ -141,6 +158,9 @@ export async function GET(request) {
       stats.nominationsReceived = nominationsReceived
       stats.rank = { position, total, percentile }
     }
+
+    // Re-sort after adding nomination activity items
+    activity.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
 
     return NextResponse.json({ success: true, activity: activity.slice(0, maxResults), stats })
   } catch (error) {
