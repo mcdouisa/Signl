@@ -144,7 +144,6 @@ export default function NominationsPage() {
               <Link href="/student/peers" className="text-gray-400 hover:text-white text-sm font-medium">Peers</Link>
               <Link href="/student/network" className="text-gray-400 hover:text-white text-sm font-medium">Network</Link>
               <Link href="/student/companies" className="text-gray-400 hover:text-white text-sm font-medium">Companies</Link>
-              <Link href="/student/leaderboard" className="text-gray-400 hover:text-white text-sm font-medium">Leaderboard</Link>
               <Link href="/student/settings" className="text-gray-400 hover:text-white text-sm font-medium">Settings</Link>
               <button onClick={handleLogout} className="text-gray-400 hover:text-white text-sm font-medium">Sign Out</button>
             </div>

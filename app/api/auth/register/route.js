@@ -61,16 +61,14 @@ export async function POST(request) {
       )
     }
 
-    // Validate each valid nomination has either email or LinkedIn URL
+    // Validate each valid nomination has an email address (required for matching)
     for (let i = 0; i < validNominations.length; i++) {
       const nom = validNominations[i]
-      
       const hasEmail = nom.email && nom.email.trim() && nom.email.includes('@')
-      const hasLinkedIn = nom.linkedinUrl && nom.linkedinUrl.trim() && linkedinPattern.test(nom.linkedinUrl)
-      
-      if (!hasEmail && !hasLinkedIn) {
+
+      if (!hasEmail) {
         return NextResponse.json(
-          { error: `Nomination for "${nom.name}": Either email or LinkedIn URL is required` },
+          { error: `Nomination for "${nom.name}": A valid email address is required` },
           { status: 400 }
         )
       }

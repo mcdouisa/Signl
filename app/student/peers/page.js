@@ -167,9 +167,6 @@ export default function PeersPage() {
               <Link href="/student/companies" className="text-gray-400 hover:text-white text-sm font-medium">
                 Companies
               </Link>
-              <Link href="/student/leaderboard" className="text-gray-400 hover:text-white text-sm font-medium">
-                Leaderboard
-              </Link>
               <Link href="/student/settings" className="text-gray-400 hover:text-white text-sm font-medium">
                 Settings
               </Link>

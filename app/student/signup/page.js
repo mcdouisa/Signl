@@ -202,12 +202,9 @@ function StudentSignupContent() {
           return
         }
         
-        // Check that either email or LinkedIn URL is provided
-        const hasEmail = nom.email && nom.email.trim() && nom.email.includes('@')
-        const hasLinkedIn = nom.linkedinUrl && nom.linkedinUrl.trim() && /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+/i.test(nom.linkedinUrl)
-        
-        if (!hasEmail && !hasLinkedIn) {
-          alert(`Nomination #${i + 1}: Please provide either an email address or LinkedIn profile URL for your peer`)
+        // Email is required for matching nominations to the right person
+        if (!nom.email || !nom.email.trim() || !nom.email.includes('@')) {
+          alert(`Nomination #${i + 1}: A valid email address is required so we can match your nomination to the right person`)
           return
         }
       }
@@ -551,12 +548,15 @@ function StudentSignupContent() {
                   <div className="space-y-4">
                     <input type="text" value={nomination.name} onChange={(e) => handleNominationChange(index, 'name', e.target.value)} placeholder="Name *" required className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
                     
-                    <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
-                      <p className="text-amber-300 text-sm font-medium mb-2">Provide at least one way to contact your peer:</p>
-                      <div className="space-y-3">
-                        <input type="email" value={nomination.email} onChange={(e) => handleNominationChange(index, 'email', e.target.value)} placeholder="Email address" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
-                        <div className="text-center text-gray-500 text-sm">— OR —</div>
-                        <input type="url" value={nomination.linkedinUrl || ''} onChange={(e) => handleNominationChange(index, 'linkedinUrl', e.target.value)} placeholder="LinkedIn profile URL (e.g., https://linkedin.com/in/username)" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-300 mb-1">Email address <span className="text-red-400">*</span></label>
+                        <input type="email" value={nomination.email} onChange={(e) => handleNominationChange(index, 'email', e.target.value)} placeholder="peer@university.edu" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
+                        <p className="text-xs text-gray-500 mt-1">Required — ensures your nomination is matched to the right person, even if their name is spelled differently.</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-300 mb-1">LinkedIn Profile URL <span className="text-gray-500 font-normal">(optional)</span></label>
+                        <input type="url" value={nomination.linkedinUrl || ''} onChange={(e) => handleNominationChange(index, 'linkedinUrl', e.target.value)} placeholder="https://linkedin.com/in/username" className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 rounded-lg" />
                       </div>
                     </div>
                     
