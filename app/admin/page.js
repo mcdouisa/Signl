@@ -459,12 +459,12 @@ export default function AdminDashboard() {
                     {/* Contact Outreach - for unverified nominees */}
                     {!selectedPerson.verified && (selectedPerson.schoolEmail || selectedPerson.linkedinUrl) && (() => {
                       const firstName = selectedPerson.firstName || selectedPerson.name?.split(' ')[0] || 'there'
-                      const nominatorNames = (selectedPerson.nominatedBy || []).map(n => n.byName).filter(Boolean)
-                      const nominatedByText = nominatorNames.length > 0
-                        ? nominatorNames.length === 1
-                          ? nominatorNames[0]
-                          : nominatorNames.slice(0, -1).join(', ') + ' and ' + nominatorNames[nominatorNames.length - 1]
-                        : 'your peers'
+                      const nominationCount = (selectedPerson.nominatedBy || []).length
+                      const nominatedByText = nominationCount === 1
+                        ? 'one of your peers'
+                        : nominationCount > 1
+                          ? `${nominationCount} of your peers`
+                          : 'your peers'
                       const emailMessage = `Subject: You've been nominated by your peers on Signl\n\nHey ${firstName},\n\nGood news - ${nominatedByText} nominated you on Signl, a peer-validated recruiting platform we're building.\n\nWhat this means: Someone you worked with in a group project said they'd want to work with you again and vouched for your skills. We're connecting students like you with recruiters who want peer-validated talent, not just resumes.\n\nNext step: Claim your profile and opt in to be visible to recruiters. Takes 2 minutes:\n\n1. Verify your student email\n2. Add your LinkedIn/portfolio (optional)\n3. Choose whether you want companies to see you\n\nImportant: This is 100% opt-in. If you don't want to be visible to recruiters, just don't complete your profile. But if you're interested in opportunities, this is a way to get noticed based on what your peers actually think of your work.\n\nhttps://signl.cc/student/signup\n\nLet me know if you have questions!\n\nIsaac\nSignl`
                       const linkedinMessage = `Hey ${firstName}! Good news - ${nominatedByText} nominated you on Signl, a peer-validated recruiting platform we're building. Someone you worked with vouched for your skills, and we're connecting students like you with recruiters who want peer-validated talent. It's 100% opt-in and takes 2 min to claim your profile: signl.cc/student/signup`
 

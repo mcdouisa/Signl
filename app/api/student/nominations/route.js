@@ -86,7 +86,9 @@ export async function GET(request) {
     }))
 
     // Incoming nominations: scan all students for nominations matching this student
-    const allStudentsSnapshot = await getDocs(query(studentsRef, where('status', '==', 'active')))
+    // Include all registered students regardless of status so nominations from
+    // newer or differently-statused accounts are not missed
+    const allStudentsSnapshot = await getDocs(studentsRef)
     const incoming = []
 
     allStudentsSnapshot.forEach(doc => {
