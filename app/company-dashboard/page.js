@@ -1,17 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-const mockStudents = [
-  { id: 1, name: 'Sarah Chen', major: 'Computer Science', gradYear: 'May 2025', careerInterests: 'Software Engineering, ML', peerScore: 95, nominationCount: 12, topSkills: ['Technical Skills', 'Problem Solving', 'Communication'], gpa: 3.85, status: 'Available' },
-  { id: 2, name: 'Marcus Johnson', major: 'Information Systems', gradYear: 'Dec 2025', careerInterests: 'Product Management, BA', peerScore: 92, nominationCount: 10, topSkills: ['Leadership', 'Communication', 'Problem Solving'], gpa: 3.72, status: 'Available' },
-  { id: 3, name: 'Emily Rodriguez', major: 'Computer Science', gradYear: 'May 2025', careerInterests: 'Full-Stack Dev, Cloud', peerScore: 89, nominationCount: 9, topSkills: ['Technical Skills', 'Creativity', 'Teamwork'], gpa: 3.91, status: 'Available' },
-]
-
 export default function CompanyDashboard() {
+  const [students, setStudents] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [requestedIntros, setRequestedIntros] = useState([])
+
+  useEffect(() => {
+    async function fetchStudents() {
+      try {
+        const res = await fetch('/api/students')
+        const data = await res.json()
+        if (data.success) {
+          setStudents(data.students)
+        } else {
+          setError('Failed to load students')
+        }
+      } catch (err) {
+        setError('Failed to load students')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchStudents()
+  }, [])
 
   const requestIntro = (studentId) => {
     setRequestedIntros([...requestedIntros, studentId])
@@ -45,7 +61,7 @@ export default function CompanyDashboard() {
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
-            <div className="text-2xl font-bold text-white mb-1">247</div>
+            <div className="text-2xl font-bold text-white mb-1">{loading ? '—' : students.length}</div>
             <div className="text-sm text-gray-400">Available Students</div>
           </div>
           <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6">
@@ -90,87 +106,126 @@ export default function CompanyDashboard() {
         </div>
 
         {/* Student Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            {mockStudents.map(student => (
-              <div key={student.id} onClick={() => setSelectedStudent(student)} className={`bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg ${selectedStudent?.id === student.id ? 'ring-2 ring-blue-500' : ''}`}>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">{student.name}</h3>
-                    <p className="text-gray-400">{student.major} • {student.gradYear}</p>
-                    <p className="text-sm text-gray-500 mt-1">{student.careerInterests}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-3xl font-bold text-blue-400">{student.peerScore}</div>
-                    <div className="text-xs text-gray-500">Peer Score</div>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {student.topSkills.map(skill => (
-                    <span key={skill} className="px-3 py-1 bg-blue-500/10 text-blue-400 text-sm rounded-full font-semibold">{skill}</span>
-                  ))}
-                </div>
-                <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                  <span className="text-sm text-gray-400">{student.nominationCount} peer nominations</span>
-                  <span className="text-sm text-gray-400">GPA: {student.gpa}</span>
-                </div>
-              </div>
-            ))}
+        {loading ? (
+          <div className="text-center py-20 text-gray-400">
+            <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p>Loading students...</p>
           </div>
-
-          <div className="lg:col-span-1">
-            <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6 sticky top-8">
-              {selectedStudent ? (
-                <>
-                  <h3 className="text-xl font-bold text-white mb-4">{selectedStudent.name}</h3>
-                  <div className="space-y-4 mb-6">
+        ) : error ? (
+          <div className="text-center py-20 text-red-400">
+            <p>{error}</p>
+          </div>
+        ) : students.length === 0 ? (
+          <div className="text-center py-20 text-gray-400">
+            <p>No verified students found yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-4">
+              {students.map(student => (
+                <div key={student.id} onClick={() => setSelectedStudent(student)} className={`bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg ${selectedStudent?.id === student.id ? 'ring-2 ring-blue-500' : ''}`}>
+                  <div className="flex items-start justify-between mb-4">
                     <div>
-                      <div className="text-sm font-semibold text-gray-400 mb-1">Peer Validation</div>
-                      <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-lg p-4 border border-blue-500/20">
-                        <div className="text-3xl font-bold text-blue-400 mb-1">{selectedStudent.peerScore}</div>
-                        <div className="text-sm text-gray-400">{selectedStudent.nominationCount} nominations</div>
-                      </div>
+                      <h3 className="text-xl font-bold text-white">{student.name}</h3>
+                      <p className="text-gray-400">{student.major} • {student.gradYear}</p>
+                      <p className="text-sm text-gray-500 mt-1">{student.careerInterests}</p>
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold text-gray-400 mb-2">Top Skills</div>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedStudent.topSkills.map(skill => (
-                          <span key={skill} className="px-3 py-1 bg-blue-500/10 text-blue-400 text-sm rounded-full font-semibold">{skill}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-gray-400 mb-1">Career Interests</div>
-                      <p className="text-white">{selectedStudent.careerInterests}</p>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-gray-400 mb-1">Academic</div>
-                      <p className="text-white">GPA: {selectedStudent.gpa}</p>
-                      <p className="text-gray-400 text-sm">{selectedStudent.major}</p>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold text-blue-400">{student.peerScore}</div>
+                      <div className="text-xs text-gray-500">Peer Score</div>
                     </div>
                   </div>
-
-                  {requestedIntros.includes(selectedStudent.id) ? (
-                    <button disabled className="w-full bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed">
-                      Introduction Requested ✓
-                    </button>
-                  ) : (
-                    <button onClick={() => requestIntro(selectedStudent.id)} className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
-                      Request Introduction
-                    </button>
-                  )}
-                </>
-              ) : (
-                <div className="text-center text-gray-400 py-12">
-                  <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  <p>Select a student to view details</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {(student.topSkills || []).map(skill => (
+                      <span key={skill} className="px-3 py-1 bg-blue-500/10 text-blue-400 text-sm rounded-full font-semibold">{skill}</span>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                    <span className="text-sm text-gray-400">{student.nominationCount} peer nominations</span>
+                    {student.gpa ? <span className="text-sm text-gray-400">GPA: {student.gpa}</span> : null}
+                  </div>
                 </div>
-              )}
+              ))}
+            </div>
+
+            <div className="lg:col-span-1">
+              <div className="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-xl p-6 sticky top-8">
+                {selectedStudent ? (
+                  <>
+                    <h3 className="text-xl font-bold text-white mb-4">{selectedStudent.name}</h3>
+                    <div className="space-y-4 mb-6">
+                      <div>
+                        <div className="text-sm font-semibold text-gray-400 mb-1">Peer Validation</div>
+                        <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-lg p-4 border border-blue-500/20">
+                          <div className="text-3xl font-bold text-blue-400 mb-1">{selectedStudent.peerScore}</div>
+                          <div className="text-sm text-gray-400">{selectedStudent.nominationCount} nominations</div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-gray-400 mb-2">Top Skills</div>
+                        <div className="flex flex-wrap gap-2">
+                          {(selectedStudent.topSkills || []).map(skill => (
+                            <span key={skill} className="px-3 py-1 bg-blue-500/10 text-blue-400 text-sm rounded-full font-semibold">{skill}</span>
+                          ))}
+                        </div>
+                      </div>
+                      {selectedStudent.careerInterests && (
+                        <div>
+                          <div className="text-sm font-semibold text-gray-400 mb-1">Career Interests</div>
+                          <p className="text-white">{selectedStudent.careerInterests}</p>
+                        </div>
+                      )}
+                      {selectedStudent.bio && (
+                        <div>
+                          <div className="text-sm font-semibold text-gray-400 mb-1">Bio</div>
+                          <p className="text-gray-300 text-sm">{selectedStudent.bio}</p>
+                        </div>
+                      )}
+                      <div>
+                        <div className="text-sm font-semibold text-gray-400 mb-1">Academic</div>
+                        {selectedStudent.gpa && <p className="text-white">GPA: {selectedStudent.gpa}</p>}
+                        <p className="text-gray-400 text-sm">{selectedStudent.major}</p>
+                      </div>
+                      {(selectedStudent.linkedinUrl || selectedStudent.githubUrl || selectedStudent.portfolioUrl) && (
+                        <div>
+                          <div className="text-sm font-semibold text-gray-400 mb-2">Links</div>
+                          <div className="flex flex-col gap-1">
+                            {selectedStudent.linkedinUrl && (
+                              <a href={selectedStudent.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-sm hover:underline">LinkedIn →</a>
+                            )}
+                            {selectedStudent.githubUrl && (
+                              <a href={selectedStudent.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-sm hover:underline">GitHub →</a>
+                            )}
+                            {selectedStudent.portfolioUrl && (
+                              <a href={selectedStudent.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-sm hover:underline">Portfolio →</a>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {requestedIntros.includes(selectedStudent.id) ? (
+                      <button disabled className="w-full bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed">
+                        Introduction Requested ✓
+                      </button>
+                    ) : (
+                      <button onClick={() => requestIntro(selectedStudent.id)} className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+                        Request Introduction
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center text-gray-400 py-12">
+                    <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <p>Select a student to view details</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
