@@ -8,22 +8,67 @@ export default function CompanyLogin() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
+    setError('')
+    setLoading(true)
 
-    // Validate credentials
-    if (email === 'demo@signl.com' && password === 'signl2025') {
-      router.push('/students')
-    } else {
-      alert('Invalid credentials. Please contact us for a demo to get access.')
+    try {
+      // Demo credentials check
+      if (email === 'demo@signl.com' && password === 'signl2025') {
+        const session = {
+          company: {
+            id: 'demo_company',
+            name: 'Acme Corp',
+            email: 'demo@signl.com',
+            industry: 'Technology',
+            size: '50-200',
+            location: 'San Francisco, CA',
+            verified: true,
+            onboardingComplete: false,
+          },
+          token: 'demo_token',
+          unreadMessages: 0,
+          loginAt: new Date().toISOString(),
+        }
+        localStorage.setItem('signl_company_session', JSON.stringify(session))
+        router.push('/company/dashboard')
+        return
+      }
+
+      // Try Firebase auth (for real accounts)
+      const res = await fetch('/api/company/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        if (data.success) {
+          localStorage.setItem('signl_company_session', JSON.stringify(data.session))
+          router.push('/company/dashboard')
+          return
+        }
+      }
+
+      // Fallback: allow login with any credentials for demo purposes
+      // Remove this in production
+      setError('Invalid credentials. Use demo@signl.com / signl2025 for the demo.')
       setPassword('')
+    } catch (err) {
+      setError('Invalid credentials. Use demo@signl.com / signl2025 for the demo.')
+      setPassword('')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Navigation */}
       <nav className="bg-black/90 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <Link href="/">
@@ -43,11 +88,15 @@ export default function CompanyLogin() {
           <h2 className="text-2xl font-bold text-white text-center mb-2">Company Sign In</h2>
           <p className="text-gray-400 text-center mb-8">Access peer-validated college talent</p>
 
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">
-                Email
-              </label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Email</label>
               <input
                 type="email"
                 value={email}
@@ -59,9 +108,7 @@ export default function CompanyLogin() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">
-                Password
-              </label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Password</label>
               <input
                 type="password"
                 value={password}
@@ -74,11 +121,19 @@ export default function CompanyLogin() {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
             >
-              Sign In
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
+
+          {/* Demo hint */}
+          <div className="mt-4 p-3 rounded-lg bg-teal-500/5 border border-teal-500/10">
+            <p className="text-xs text-gray-500 text-center">
+              Demo: <span className="text-teal-400">demo@signl.com</span> / <span className="text-teal-400">signl2025</span>
+            </p>
+          </div>
 
           <div className="mt-6 pt-6 border-t border-white/10 text-center">
             <p className="text-sm text-gray-400 mb-3">Don't have an account?</p>
@@ -89,7 +144,7 @@ export default function CompanyLogin() {
 
           <div className="mt-4 text-center">
             <Link href="/signin" className="text-sm text-gray-400 hover:text-white">
-              ← Back to Sign In
+              &larr; Back to Sign In
             </Link>
           </div>
         </div>
