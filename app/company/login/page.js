@@ -55,12 +55,10 @@ export default function CompanyLogin() {
         }
       }
 
-      // Fallback: allow login with any credentials for demo purposes
-      // Remove this in production
-      setError('Invalid credentials. Use demo@signl.com / signl2025 for the demo.')
+      setError('Invalid credentials. Please try again or request a demo.')
       setPassword('')
     } catch (err) {
-      setError('Invalid credentials. Use demo@signl.com / signl2025 for the demo.')
+      setError('Invalid credentials. Please try again or request a demo.')
       setPassword('')
     } finally {
       setLoading(false)
@@ -127,13 +125,6 @@ export default function CompanyLogin() {
               {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
-
-          {/* Demo hint */}
-          <div className="mt-4 p-3 rounded-lg bg-teal-500/5 border border-teal-500/10">
-            <p className="text-xs text-gray-500 text-center">
-              Demo: <span className="text-teal-400">demo@signl.com</span> / <span className="text-teal-400">signl2025</span>
-            </p>
-          </div>
 
           <div className="mt-6 pt-6 border-t border-white/10 text-center">
             <p className="text-sm text-gray-400 mb-3">Don't have an account?</p>
